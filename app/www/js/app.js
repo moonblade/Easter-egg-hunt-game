@@ -4,7 +4,7 @@
 // 'Gunt' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'Gunt.controllers' is found in controllers.js
-angular.module('Gunt', ['ionic', 'Gunt.controllers','Gunt.factories'])
+angular.module('Gunt', ['ionic', 'Gunt.controllers','Gunt.factories','Gunt.alpha'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -44,19 +44,6 @@ angular.module('Gunt', ['ionic', 'Gunt.controllers','Gunt.factories'])
             'menuContent': {
                 templateUrl: 'templates/login.html',
                 controller: 'LoginCtrl'
-            },
-            'fabContent': {
-                template: ''
-            }
-        }
-    })
-
-    .state('app.gateone', {
-        url: '/gateone',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/tictactoe.html',
-                controller: 'TicTacToeCtrl'
             },
             'fabContent': {
                 template: ''
