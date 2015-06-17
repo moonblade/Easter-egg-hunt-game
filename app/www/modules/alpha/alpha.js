@@ -1,16 +1,23 @@
-angular.module('Gunt.alpha', [])
+angular.module('Gunt.alpha', ['ionic', 'Gunt.controllers', 'ngOpenFB', 'Gunt.factories', 'Gunt'])
 
-.state('app.gateone', {
-    url: '/gateone',
-    views: {
-        'menuContent': {
-            templateUrl: 'modules/alpha/views/tictactoe.html',
-            controller: 'TicTacToeCtrl'
-        },
-        'fabContent': {
-            template: ''
-        }
-    }
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+    $stateProvider
+        .state('app.gateone', {
+            url: '/gateone',
+            views: {
+                'menuContent': {
+                    templateUrl: 'modules/alpha/views/tictactoe.html',
+                    controller: 'TicTacToeCtrl'
+                },
+                'fabContent': {
+                    template: ''
+                }
+            }
+        })
+
+    ;
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/login');
 })
 
 

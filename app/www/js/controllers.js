@@ -1,4 +1,4 @@
-angular.module('Gunt.controllers', [])
+angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout) {
     // Form data for the login modal
@@ -84,8 +84,36 @@ angular.module('Gunt.controllers', [])
     };
 })
 
-.controller('LoginCtrl', function($scope, $timeout, $stateParams) {
+.controller('LoginCtrl', function($scope, $timeout, $stateParams, ngFB) {
     $scope.$parent.clearFabs();
+    $scope.fbLogin = function() {
+        ngFB.login({
+            scope: 'email'
+        }).then(
+            function(response) {
+                if (response.status === 'connected') {
+                    console.log('Facebook login succeeded');
+                    ngFB.api({
+                        path: '/me',
+                        params: {
+                            fields: 'id,name,email'
+                        }
+                    }).then(
+                        function(user) {
+                            $scope.user = user;
+                            console.log($scope.user)
+                        },
+                        function(error) {
+                            alert('Facebook error: ' + error.error_description);
+                        });
+                } else {
+                    alert('Facebook login failed');
+                }
+            });
+
+    };
+
+
     $timeout(function() {
         $scope.$parent.hideHeader();
     }, 0);
@@ -115,5 +143,4 @@ angular.module('Gunt.controllers', [])
 
     // Set Ink
     ionic.material.ink.displayEffect();
-})
-;
+});

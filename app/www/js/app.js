@@ -4,10 +4,11 @@
 // 'Gunt' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'Gunt.controllers' is found in controllers.js
-angular.module('Gunt', ['ionic', 'Gunt.controllers','Gunt.factories','Gunt.alpha'])
+angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories','Gunt.alpha'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, ngFB) {
     $ionicPlatform.ready(function() {
+        ngFB.init({appId: '1573565049528271'});
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {
