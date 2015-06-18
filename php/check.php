@@ -4,7 +4,8 @@ $username = $_POST['username'];
 $id = $_POST['id'];
 $intid=intval($id);
 $level = $_POST['level'];
-$answer=md5($_POST['answer']);
+// $answer=md5($_POST['answer']);
+$answer=($_POST['answer']);
 
 function updatelevel(&$message,$level)
 {
