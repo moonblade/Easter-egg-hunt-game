@@ -84,7 +84,7 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
     };
 })
 
-.controller('LoginCtrl', function($scope, $timeout, $stateParams, ngFB) {
+.controller('LoginCtrl', function($scope, $timeout, $stateParams,$ionicPopup, ngFB) {
     $scope.$parent.clearFabs();
     $scope.fbLogin = function() {
         ngFB.login({
@@ -102,6 +102,10 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
                         function(user) {
                             $scope.user = user;
                             console.log($scope.user)
+                            $ionicPopup.alert({
+                                title: 'user',
+                                template: ''+JSON.stringify($scope.user)
+                            });
                         },
                         function(error) {
                             alert('Facebook error: ' + error.error_description);
