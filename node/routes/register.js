@@ -7,13 +7,13 @@ var sizeof = require('object-sizeof');
 var maxSize = 2500;
 
 router.get('/', function(req, res) {
-    res.nd('Request method not allowed');
+    res.send('Request method not allowed');
 });
 
 router.post('/', function(req, res) {
     p = new playerModel(req.body);
-    p.password = md5(p.password)
-    p.checkLogin(function(err, player) {
+    p.password = md5(p.password);
+    p.login(function(err, player) {
         if (err) {
             res.json({
                 code: 3,
@@ -40,7 +40,7 @@ router.post('/', function(req, res) {
                     else
                         res.json({
                             code: 0,
-                            message: player
+                            message: p
                         });
                 });
         }
