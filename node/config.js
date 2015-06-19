@@ -10,8 +10,8 @@ var config = {
     production: {
         dbHost: 'mongodb://localhost/gunt',
         versionDetails: {
-            code: 1,
-            info: 'Development version',
+            code: 2,
+            info: 'Release Version',
             forceUpdate: true
         }
     }

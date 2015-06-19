@@ -21,6 +21,10 @@ angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories',
     });
 })
 
+.value('appConfig', {
+    serverUrl: 'http://localhost:3000/'
+})
+
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     // Turn off caching for demo simplicity's sake

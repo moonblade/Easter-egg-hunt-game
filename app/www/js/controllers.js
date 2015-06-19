@@ -84,9 +84,10 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
     };
 })
 
-.controller('LoginCtrl', function($scope, $timeout, $stateParams,$ionicPopup, ngFB) {
+.controller('LoginCtrl', function($scope,$state, $timeout, $stateParams, $ionicPopup,$ionicLoading, ngFB, login) {
     $scope.$parent.clearFabs();
     $scope.fbLogin = function() {
+        $ionicLoading.show();
         ngFB.login({
             scope: 'email'
         }).then(
@@ -99,13 +100,36 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
                             fields: 'id,name,email'
                         }
                     }).then(
-                        function(user) {
-                            $scope.user = user;
-                            console.log($scope.user)
-                            $ionicPopup.alert({
-                                title: 'user',
-                                template: ''+JSON.stringify($scope.user)
-                            });
+                        function(player) {
+                            $scope.player = player;
+                            console.log($scope.player);
+                            login.login($scope.player)
+                                .success(function(data) {
+                                    console.log(data);
+                                    if (data.code == 0) {
+                                        var alertPopup = $ionicPopup.alert({
+                                            title: 'Success',
+                                            template: 'You have been successfully registered'
+                                        });
+                                        alertPopup.then(function(res) {
+                                            // $state.go('app.dashboard');
+                                        });
+                                    } else if (data.code == 3) {
+                                        var alertPopup = $ionicPopup.alert({
+                                            title: 'Failed',
+                                            template: 'The Email is already in use' + '</br> Error code : ' + data.code
+                                        });
+                                    } else {
+                                        var alertPopup = $ionicPopup.alert({
+                                            title: 'Failed',
+                                            template: 'Some Error Occured' + '</br> Error code : ' + data.code
+                                        });
+                                    }
+                                }).error(function(err) {
+                                    console.log(err);
+                                }).then(function() {
+                                    $ionicLoading.hide();
+                                });
                         },
                         function(error) {
                             alert('Facebook error: ' + error.error_description);

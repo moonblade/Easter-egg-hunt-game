@@ -17,5 +17,20 @@ angular.module('Gunt.factories', [])
     }
 }])
 
+.factory('login', function($http, appConfig) {
+    return {
+        login: function(player) {
+            return $http({
+                method: 'POST',
+                url: appConfig.serverUrl + 'register/',
+                data: player,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+    }
+})
+
 
 ;

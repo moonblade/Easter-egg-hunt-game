@@ -5,6 +5,8 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var program = require('commander')
 var routes = require('./routes/index');
+var register = require('./routes/register');
+var addlevel = require('./routes/addlevel');
 var db = mongoose.connection;
 var app = express();
 var config = require('./config').config[app.get('env')];
@@ -36,6 +38,8 @@ app.use(function(req, res, next) {
 });
 
 app.use(routes);
+app.use('/register', register);
+app.use('/addlevel', addlevel);
 
 app.use(function(err, req, res, next) {
     var err = new Error('Not found');
