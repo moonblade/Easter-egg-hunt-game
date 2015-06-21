@@ -37,17 +37,31 @@ router.post('/', function(req, res) {
                         var answer = md5(req.body.answer);
                         if (answer == level.key) {
                             player.level = player.level + 1;
+                            player.score = player.score + level.basescore;
+                            if (level.num < 5) {
+                                player.score = player.score + 1000 * (5 - level.num);
+                            }
                             player.save(function(err) {
                                 if (err)
                                     res.json({
                                         code: 16,
                                         message: err
                                     });
-                                else
-                                    res.json({
-                                        code: 0,
-                                        message: 'correct answer'
+                                else {
+                                    level.num = level.num + 1;
+                                    level.save(function(err) {
+                                        if (err)
+                                            res.json({
+                                                code: 22,
+                                                message: err
+                                            });
+                                        else
+                                            res.json({
+                                                code: 0,
+                                                message: 'correct answer'
+                                            });
                                     });
+                                }
                             });
                         } else {
                             res.json({
@@ -59,54 +73,82 @@ router.post('/', function(req, res) {
                         var answer1 = md5(req.body.answer1);
                         var answer2 = md5(req.body.answer2);
                         var answer3 = md5(req.body.answer3);
-                        var correct = 0;
-                        // correct = 1 - 7 for correct answers permutations for answer 1 2 3
                         l2 = new levelModel({
-                            level: curLevel+1
+                            level: curLevel + 1
                         });
                         l3 = new levelModel({
-                            level: curLevel+2
+                            level: curLevel + 2
                         });
-                        l2.find(function(err,level2){
+                        l2.find(function(err, level2) {
                             if (err)
                                 res.json({
                                     code: 17,
                                     message: err
                                 });
-                            else if (level2){
-                                l3.find(function(err,level2){
+                            else if (level2) {
+                                l3.find(function(err, level3) {
                                     if (err)
                                         res.json({
                                             code: 18,
                                             message: err
                                         });
-                                    else if (level2){
+                                    else if (level3) {
+                                        var correct = 0;
+                                        // correct = 1 - 7 for correct answers permutations for answer 1 2 3
+                                        if (answer1 == level.key)
+                                            correct = correct + 1;
+                                        if (answer2 == level2.key)
+                                            correct = correct + 2;
+                                        if (answer3 == level3.key)
+                                            correct = correct + 4;
+                                        if (correct == 7) {
+                                            player.level = 9;
+                                            player.score = player.score + level.basescore + level2.basescore + level3.basescore;
+                                            if (level.num < 5)
+                                                player.score = player.score + 1000 * (5 - level.num);
+                                            player.save(function(err) {
+                                                if (err)
+                                                    res.json({
+                                                        code: 21,
+                                                        message: err
+                                                    });
+                                                else {
+                                                    level.num = level.num + 1;
+                                                    level.save(function(err) {
+                                                        if (err)
+                                                            res.json({
+                                                                code: 23,
+                                                                message: err
+                                                            });
+                                                        else
+                                                            res.json({
+                                                                code: 0,
+                                                                message: correct
+                                                            });
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            res.json({
+                                                code: 0,
+                                                message: correct
+                                            });
+                                        }
 
-                                    }
-                                    else
+                                    } else
                                         res.json({
                                             code: 20,
                                             message: 'could not find level'
                                         });
                                 })
-                            }
-                            else
+                            } else
                                 res.json({
                                     code: 19,
                                     message: 'could not find level'
                                 })
                         })
 
-                        if (answer1 == level.key)
-                            correct = correct + 1;
-                        if (answer2 == level.key)
-                            correct = correct + 2;
-                        if (answer3 == level.key)
-                            correct = correct + 4;
-                        res.json({
-                            code: 0,
-                            message: correct
-                        });
+
                     }
                 } else {
                     res.json({

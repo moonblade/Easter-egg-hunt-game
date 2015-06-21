@@ -13,4 +13,6 @@
 18 - on 6th level, could not find eighth
 19 - no seventh level found
 20 - no eighth level found
-
+21 - all three answers correct, couldn't update player level
+22 - correct answer, could not update num in level
+23 - all three answers correct, couldn't update num in level
