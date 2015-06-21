@@ -2,10 +2,6 @@ var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var md5 = require('MD5');
 
-var projection = {
-    // password:0
-}
-
 var playerSchema = mongoose.Schema({
     id : {
         type: Number,

@@ -7,6 +7,7 @@ var program = require('commander')
 var routes = require('./routes/index');
 var register = require('./routes/register');
 var addlevel = require('./routes/addlevel');
+var checkanswer = require('./routes/checkanswer');
 var db = mongoose.connection;
 var app = express();
 var config = require('./config').config[app.get('env')];
@@ -40,6 +41,7 @@ app.use(function(req, res, next) {
 app.use(routes);
 app.use('/register', register);
 app.use('/addlevel', addlevel);
+app.use('/checkanswer', checkanswer);
 
 app.use(function(err, req, res, next) {
     var err = new Error('Not found');

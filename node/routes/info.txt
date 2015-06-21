@@ -1,0 +1,16 @@
+0 - success
+
+3 - player login error
+
+10 - errored out during level find, to update or insert
+11 - level found, could not update values
+12 - logged in player, error in finding his level
+13 - wrong answer
+14 - logged in player, is in an invalid level
+15 - could not find user
+16 - correct answer but couldn't update level
+17 - on 6th level, could not find seventh
+18 - on 6th level, could not find eighth
+19 - no seventh level found
+20 - no eighth level found
+
