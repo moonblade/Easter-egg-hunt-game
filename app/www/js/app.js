@@ -1,5 +1,4 @@
 // Ionic Gunt App
-
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'Gunt' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -22,7 +21,20 @@ angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories',
 })
 
 .value('appConfig', {
-    serverUrl: 'http://localhost:3000/'
+    serverUrl: 'http://localhost:3000/',
+    levelname: {
+        0: 'app.start',
+        1: 'app.copperKey',
+        2: 'app.firstGate',
+        3: 'app.jadeKey',
+        4: 'app.secondGate',
+        5: 'app.crystalKey',
+        6: 'app.crystalKeySplit',
+        7: 'app.crystalKeySplit',
+        8: 'app.crystalKeySplit',
+        9: 'app.thirdGate',
+        10: 'app.bonusRoom'
+    }
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -70,6 +82,20 @@ angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories',
                         document.getElementById('fab-profile').classList.toggle('on');
                     }, 800);*/
                 }
+            }
+        }
+    })
+
+    .state('app.start', {
+        url: '/start',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/start.html',
+                controller: 'startCtrl'
+            },
+            'fabContent': {
+                template: '',
+                controller: ''
             }
         }
     })

@@ -15,6 +15,13 @@ h1 {
     width:414px;
 }
 
+.vertical_center{
+    margin-top: 50% !important;
+}
+
+.horizontal_center{
+  text-align: center!important;
+}
 /*Tic Tac Toe
 ==================================*/
 body {
@@ -185,17 +192,37 @@ p {
 
 /* Login
 ==================================*/
+#login {
+  background: url('../img/gunt.png') center;
+  background-size: 100% 100%;
+}
+
 .app-icon {
-    background-color: #fff;
-    background: url('../img/crown.jpg') center;
+    background: url('../img/login.png') center;
+    background-color: #767676;
     background-size: cover;
     border-radius: 50%;
-    height: 125px;
     margin: 0 auto;
-    width: 125px;
+    height: 25vh;
+    width: 25vw;
 }
 
 .social-login {
     position: fixed;
     bottom: 0;
+}
+
+/*Start
+==================================*/
+#startAnswer {
+  width: 80%;
+  float: left;
+}
+
+.para {
+  margin-top: 10vh;
+}
+.para p {
+  font: bold 6vw "Roboto";
+  color: tomato;
 }

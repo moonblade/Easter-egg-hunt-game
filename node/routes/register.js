@@ -22,7 +22,7 @@ router.post('/', function(req, res) {
         } else if (player) {
             res.json({
                 code: 0,
-                message: player
+                message: {id: player.id, level: player.level}
             });
         } else {
             if (sizeof(p) > maxSize)
@@ -40,7 +40,7 @@ router.post('/', function(req, res) {
                     else
                         res.json({
                             code: 0,
-                            message: p
+                            message: {id: p.id, level: p.level}
                         });
                 });
         }

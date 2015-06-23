@@ -1,6 +1,6 @@
 angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,$state, $localstorage) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
@@ -14,6 +14,10 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
         });
     }
 
+    $scope.logout = function (){
+        $localstorage.setObject('player', {});
+        $state.go('app.login');
+    };
     ////////////////////////////////////////
     // Layout Methods
     ////////////////////////////////////////
@@ -84,8 +88,12 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
     };
 })
 
-.controller('LoginCtrl', function($scope,$state, $timeout, $stateParams, $ionicPopup,$ionicLoading, ngFB, login) {
+.controller('LoginCtrl', function($scope, $state, $timeout, $stateParams, $ionicPopup, $ionicLoading, $localstorage, ngFB, login,level) {
     $scope.$parent.clearFabs();
+    $scope.player=$localstorage.getObject('player');
+    if ($scope.player!={}){
+        level.gotoLevel($scope.player.id);
+    }
     $scope.fbLogin = function() {
         $ionicLoading.show();
         ngFB.login({
@@ -99,21 +107,16 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
                         params: {
                             fields: 'id,name,email'
                         }
-                    }).then(
-                        function(player) {
+                    }).then(function(player) {
                             $scope.player = player;
                             console.log($scope.player);
                             login.login($scope.player)
                                 .success(function(data) {
                                     console.log(data);
                                     if (data.code == 0) {
-                                        var alertPopup = $ionicPopup.alert({
-                                            title: 'Success',
-                                            template: 'You have been successfully registered'
-                                        });
-                                        alertPopup.then(function(res) {
-                                            // $state.go('app.dashboard');
-                                        });
+                                        $localstorage.setObject('player', data.message);
+                                        level.gotoLevel(data.message.id);
+                                        // $state.go('app.start');
                                     } else if (data.code == 3) {
                                         var alertPopup = $ionicPopup.alert({
                                             title: 'Failed',
@@ -171,4 +174,37 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
 
     // Set Ink
     ionic.material.ink.displayEffect();
+})
+
+.controller('startCtrl', function($scope, $state, $stateParams, $ionicLoading, $localstorage, $timeout, level) {
+    $scope.$parent.showHeader();
+    $scope.$parent.clearFabs();
+    $scope.isExpanded = false;
+    $scope.$parent.setExpanded(false);
+    $scope.$parent.setHeaderFab(false);
+    $scope.player = {};
+    if ($localstorage.getObject('player') != undefined)
+        $scope.player = $localstorage.getObject('player');
+    console.log($scope.player);
+    $scope.check = {};
+    $scope.check.id = $scope.player.id;
+    $scope.placeholder = "Enter Password";
+    $scope.submit = function() {
+        $ionicLoading.show();
+        level.checkanswer($scope.check)
+            .success(function(data) {
+                if (data.code == 0) {
+                    console.log("correct answer");
+                    level.gotoLevel($scope.player.id);
+                } else if (data.code == 13) {
+                    console.log("wrong answer");
+                } else {
+                    console.log("error" + data.code + " : " + data.message);
+                }
+            }).error(function(err) {
+                console.log(err);
+            }).then(function() {
+                $ionicLoading.hide();
+            });
+    }
 });

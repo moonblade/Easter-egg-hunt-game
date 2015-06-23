@@ -128,6 +128,11 @@ router.post('/', function(req, res) {
                                                     });
                                                 }
                                             });
+                                        } else if (correct == 0) {
+                                            res.json({
+                                                code: 13,
+                                                message: 'wrong answer'
+                                            });
                                         } else {
                                             res.json({
                                                 code: 0,
