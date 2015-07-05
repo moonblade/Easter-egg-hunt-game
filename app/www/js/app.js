@@ -3,11 +3,13 @@
 // 'Gunt' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'Gunt.controllers' is found in controllers.js
-angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories','Gunt.alpha'])
+angular.module('Gunt', ['ionic', 'Gunt.controllers', 'ngOpenFB', 'Gunt.factories', 'Gunt.alpha'])
 
 .run(function($ionicPlatform, ngFB) {
     $ionicPlatform.ready(function() {
-        ngFB.init({appId: '1573565049528271'});
+        ngFB.init({
+            appId: '1573565049528271'
+        });
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -54,18 +56,11 @@ angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories',
         controller: 'AppCtrl'
     })
 
-    
-    .state('app.login', {
+
+    .state('login', {
         url: '/login',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/login.html',
-                controller: 'LoginCtrl'
-            },
-            'fabContent': {
-                template: ''
-            }
-        }
+        templateUrl: 'templates/login.html',
+        controller: 'LoginCtrl'
     })
 
     .state('app.profile', {
@@ -77,7 +72,7 @@ angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories',
             },
             'fabContent': {
                 template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
-                controller: function ($timeout) {
+                controller: function($timeout) {
                     /*$timeout(function () {
                         document.getElementById('fab-profile').classList.toggle('on');
                     }, 800);*/
@@ -98,9 +93,8 @@ angular.module('Gunt', ['ionic', 'Gunt.controllers','ngOpenFB','Gunt.factories',
                 controller: ''
             }
         }
-    })
-    ;
+    });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/login');
+    $urlRouterProvider.otherwise('/login');
 });

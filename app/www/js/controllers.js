@@ -1,6 +1,6 @@
 angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,$state, $localstorage) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout, $state, $localstorage) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
@@ -14,7 +14,7 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
         });
     }
 
-    $scope.logout = function (){
+    $scope.logout = function() {
         $localstorage.setObject('player', {});
         $state.go('app.login');
     };
@@ -88,66 +88,79 @@ angular.module('Gunt.controllers', ['Gunt.factories', 'ngOpenFB'])
     };
 })
 
-.controller('LoginCtrl', function($scope, $state, $timeout, $stateParams, $ionicPopup, $ionicLoading, $localstorage, ngFB, login,level) {
-    $scope.$parent.clearFabs();
-    $scope.player=$localstorage.getObject('player');
-    if ($scope.player!={}){
+.controller('LoginCtrl', function($scope, $state, $timeout, $stateParams, $ionicPopup, $ionicLoading, $localstorage, ngFB, login, level) {
+    $scope.player = $localstorage.getObject('player');
+    if ($scope.player != {}) {
         level.gotoLevel($scope.player.id);
     }
     $scope.fbLogin = function() {
         $ionicLoading.show();
-        ngFB.login({
-            scope: 'email'
-        }).then(
-            function(response) {
-                if (response.status === 'connected') {
-                    console.log('Facebook login succeeded');
-                    ngFB.api({
-                        path: '/me',
-                        params: {
-                            fields: 'id,name,email'
-                        }
-                    }).then(function(player) {
-                            $scope.player = player;
-                            console.log($scope.player);
-                            login.login($scope.player)
-                                .success(function(data) {
-                                    console.log(data);
-                                    if (data.code == 0) {
-                                        $localstorage.setObject('player', data.message);
-                                        level.gotoLevel(data.message.id);
-                                        // $state.go('app.start');
-                                    } else if (data.code == 3) {
-                                        var alertPopup = $ionicPopup.alert({
-                                            title: 'Failed',
-                                            template: 'The Email is already in use' + '</br> Error code : ' + data.code
-                                        });
-                                    } else {
-                                        var alertPopup = $ionicPopup.alert({
-                                            title: 'Failed',
-                                            template: 'Some Error Occured' + '</br> Error code : ' + data.code
-                                        });
-                                    }
-                                }).error(function(err) {
-                                    console.log(err);
-                                }).then(function() {
-                                    $ionicLoading.hide();
-                                });
-                        },
-                        function(error) {
-                            alert('Facebook error: ' + error.error_description);
-                        });
-                } else {
-                    alert('Facebook login failed');
-                }
-            });
+        // ngFB.login({
+        //     scope: 'email'
+        // }).then(
+        //     function(response) {
+        //         if (response.status === 'connected') {
+        //             console.log('Facebook login succeeded');
+        //             ngFB.api({
+        //                 path: '/me',
+        //                 params: {
+        //                     fields: 'id,name,email'
+        //                 }
+        //             }).then(function(player) {
+        //                     $scope.player = player;
+        //                     console.log($scope.player);
+        //                     var alertPopup = $ionicPopup.alert({
+        //                         title: 'profile',
+        //                         template: JSON.stringify($scope.player)
+        //                     });
+        //                     $ionicLoading.hide();
+        //                     login.login($scope.player)
+        //                         .success(function(data) {
+        //                             console.log(data);
+        //                             if (data.code == 0) {
+        //                                 $localstorage.setObject('player', data.message);
+        //                                 level.gotoLevel(data.message.id);
+        //                             } else if (data.code == 3) {
+        //                                 var alertPopup = $ionicPopup.alert({
+        //                                     title: 'Failed',
+        //                                     template: 'The Email is already in use' + '</br> Error code : ' + data.code
+        //                                 });
+        //                             } else {
+        //                                 var alertPopup = $ionicPopup.alert({
+        //                                     title: 'Failed',
+        //                                     template: 'Some Error Occured' + '</br> Error code : ' + data.code
+        //                                 });
+        //                             }
+        //                         }).error(function(err) {
+        //                             console.log(err);
+        //                         }).then(function() {
+        //                             $ionicLoading.hide();
+        //                         });
+        //                 },
+        //                 function(error) {
+        //                     alert('Facebook error: ' + error.error_description);
+        //                 });
+        //         } else {
+        //             alert('Facebook login failed');
+        //         }
+        //     });
 
+            facebookConnectPlugin.login(['public_profile', 'email'], 
+                function (response) { 
+                    // $localstorage.set('login_status','success');
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'login',
+                        template: JSON.stringify(response)
+                    });
+                    console.log(response);
+                    $state.go('app.home', {}, {location: "replace", reload: true});
+                    $ionicLoading.hide();
+                }, 
+                function (error) { 
+                    ionicToast.show("Some error occured! Please try again.","middle",false,2500);
+                });
     };
 
-
-    $timeout(function() {
-        $scope.$parent.hideHeader();
-    }, 0);
     ionic.material.ink.displayEffect();
 })
 
