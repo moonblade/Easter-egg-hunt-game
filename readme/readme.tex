@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage{hyperref}
+\title{Easter Egg Hunt}
+\author{moonblade168}
+\begin{document}
+\maketitle
+
+\section{Preface}
+First of all, thanks for doing this, I'm taking it on faith that you won't spoil this project for others, by revealing answers or hints. That said, there's a lot of hints lying about within the game itself. 
+
+The game is supposed to be like a treasure hunt, mostly involving a textual answer to a complicated riddle which may involve solving some puzzle, I'll walk you through the whole thing.
+
+\section{Almanac}
+Users are given an almanac and nothing else, they're supposed to find the start of the hunt from the \href{https://drive.google.com/file/d/0Bw1NE28SnI6_QWNuOEt2SExWUUk/view?usp=sharing}{Almanac}. The given link is to an old version of the almanac, there would be some changes, but the core of it would remain the same. Besides the start of game, it also hides other stuff within it.
+
+\section{Scoring}
+\begin{itemize}
+\item Each copper key has a value of 5000.
+\item The first person to get the key gets 10,000.the second 9000 and so on till 5000.everyone after that will get 5k.
+\item For the jade key, it's 20k for the first person, then 19k down to 15k.
+\item For the crystal key, 30k for the first person down to 25k.
+
+\item First gate gate on passing will give 100k.
+\item Second gate 200k.
+\item Third gate 300k.
+\item these are same for everyone.
+\item Passing each gate will give an icon of a respective coloured gate near the score of the person.
+
+\item The bonus key has no points.
+\end{itemize}
+
+\section{Background}
+Before the game begins, there would be a login, with either google, or normal password option, and an option to set an avatar name. The navbar would include \textbf{Game}, \textbf{Scoreboard}, \textbf{Almanac}. Thats it. The scoreboard initially would be 10 zero's, and would fill up as the game progresses. Each user is taken to his or her own level and if attempt is made to access some other level, it is forbidden.
+
+There was an Idea to make it spread through different site, but thats too time consuming and cumbersome, So it would be in one continuous stretch.
+
+The keys are entered into the gates, so to know if you the right key, you need the gate, but you also might need to refer to the key page again, So the key and gate pages are always seen together, either scrollable or with forward and backward navigation.
+\section{Copper Key}
+\begin{centering}
+Beneath these words the copper key awaits. \\
+An invincible foe beyond the gates.\\
+A Roman emperor known for his might.\\
+An eight bit word to help win this fight.\\
+\end{centering}
+
+This riddle appers with the setting of an ancient roman empire in the background. 
+
+If the source code of the page is taken, just underneath this four lines (Beneath these words) There would be a line of numbers saying ``2200614801124062''. This is the clue for the copper key. 
+
+The roman emporer (Although he was actually a general) is caesar and his help would mean that unlocking the key requires the caeser cipher. Dan brown in Digital fortress mistakenly says that caeser cipher is done by arraging the letters in the form of a grid and then reading from top to bottom.
+
+so arraging it in a grid we have\\
+2 2 0 0\\
+6 1 4 8\\
+0 1 1 2\\
+4 0 6 2\\
+
+And we get the new string by reading it in top down fashion. 26 04 21 10 04 16 08 22, These seem a bit like letter substitution so we'll try substituting letters. Z D U J D P H V. 
+
+Caeser cipher in actuality is a shift cipher with a shift value of 3, so a becomes d, b becomes e and so on. So decrypting the text with the actual caeser cipher we get WARGAMES which is the key required. On entering wargames without spaces an in lower case, an icon of a key is shown and they pass through to the First gate.
+
+\section{First gate}
+A picture of a copper gate and the words congrats you found the first gate appears. A textbox which says enter key is seen. On entering wargames the door opens to reveal the obstacle
+ (Unlocked with the copper key). Beyond the gate is a terminal like interface. All black and white and drawn on it is a tic tac toe board.
+
+The tic tac toe is to be implemented with the minimax algorithm, ie it is unbeatable. (invincible foe beyond the gate). The user enters a digit from 1-9 to enter an X into the curresponding cell, and the computer playes perfectly against them, ending in a draw or a win for the computer. 
+
+A single instruction is written on top of the game, which simply says, WIN.
+
+Remember how the key was war games? well the key has more significance than just unlocking the gate, In the film war games, mathew brodrick, eventually makes wopr understand futility by making it play tic tac toe against itself, finally it remarks, ``The only winning move is not to play.''
+
+In the text box where 1-9 is entered, Enter theonlywinningmoveisnottoplay to proceed to the next level.
+
+
+\section{Jade key}
+
+The second key and gate are easier than the first (They were switched around a bit for acquiring a bonus key).
+
+\begin{centering}
+The clown prince conceals the jade key.
+Hidden by a foe of thee.
+He raises them from the final fall.
+Sauron, the greatest of them all.
+\end{centering}
+
+An easier level by comparison. The background is like a game of find the hidden objects. The clown prince refers to joker. An a playing card joker is hidden in the background. Finding it and clicking it should bring up a qr code, which on scanning and entering shall grant access to the gate. 
+
+The actual key is easy to decipher, which is ``necromancer'' he who raises the dead, or from the final fall. Sauron is said to be the greatest necromancer.
+
+\section{Second Gate}
+The second gate is opened with the key ``necromancer''. Beyond the gate A picture of the gates of durin appears, with the words, speak friend and enter written in elvish on it. There would be an alt text saying, are you a friend or an enemy? or perhaps both (It references an \href{xkcd comic}{http://xkcd.com/1218/8}, , On entering ``mellogoth'' the elvish word for frienemy, the gates are passed.
+
+\section{Crystal Key}
+In an ornately carved picture frame, In the center of the frame is the riddle.
+\begin{centering}
+Game, Book and Movie blends
+A glitchy egg for our plumber twins
+The twist by richard ends
+A tribute to where it all begins
+\end{centering}
+Around the edges of the frame are letters ``PFEE SESN RETM PFHA IRWE OOIG MEEN NRMA ENET SHAS DCNS IIAA IEER BRNK FBLE LODI'' googling the letters directly should give you the answer, It's from dan browns digital fortress, Arranging it into a square reveals the clue as ``PRIME DIFFERENCE BETWEEN ELEMENTS RESPONSIBLE FOR HIROSHIMA AND NAGASAKI''. The book answers it as three. 
+
+In front of the gate there is a single text box, when the word three is written into it, the textbox splits into three and three answers are to be found simultaneusly.
+
+The answers are a game, a book and a movie respectively.
+
+A glitchy egg for our plumber twins. The plumber twins are mario, and the glitchy egg refers to a glitch/easter egg in mario, called Minus World. The first part of the key is therefore ``minusworld''
+
+The twist by richard ends. Richard can be shortened to dick, So dick ends is dickens. The twist refers to Oliver Twist written by Charles dickens. That gives the second part of the key as ``olivertwist''
+
+A tribute to where it all begins. This game began from the book ready player one. and that is the third part of the key ``readyplayerone''.
+
+Entering all three unlocks the gate. It might be insanely hard to get all three right at once, So if any of them are right, a tick appears next to it so that the user knows that the answer is correct. Thus restricting the search to lesser riddles.
+
+\section{Third Gate}
+The third gate has a simple textbox. A white background. The text above reads (haven't decided if a rhyme is necessary here). ``The tribute felt too small don't you think?''
+
+In the book, ready player one, ernest cline hid an easter egg to a competition he hosted. The first part of the competition, The copper gate is still up and it involves playing an atari 2600 game called the stacks, on completing the game and finding the easter egg, a qr code with a link appears. The link is the answer to this round. On entering it. The credits roll.
+
+At the end of the credits, the logo ie an easter egg appears. Inside the easter egg is a hidden, smaller easter egg. On clicking it, you enter the bonus room.
+
+\section{Bonus room}
+An 8 bit graphic background and a single treasure chest sits. And a riddle appears on the screen.
+
+\begin{centering}
+The keys were gained
+The tribute was paid
+Cut off the heads claimed
+The bonus key is made
+\end{centering}
+
+The keys that were received in order were\\
+War games\\
+Necromancer\\
+Three\\
+Minus world\\
+Oliver twist\\
+Ready player one\\
+
+Taking off two letters from the beginning (cut off the heads claimed) of the first and last keys, and one from each of the others, we have the word ``want more''. In the almanac is a line stating, I is very important. Which leads to ``iwantmore'' which is the answer. (which is why you clicked the bonus egg)
+\end{document}  
