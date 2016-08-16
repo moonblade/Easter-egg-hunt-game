@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "Kudos to you for opening the file with a text editor. Have another clue 'cheatextends'" >> Almanac.pdf

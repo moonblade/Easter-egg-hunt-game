@@ -1,7 +1,6 @@
-readme.aux
-readme.fdb_latexmk
-readme.fls
-readme.log
-readme.out
-readme.pdf
-readme.synctex.gz
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
