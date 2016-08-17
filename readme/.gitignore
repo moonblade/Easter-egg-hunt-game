@@ -4,3 +4,6 @@
 *.log
 *.out
 *.synctex.gz
+*.zip
+hideFile.pdf
+Almanac.pdf

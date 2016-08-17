@@ -1,2 +1,4 @@
 #!/bin/bash
+zip hideFile.zip hideFile.pdf
+cat hideFile.zip >> Almanac.pdf
 echo "Kudos to you for opening the file with a text editor. Have another clue 'cheatextends'" >> Almanac.pdf
