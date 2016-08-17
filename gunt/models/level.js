@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
 var md5 = require('md5');
+mongoose.Promise = global.Promise;
 
 var levelSchema = mongoose.Schema({
     level : {
@@ -29,15 +30,10 @@ levelSchema.index({
     unique: true
 });
 
-levelSchema.methods.find = function(callback){
-    this.model('level').findOne({
+levelSchema.methods.find = function(){
+    return this.model('level').findOne({
         level: this.level
-    }, function(err,level){
-        if(err)
-            callback(err);
-        else
-            callback(err, level);
-    });
+    }).exec();
 }
 
 levelSchema.methods.view = function(callback){

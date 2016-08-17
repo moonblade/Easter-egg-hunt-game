@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var validate = require('mongoose-validator');
-var md5 = require('MD5');
+var md5 = require('md5');
 
 var playerSchema = mongoose.Schema({
     id : {
