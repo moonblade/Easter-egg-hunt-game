@@ -1,5 +1,5 @@
-angular.module("gunt", ["ngMaterial", "ui.router"])
-    .config(function($stateProvider, $urlRouterProvider) {
+angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage'])
+    .config(function($stateProvider, $urlRouterProvider, GooglePlusProvider) {
         $urlRouterProvider.otherwise("/app/game/one");
         $stateProvider
             .state("app", {
@@ -29,4 +29,9 @@ angular.module("gunt", ["ngMaterial", "ui.router"])
                 templateUrl: "modules/game/one.html",
                 controller: "oneController"
             });
+
+        GooglePlusProvider.init({
+            clientId: '244830570730-3e20m76uc4q9pnkkusljpmq6qnur472d.apps.googleusercontent.com',
+            apiKey: 'AIzaSyD98IUTYTnag2GoQsINaujL7kfLQxh76H4'
+        });
     });

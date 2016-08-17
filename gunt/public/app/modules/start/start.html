@@ -1,7 +1,6 @@
-<md-content class="md-padding">
-    <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
-        <md-nav-item md-nav-sref="app.game.dummy" name="game">Game</md-nav-item>
-        <md-nav-item md-nav-sref="app.scoreboard" name="scoreboard">Score Board</md-nav-item>
-    </md-nav-bar>
-</md-content>
+<md-tabs>
+  <md-tab ui-sref="app.game.dummy" label="Game"></md-tab>
+  <md-tab ui-sref="app.scoreboard" label="Score Board"></md-tab>
+</md-tabs>
+<md-button ng-click="login()" class="md-raised">{{loginAction}}</md-button>
 <ui-view/>
