@@ -4,10 +4,11 @@ var md5 = require('md5');
 mongoose.Promise = global.Promise;
 
 var levelSchema = mongoose.Schema({
-    level : {
+    level: {
         type: Number,
         unique: true,
-        required: true
+        required: true,
+        index: true
     },
     key: {
         type: String,
@@ -24,21 +25,15 @@ var levelSchema = mongoose.Schema({
 });
 
 
-levelSchema.index({
-    id: 1
-}, {
-    unique: true
-});
-
-levelSchema.methods.find = function(){
+levelSchema.methods.find = function() {
     return this.model('level').findOne({
         level: this.level
     }).exec();
 }
 
-levelSchema.methods.view = function(callback){
-    this.model('level').find(function(err,level){
-        if(err)
+levelSchema.methods.view = function(callback) {
+    this.model('level').find(function(err, level) {
+        if (err)
             callback(err);
         else
             callback(err, level);
@@ -48,4 +43,3 @@ levelSchema.methods.view = function(callback){
 
 var level = mongoose.model('level', levelSchema);
 module.exports = level;
- 

@@ -6,11 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var version = 'v1';
 var routes = require('./routes/'+version+'/index');
-var user = require('./routes/'+version+'/user');
+var player = require('./routes/'+version+'/player');
 var level = require('./routes/'+version+'/level');
-
+var config = require('./config');
 var app = express();
+var mongoose = require('mongoose');
 
+mongoose.connect(config.mongoUrl);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -23,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public/app/')));
 
-app.use('/user', user);
+app.use('/player', player);
 app.use('/level', level);
 app.use('/', routes);
 

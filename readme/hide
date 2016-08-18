@@ -1,4 +1,7 @@
 #!/bin/bash
+xelatex Almanac.tex
+xelatex secret.tex
 echo "Kudos to you for opening the file with a text editor and actually reading through it. Have a clue 'cheatawesome'" >> Almanac.pdf
+echo "Don't you think its time to stop searching for more?" >> secret.pdf
 zip secret.zip secret.pdf
 cat secret.zip >> Almanac.pdf

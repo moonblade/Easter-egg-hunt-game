@@ -1,28 +1,32 @@
 var express = require('express');
 var router = express.Router();
-var levelModel = require('../../models/level');
+var debug = require('debug')('player');
 var md5 = require('md5');
-var debug = require('debug')('level');
+var playerModel = require('../../models/player');
+var levelModel = require('../../models/level');
 var constant = require('../../config/constant');
 var auth = require('./auth');
-/* GET home page. */
+
 function e(errMsg) {
     return {
         error: errMsg
     };
 }
+
 router.get('/', function(req, res, next) {
-    levelModel.findOne({level : req.query.level}).exec().then(function(foundLevel) {
-        res.send(foundLevel);
+    playerModel.findOne({
+        id: req.query.id
+    }).exec().then(function(foundPlayer) {
+        res.send(foundPlayer);
     }).catch(function(error) {
         res.status(constant.serverError).send(e(error));
     })
 });
 
 router.delete('/', function(req, res, next) {
-    var level = req.body.level;
-    levelModel.remove(level)
-        .then(function(level) {
+    var player = req.body.player;
+    playerModel.remove(player)
+        .then(function(player) {
             return res.json(constant.successMessage);
         }).catch(function(error) {
             return res.status(constant.serverError).send(e(error));
@@ -30,22 +34,14 @@ router.delete('/', function(req, res, next) {
 });
 
 router.put('/', function(req, res, next) {
-    var level = req.body.level;
-    level.key = md5(level.key);
-    debug(level);
-    levelModel.update({
-            "level": level.level
-        }, {
-            $set: level
-        }, {
-            upsert: true
-        })
-        .exec()
-        .then(function(level) {
-            return res.json(constant.successMessage);
-        }).catch(function(error) {
+    var player = new playerModel(req.body.player);
+    debug(player);
+    // Apparently promise violates "unique" rules and creates a copy, weird
+    player.save(function(error) {
+        if (error)
             return res.status(constant.serverError).send(e(error));
-        });
+        return res.json(constant.successMessage);
+    });
 });
 
 module.exports = router;

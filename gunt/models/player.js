@@ -3,17 +3,16 @@ var validate = require('mongoose-validator');
 var md5 = require('md5');
 
 var playerSchema = mongoose.Schema({
-    id : {
+    id: {
         type: Number,
-        required: true
+        required: true,
+        unique: true,
+        index: true
     },
     name: {
         type: String,
+        unique: true,
         required: true,
-    },
-    email: {
-        type: String,
-        required: true
     },
     score: {
         type: Number,
@@ -21,7 +20,22 @@ var playerSchema = mongoose.Schema({
     },
     level: {
         type: Number,
+        default: 0,
+        index: true
+    },
+    auth: {
+        type: Number,
         default: 0
+            // 0 - player
+            // 1 - writer
+            // 2 - admin
+    },
+    status: {
+        type: Number,
+        default: 0
+            // 0 - Active
+            // 1 - Inactive
+            // 2 - Banned
     }
 });
 
@@ -31,11 +45,11 @@ playerSchema.index({
     unique: true
 });
 
-playerSchema.methods.login = function(callback){
+playerSchema.methods.login = function(callback) {
     this.model('player').findOne({
         id: this.id
-    }, function(err,player){
-        if(err)
+    }, function(err, player) {
+        if (err)
             callback(err);
         else
             callback(err, player);
@@ -43,4 +57,3 @@ playerSchema.methods.login = function(callback){
 }
 var player = mongoose.model('player', playerSchema);
 module.exports = player;
- 

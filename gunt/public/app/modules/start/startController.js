@@ -15,8 +15,8 @@ angular.module("gunt")
         $scope.login = function() {
             if ($localStorage.guntUser) {
                 // logout
-                $localStorage.guntUser = null
-                $scope.loginAction = "Login"
+                $localStorage.guntUser = null;
+                $scope.loginAction = "Login";
                 GooglePlus.logout();
             } else {
                 // login
