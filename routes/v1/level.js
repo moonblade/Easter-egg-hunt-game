@@ -12,7 +12,9 @@ function e(errMsg) {
     };
 }
 router.get('/', function(req, res, next) {
-    levelModel.findOne({level : req.query.level}).exec().then(function(foundLevel) {
+    levelModel.findOne({
+        level: req.query.level
+    }).exec().then(function(foundLevel) {
         res.send(foundLevel);
     }).catch(function(error) {
         res.status(constant.serverError).send(e(error));
