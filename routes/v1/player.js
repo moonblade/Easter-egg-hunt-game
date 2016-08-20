@@ -17,13 +17,16 @@ router.get('/', function(req, res, next) {
     playerModel.findOne({
         id: req.query.id
     }).exec().then(function(foundPlayer) {
-        res.send(foundPlayer);
+        if (foundPlayer.status == constant.playerStatus.banned || foundPlayer.status == constant.playerStatus.inactive)
+            res.status(401).send(e(constant.codes.playerNotActive));
+        else
+            res.send(foundPlayer);
     }).catch(function(error) {
         res.status(constant.serverError).send(e(error));
     })
 });
 
-router.delete('/', function(req, res, next) {
+router.delete('/', auth.admin, function(req, res, next) {
     var player = req.body.player;
     playerModel.remove(player)
         .then(function(player) {
@@ -42,6 +45,32 @@ router.put('/', function(req, res, next) {
             return res.status(constant.serverError).send(e(error));
         return res.json(constant.successMessage);
     });
+});
+
+router.post('/checkAnswer', auth.player, function(req, res, next) {
+    var answer = md5(req.body.answer);
+    var player = req.body.player;
+    playerModel.findOne({
+        id: req.body.player.id
+    }).exec().then(function(foundPlayer) {
+        if (foundPlayer) {
+            levelModel.findOne({
+                level: foundPlayer.level
+            }).exec().then(function(foundLevel) {
+                if (answer == foundLevel.key) {
+                    // TODO update level of user and return true
+                } else {
+                    return res.json(constant.codes.wrongAnswer);
+                }
+            }).catch(function(error) {
+                return res.status(constant.serverError).send(e(error));
+            });
+        } else
+            return res.status(constant.serverError).send(e(constant.codes.noPlayerFound));
+    }).catch(function(error) {
+        return res.status(constant.serverError).send(e(error));
+    })
+
 });
 
 module.exports = router;

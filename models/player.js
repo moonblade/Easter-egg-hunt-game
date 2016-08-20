@@ -45,6 +45,12 @@ playerSchema.index({
     unique: true
 });
 
+playerSchema.index({
+    name: 1
+}, {
+    unique: true
+});
+
 playerSchema.methods.login = function(callback) {
     this.model('player').findOne({
         id: this.id

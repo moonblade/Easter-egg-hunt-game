@@ -28,12 +28,21 @@ input = {
             name: "testName",
         }
     },
+    putPlayerNameConflict: {
+        player: {
+            id: "654322",
+            name: "testName"
+        }
+    },
     getPlayer: "?id=654321",
     deletePlayer: {
         player: {
             id: "654321",
+        },
+        user: {
+            id: "791a4270d908c5d131e59f4ee95b9f4a"
         }
-    },
+    }
 }
 
 describe('Routing', function() {
@@ -63,19 +72,6 @@ describe('Routing', function() {
                     done();
                 });
         });
-
-        it('Deletes a level', function(done) {
-            request(url)
-                .delete("/level")
-                .send(input.deleteLevel)
-                .expect('Content-Type', /json/)
-                .expect(200)
-                .end(function(err, res) {
-                    if (err)
-                        return done(err)
-                    done();
-                });
-        });
     });
 
     describe('Player Functions', function() {
@@ -85,6 +81,32 @@ describe('Routing', function() {
                 .send(input.putPlayer)
                 .expect('Content-Type', /json/)
                 .expect(200)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err)
+                    done();
+                });
+        });
+
+        it('Conflict on id of player', function(done) {
+            request(url)
+                .put("/player")
+                .send(input.putPlayer)
+                .expect('Content-Type', /json/)
+                .expect(500)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err)
+                    done();
+                });
+        });
+
+        it('Conflict on name of player', function(done) {
+            request(url)
+                .put("/player")
+                .send(input.putPlayerNameConflict)
+                .expect('Content-Type', /json/)
+                .expect(500)
                 .end(function(err, res) {
                     if (err)
                         return done(err)
@@ -116,5 +138,20 @@ describe('Routing', function() {
                     done();
                 });
         });
-    })
+    });
+
+    describe('Level Functions', function() {
+        it('Deletes a level', function(done) {
+            request(url)
+                .delete("/level")
+                .send(input.deleteLevel)
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function(err, res) {
+                    if (err)
+                        return done(err)
+                    done();
+                });
+        });
+    });
 })

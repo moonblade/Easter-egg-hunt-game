@@ -22,5 +22,11 @@
     "should": "^9.0.2",
     "supertest": "^1.2.0",
     "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.14.0",
+    "gulp": "^3.9.1",
+    "gulp-inject": "^4.1.0",
+    "wiredep": "^4.0.0"
   }
 }
