@@ -8,7 +8,7 @@ angular.module("gunt")
                     $scope.userLevel = data.data.level;
                     $state.go(levelToState[$scope.userLevel]);
                 }).catch(function(error) {
-                    console.log(error);
+                    $scope.showError(error);
                 });
         }
 

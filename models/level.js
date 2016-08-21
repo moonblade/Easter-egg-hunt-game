@@ -17,10 +17,6 @@ var levelSchema = mongoose.Schema({
     basescore: {
         type: Number,
         required: true
-    },
-    num: {
-        type: Number,
-        default: 0
     }
 });
 

@@ -11,6 +11,7 @@ module.exports = {
         banned: 2
     },
     codes: {
+        successCode: 0,
         successMessage: {
             "code": 0,
             "message": "Success"

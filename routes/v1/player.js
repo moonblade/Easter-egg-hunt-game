@@ -28,6 +28,7 @@ function e(errMsg) {
  *   "score": 0
  *  }
  * @apiGroup player
+ * @apiVersion 0.1.0
  */
 router.get('/', function(req, res, next) {
     playerModel.findOne({
@@ -54,12 +55,13 @@ router.get('/', function(req, res, next) {
  *       id: "791a4270d908c5d131e59f4ee95b9f4a"
  *   }
  * }
- * @apiSuccessExample {josn} success
+ * @apiSuccessExample {json} success
  * {
  *      "code" : 0,
  *      "message": "Success"
  * }
  * @apiGroup player
+ * @apiVersion 0.1.0
  */
 router.delete('/', auth.admin, function(req, res, next) {
     var player = req.body.player;
@@ -80,12 +82,13 @@ router.delete('/', auth.admin, function(req, res, next) {
  *       name: "testName",
  *   }
  * }
- * @apiSuccessExample {josn} success
+ * @apiSuccessExample {json} success
  * {
  *      "code" : 0,
  *      "message": "Success"
  * }
  * @apiGroup player
+ * @apiVersion 0.1.0
  */
 router.put('/', function(req, res, next) {
     var player = new playerModel(req.body.player);
@@ -98,6 +101,24 @@ router.put('/', function(req, res, next) {
     });
 });
 
+/**
+ * @api {post} /player/checkAnswer check answer
+ * @apiDescription Checks if the answer is correct, updates player score and level in backend
+ * @apiParamExample {json} request
+ * {
+ *   player: {
+ *       id: "654321",
+ *   },
+ *   answer: "testKey"
+ * }
+ * @apiSuccessExample {json} success
+ * {
+ *      "code" : 0,
+ *      "message": "Correct Answer"
+ * }
+ * @apiGroup player
+ * @apiVersion 0.1.0
+ */
 router.post('/checkAnswer', auth.player, function(req, res, next) {
     var answer = md5(req.body.answer);
     var player = req.body.player;
@@ -106,16 +127,42 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
     }).exec().then(function(foundPlayer) {
         if (foundPlayer) {
             levelModel.findOne({
-                level: foundPlayer.level
-            }).exec().then(function(foundLevel) {
-                if (answer == foundLevel.key) {
-                    // TODO update level of user and return true
-                } else {
-                    return res.json(constant.codes.wrongAnswer);
-                }
-            }).catch(function(error) {
-                return res.status(constant.serverError).send(e(error));
-            });
+                    level: foundPlayer.level
+                }).exec()
+                .then(function(foundLevel) {
+                    if (answer == foundLevel.key) {
+                        // TODO update level of user and return true
+                        // find number of users with that level
+                        playerModel.count({
+                            level: {
+                                $gte: foundLevel.level
+                            }
+                        }).exec().then(function(count) {
+                            console.log(count);
+                            // add 5000 to 1000 for the first five people
+                            plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
+                            scoreToAdd = foundLevel.basescore + plusBaseScore;
+                            playerModel.update(foundPlayer, {
+                                    $set: {
+                                        level: foundPlayer.level + 1,
+                                        score: foundPlayer.score + scoreToAdd
+                                    }
+                                }).exec()
+                                .then(function(foundPlayer) {
+                                    return res.json(constant.codes.correctAnswer);
+                                }).catch(function(error) {
+                                    return res.status(constant.serverError).send(e(error));
+                                })
+
+                        }).catch(function(error) {
+                            return res.status(constant.serverError).send(e(error));
+                        })
+                    } else {
+                        return res.json(constant.codes.wrongAnswer);
+                    }
+                }).catch(function(error) {
+                    return res.status(constant.serverError).send(e(error));
+                });
         } else
             return res.status(constant.serverError).send(e(constant.codes.noPlayerFound));
     }).catch(function(error) {

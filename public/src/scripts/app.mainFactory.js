@@ -14,7 +14,18 @@ angular.module("gunt")
         }
 
         factory.checkAnswer = function(player, answer) {
-        	
+            return $http({
+                method: "POST",
+                url: serverUrl + "player/checkAnswer",
+                data: {
+                    "player": player,
+                    "answer": answer
+                }
+            });
+        }
+
+        factory.scoreBoard = function() {
+            return $http.get(serverUrl + "/scoreBoard");
         }
 
         factory.addPlayer = function(player) {

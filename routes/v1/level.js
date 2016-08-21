@@ -38,6 +38,7 @@ function e(errMsg) {
  *    }
  *  }
  *  @apiGroup level
+ *  @apiVersion 0.1.0
  */
 router.post('/', auth.admin, function(req, res, next) {
     levelModel.findOne(req.body.level)
@@ -50,7 +51,7 @@ router.post('/', auth.admin, function(req, res, next) {
 
 /**
  * @api {delete} /level delete level
- * @apiParamExample {josn} request
+ * @apiParamExample {json} request
  * {
  *   level: {
  *       level: 101,
@@ -59,12 +60,13 @@ router.post('/', auth.admin, function(req, res, next) {
  *       id: "791a4270d908c5d131e59f4ee95b9f4a"
  *   }
  * }
- * @apiSuccessExample {josn} success
+ * @apiSuccessExample {json} success
  * {
  *      "code" : 0,
  *      "message": "Success"
  * }
  * @apiGroup level
+ * @apiVersion 0.1.0
  */
 router.delete('/', auth.admin, function(req, res, next) {
     var level = req.body.level;
@@ -78,7 +80,7 @@ router.delete('/', auth.admin, function(req, res, next) {
 
 /**
  * @api {put} /level put level
- * @apiParamExample {josn} request
+ * @apiParamExample {json} request
  * {
  *  level: {
  *      level: 101,
@@ -90,12 +92,13 @@ router.delete('/', auth.admin, function(req, res, next) {
  *  }
  * }
  *
- * @apiSuccessExample {josn} success
+ * @apiSuccessExample {json} success
  * {
  *      "code" : 0,
  *      "message": "Success"
  * }
  * @apiGroup level
+ * @apiVersion 0.1.0
  */
 router.put('/', auth.admin, function(req, res, next) {
     var level = req.body.level;

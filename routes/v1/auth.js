@@ -29,7 +29,6 @@ exports.admin = function(req, res, next) {
     }).catch(function(error) {
         return res.status(constant.serverError).send(e(error));
     })
-    return unauthorized();
 }
 
 exports.player = function(req, res, next) {
@@ -46,15 +45,12 @@ exports.player = function(req, res, next) {
     playerModel.findOne({
         id: req.body.player.id
     }).exec().then(function(foundPlayer) {
+        return next();
         if (foundPlayer.status == constant.playerStatus.banned || foundPlayer.status == constant.playerStatus.inactive)
-            res.status(401).send(e({
-                code: 10,
-                errmsg: "Your account is not active"
-            }));
+            res.status(401).send(e(constant.codes.playerNotActive));
         else
             return next();
     }).catch(function(error) {
         return res.status(constant.serverError).send(e(error));
     })
-    return unauthorized();
 }

@@ -40,7 +40,14 @@ input = {
         player: {
             id: "654321",
             name: "testName",
+            level:101
         }
+    },
+    checkAnswer: {
+        player: {
+            id: "654321"
+        },
+        answer: "testKey"
     },
     putPlayerNameConflict: {
         player: {
@@ -103,6 +110,7 @@ describe('Routing', function() {
                 });
         });
 
+
         it('Conflict on id of player', function(done) {
             request(url)
                 .put("/player")
@@ -129,6 +137,19 @@ describe('Routing', function() {
                 });
         });
 
+        it('Checks if answer is correct', function(done) {
+            request(url)
+                .post("/player/checkAnswer")
+                .send(input.checkAnswer)
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function(err, res) {
+                    should.not.exist(err);
+                    res.body.should.eql(constant.codes.correctAnswer);
+                    done();
+                });
+        });
+
         it('Gets a player', function(done) {
             request(url)
                 .get("/player" + input.getPlayer)
@@ -137,6 +158,24 @@ describe('Routing', function() {
                 .end(function(err, res) {
                     should.not.exist(err);
                     res.body.should.have.property('_id');
+                    // checks if passed correct answer by checking level and score
+                    res.body.should.have.property('level');
+                    res.body.level.should.eql(102);
+                    res.body.should.have.property('score');
+                    res.body.score.should.not.eql(0);
+                    done();
+                });
+        });
+
+        it('Gets scoreBoard', function(done) {
+            request(url)
+                .get("/scoreboard")
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function(err, res) {
+                    should.not.exist(err);
+                    res.body.should.have.property('scoreBoard');
+                    res.body.scoreBoard.length.should.be.above(9);
                     done();
                 });
         });
