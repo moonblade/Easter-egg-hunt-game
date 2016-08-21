@@ -13,6 +13,22 @@ function e(errMsg) {
     };
 }
 
+/**
+ * @api {get} /player get player
+ * @apiParam {String} id id of the player to get
+ * @apiSuccessExample {json} success
+ *  {
+ *   "_id": "57b9454c6ba8386c2ca2926c",
+ *   "id": 65432,
+ *   "name": "testName",
+ *   "__v": 0,
+ *   "status": 0,
+ *   "auth": 0,
+ *   "level": 0,
+ *   "score": 0
+ *  }
+ * @apiGroup player
+ */
 router.get('/', function(req, res, next) {
     playerModel.findOne({
         id: req.query.id
@@ -22,28 +38,63 @@ router.get('/', function(req, res, next) {
         else
             res.send(foundPlayer);
     }).catch(function(error) {
-        res.status(constant.serverError).send(e(error));
+        res.send();
+        // res.status(constant.serverError).send(e(error));
     })
 });
 
+/**
+ * @api {delete} /player delete player
+ * @apiParamExample {json} request
+ * {
+ *   player: {
+ *       id: "654321",
+ *   },
+ *   user: {
+ *       id: "791a4270d908c5d131e59f4ee95b9f4a"
+ *   }
+ * }
+ * @apiSuccessExample {josn} success
+ * {
+ *      "code" : 0,
+ *      "message": "Success"
+ * }
+ * @apiGroup player
+ */
 router.delete('/', auth.admin, function(req, res, next) {
     var player = req.body.player;
     playerModel.remove(player)
         .then(function(player) {
-            return res.json(constant.successMessage);
+            return res.json(constant.codes.successMessage);
         }).catch(function(error) {
             return res.status(constant.serverError).send(e(error));
         })
 });
 
+/**
+ * @api {put} /player put player
+ * @apiParamExample {json} request
+ * {
+ *   player: {
+ *       id: "654321",
+ *       name: "testName",
+ *   }
+ * }
+ * @apiSuccessExample {josn} success
+ * {
+ *      "code" : 0,
+ *      "message": "Success"
+ * }
+ * @apiGroup player
+ */
 router.put('/', function(req, res, next) {
     var player = new playerModel(req.body.player);
     debug(player);
-    // Apparently promise violates "unique" rules and creates a copy, weird
+    // Apparently promise violates some rules and creates a copy, weird
     player.save(function(error) {
         if (error)
             return res.status(constant.serverError).send(e(error));
-        return res.json(constant.successMessage);
+        return res.json(constant.codes.successMessage);
     });
 });
 

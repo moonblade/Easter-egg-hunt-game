@@ -1,6 +1,7 @@
 angular.module("gunt")
     .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus) {
 
+        $scope.guntUser = $localStorage.guntUser;
         $scope.showMessage = function(title, message) {
             $mdDialog.show(
                 $mdDialog.alert()
@@ -14,20 +15,19 @@ angular.module("gunt")
         $scope.showError = function(err) {
             if (err) {
                 if (err.error) {
-                	switch(err.error.code)
-                	{
-                		case 11000:
-	                        $scope.showMessage('Error', 'Sorry, the avatar name is not available');
-	                        break;
-	                    case 10: 
-	                    // banned
-	                    case 20:
-	                    // player not found
-	                        $scope.showMessage('Error', err.error.errmsg);
-	                        break;
-	                    default:
-				            $scope.showMessage('Error', 'There was an error : ' + (err ? JSON.stringify(err) : "Unknown Error"));
-                	}
+                    switch (err.error.code) {
+                        case 11000:
+                            $scope.showMessage('Error', 'Sorry, the avatar name is not available');
+                            break;
+                        case 10:
+                            // banned
+                        case 20:
+                            // player not found
+                            $scope.showMessage('Error', err.error.errmsg);
+                            break;
+                        default:
+                            $scope.showMessage('Error', 'There was an error : ' + (err ? JSON.stringify(err) : "Unknown Error"));
+                    }
                     if (err.error.code == 11000) {
                         // Duplicate entry
                     } else if (err.error.code == 10) {
@@ -36,7 +36,9 @@ angular.module("gunt")
 
                 }
             }
-            $scope.showMessage('Error', 'There was an error : ' + (err ? JSON.stringify(err) : "Unknown Error"));
+            else{
+                $scope.showMessage('Error', 'There was an error : ' + (err ? JSON.stringify(err) : "Unknown Error"));
+            }
         }
 
         $scope.showPrompt = function(title, message, placeholder) {
@@ -56,6 +58,8 @@ angular.module("gunt")
             if ($localStorage.guntUser) {
                 // logout
                 $localStorage.guntUser = null;
+                $scope.guntUser = $localStorage.guntUser;
+
                 $scope.loginAction = "Login";
                 GooglePlus.logout();
             } else {
@@ -75,6 +79,8 @@ angular.module("gunt")
                                                         id: player.id,
                                                         name: player.name
                                                     };
+                                                    $scope.guntUser = $localStorage.guntUser;
+
                                                 }).error(function(err) {
                                                     console.log(err);
                                                     $scope.showError(err);
@@ -86,8 +92,10 @@ angular.module("gunt")
                                             id: player.id,
                                             name: result.name
                                         };
+                                        $scope.guntUser = $localStorage.guntUser;
                                     }
                                 }).error(function(err) {
+                                    $scope.showError(err);
                                     console.log(err)
                                 })
                         });
@@ -97,5 +105,9 @@ angular.module("gunt")
                         $scope.showError(err);
                     });
             }
+        }
+
+        $scope.openMenu = function($mdOpenMenu){
+            $mdOpenMenu();
         }
     }]);

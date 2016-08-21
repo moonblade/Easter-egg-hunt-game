@@ -1,8 +1,5 @@
 module.exports = {
     serverError: 500,
-    successMessage: {
-        "message": "Success"
-    },
     auth: {
         admin: 2,
         writer: 1,
@@ -14,6 +11,10 @@ module.exports = {
         banned: 2
     },
     codes: {
+        successMessage: {
+            "code": 0,
+            "message": "Success"
+        },
         correctAnswer: {
             code: 0,
             message: "Correct Answer"

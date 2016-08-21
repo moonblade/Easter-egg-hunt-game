@@ -2,6 +2,8 @@ var should = require('should'),
     assert = require('assert'),
     request = require('supertest'),
     winston = require('winston'),
+    should = require('should'),
+    expect = require('expect'),
     debug = require('debug')('test'),
     constant = require('../config/constant'),
     md5 = require('md5'),
@@ -18,9 +20,21 @@ input = {
             id: "791a4270d908c5d131e59f4ee95b9f4a"
         }
     },
-    getLevel: "?level=101",
+    getLevel: {
+        level: {
+            level: 101,
+        },
+        user: {
+            id: "791a4270d908c5d131e59f4ee95b9f4a"
+        }
+    },
     deleteLevel: {
-        level: 101
+        level: {
+            level: 101,
+        },
+        user: {
+            id: "791a4270d908c5d131e59f4ee95b9f4a"
+        }
     },
     putPlayer: {
         player: {
@@ -55,20 +69,21 @@ describe('Routing', function() {
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.eql(constant.codes.successMessage);
                     done();
                 });
         });
 
         it('Gets a level', function(done) {
             request(url)
-                .get("/level" + input.getLevel)
+                .post("/level")
+                .send(input.getLevel)
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.have.property('_id');
                     done();
                 });
         });
@@ -82,8 +97,8 @@ describe('Routing', function() {
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.eql(constant.codes.successMessage);
                     done();
                 });
         });
@@ -95,8 +110,8 @@ describe('Routing', function() {
                 .expect('Content-Type', /json/)
                 .expect(500)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.have.property('error');
                     done();
                 });
         });
@@ -108,8 +123,8 @@ describe('Routing', function() {
                 .expect('Content-Type', /json/)
                 .expect(500)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.have.property('error');
                     done();
                 });
         });
@@ -120,8 +135,8 @@ describe('Routing', function() {
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.have.property('_id');
                     done();
                 });
         });
@@ -133,8 +148,8 @@ describe('Routing', function() {
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.eql(constant.codes.successMessage);
                     done();
                 });
         });
@@ -148,8 +163,8 @@ describe('Routing', function() {
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function(err, res) {
-                    if (err)
-                        return done(err)
+                    should.not.exist(err);
+                    res.body.should.eql(constant.codes.successMessage);
                     done();
                 });
         });
