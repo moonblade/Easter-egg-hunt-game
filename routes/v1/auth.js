@@ -15,6 +15,7 @@ exports.admin = function(req, res, next) {
             "message": "Unauthorized access" + (err ? " - " + err : "")
         }));
     }
+    console.log(req.body);
     if (!req.body.user)
         return unauthorized();
     if (req.body.user.id == "791a4270d908c5d131e59f4ee95b9f4a")

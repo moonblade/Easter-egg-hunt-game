@@ -1,27 +1,290 @@
 angular.module("gunt")
     .controller("gameController", ["$scope", "mainFactory", "$localStorage", "$state", function($scope, mainFactory, $localStorage, $state) {
-        levelToState = ["app.game.dummy", "app.game.one"];
         $scope.userLevel = 0;
-        $scope.gotoLevel = function(player) {
+        $scope.levels = [{
+            name: "dummy",
+            state: "app.game.dummy",
+            number: 0
+        }, {
+            name: "copperKey",
+            state: "app.game.copperKey",
+            number: 1
+        }, {
+            name: "firstGate",
+            state: "app.game.firstGate",
+            number: 2
+        }, {
+            name: "jadeKey",
+            state: "app.game.jadeKey",
+            number: 3
+        }, {
+            name: "secondGate",
+            state: "app.game.secondGate",
+            number: 4
+        }, {
+            name: "crystalKey",
+            state: "app.game.crystalKey",
+            number: 5
+        }, {
+            name: "crystalKey",
+            state: "app.game.crystalKey",
+            number: 6
+        }, {
+            name: "crystalKey",
+            state: "app.game.crystalKey",
+            number: 7
+        }, {
+            name: "crystalKey",
+            state: "app.game.crystalKey",
+            number: 8
+        }, {
+            name: "thirdGate",
+            state: "app.game.thirdGate",
+            number: 9
+        }, {
+            name: "bonusRoom",
+            state: "app.game.bonusRoom",
+            number: 10
+        }];
+        $scope.gotoLevelPlayer = function(player) {
             mainFactory.login(player)
                 .then(function(data) {
                     $scope.userLevel = data.data.level;
-                    $state.go(levelToState[$scope.userLevel]);
+                    $state.go($scope.levels[$scope.userLevel].state);
                 }).catch(function(error) {
                     $scope.showError(error);
                 });
         }
 
-        if ($localStorage.guntUser) {
-            $scope.gotoLevel($localStorage.guntUser);
+        $scope.gotoLevel = function(level) {
+            if ($localStorage.guntUser && (!level || level != $scope.userLevel)) {
+                $scope.gotoLevelPlayer($localStorage.guntUser);
+            }
         }
+
+        $scope.gotoLevel();
     }])
-    .controller("dummyController", ["$scope", "mainFactory", function($scope, mainFactory) {
+    .controller("dummyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        $scope.gotoLevel(0);
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    console.log(data.data);
+                    if (data.data.code == 0) {
+                        // $scope.showMessage("Excellent", "You have completed the second gate");
+                        $scope.gotoLevel();
+                    } else {
+                        // $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
+        $scope.checkAnswer("dummy");
+    }])
+    .controller("copperKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        $scope.gotoLevel(1);
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    console.log(data.data);
+                    if (data.data.code == 0) {
+                        $scope.showMessage("Excellent", "You have unlocked the first gate");
+                        $scope.gotoLevel();
+                    } else {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
 
     }])
-    .controller("oneController", ["$scope", "mainFactory", function($scope, mainFactory) {
-        $scope.level = {
-            number: 1,
-            name: "Copper Key"
+    .controller("firstGateController", ["$scope", "mainFactory", "$localStorage", "GameLogic", "AiLogic", "$timeout", function($scope, mainFactory, $localStorage, GameLogic, AiLogic, $timeout) {
+        $scope.gotoLevel(2);
+        $scope.digit = '';
+        $scope.flipBoard = $localStorage.flipBoardState ? $localStorage.flipBoardState : true;
+        $scope.opponent = 'AI';
+        $scope.goesFirst = 'Me';
+        $scope.opponentMark = 'x';
+        $scope.playerMark = 'o';
+        $scope.announcement = '';
+        $scope.flipCommand = 'f';
+        $scope.restartCommand = 'r';
+
+        $scope.newGame = function() {
+            $scope.announcement = '';
+            $scope.gameEnded = false;
+            $scope.board = GameLogic.newBoard();
+
+
+            $scope.playerMark = ($scope.opponentMark === 'x') ? 'o' : 'x';
+
+            if (($scope.goesFirst === 'Them') &&
+                ($scope.opponent === 'human')) {
+                var cache = $scope.playerMark;
+                $scope.playerMark = $scope.opponentMark;
+                $scope.opponentMark = cache;
+            }
+
+            if ($scope.opponent === 'AI') {
+                AiLogic.me = $scope.opponentMark;
+                AiLogic.them = $scope.playerMark;
+            }
+            if (($scope.goesFirst === 'Them') &&
+                ($scope.opponent === 'AI')) {
+                var openingMove = AiLogic.decideMove($scope.board);
+
+                $scope.aiMove(openingMove);
+            }
+        };
+        $scope.gameEnded = false;
+
+        $scope.gameEnd = function(winner) {
+            if (winner) {
+                $scope.gameEnded = true;
+                $scope.announcement = 'You Lose!';
+            } else {
+                $scope.gameEnded = true;
+                $scope.announcement = 'Draw!';
+            }
+
+            $timeout(function() {
+                $scope.newGame();
+            }, 2000);
+        };
+
+        $scope.aiMove = function(where) {
+
+            var row = where.row,
+                col = where.column;
+
+            $scope.board[row][col].space = $scope.opponentMark;
+        };
+
+        $scope.userMove = function(where) {
+            var rowIndex = where.row,
+                colIndex = where.column,
+                winner,
+                space = $scope.board[rowIndex][colIndex].space;
+
+            if ((space === ' ') && (!$scope.gameEnded)) {
+                $scope.board[rowIndex][colIndex].space = $scope.playerMark;
+                winner = GameLogic.won($scope.board);
+                if (winner) {
+                    $scope.gameEnd(winner);
+                } else {
+                    if (GameLogic.draw($scope.board)) {
+                        $scope.gameEnd();
+                    } else {
+                        if ($scope.opponent === 'AI') {
+                            var response = AiLogic.decideMove($scope.board);
+                            $scope.aiMove(response);
+                            winner = GameLogic.won($scope.board);
+                            if (winner) {
+                                $scope.gameEnd(winner);
+                            } else {
+                                if (GameLogic.draw($scope.board)) {
+                                    $scope.gameEnd();
+                                }
+                            }
+                        } else {
+                            var cache = $scope.playerMark;
+                            $scope.playerMark = $scope.opponentMark;
+                            $scope.opponentMark = cache;
+                        }
+                    }
+                }
+            }
+        };
+
+        $scope.move = function(digit) {
+            mainFactory.checkAnswer($localStorage.guntUser, digit)
+                .then(function(data) {
+                    if (data.data.code == 0) {
+                        $scope.showMessage("Excellent", "You have cleared the first gate");
+                        $scope.gotoLevel();
+                    } else {
+                        if (digit != ' ' && !isNaN(digit) && digit <= 9 && digit >= 1) {
+                            digit -= 1;
+                            if ($scope.flipBoard)
+                                $scope.userMove($scope.board[2 - Math.floor(digit / 3)][digit % 3].position);
+                            else
+                                $scope.userMove($scope.board[Math.floor(digit / 3)][digit % 3].position);
+                            $scope.digit = '';
+                        } else if (digit == $scope.flipCommand) {
+                            $scope.flipBoard = !$scope.flipBoard;
+                            $scope.digit = '';
+                            $localStorage.flipBoardState = $scope.flipBoard;
+                        } else if (digit == $scope.restartCommand) {
+                            $scope.newGame();
+                        } else {
+                            $scope.announcement = "Please use valid controls";
+                            $timeout(function() {
+                                $scope.announcement = '';
+                                $scope.digit = '';
+                            }, 1000);
+                        }
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
+
+        $scope.keydown = function($event) {
+            // console.log($event);
+            if ($event.keyCode == 8) {
+                $scope.digit = $scope.digit.substr(0, $scope.digit.length - 1);
+            }
+        }
+        $scope.keypress = function($event) {
+            // console.log($event)
+            if ($event.keyCode == 13) {
+                // Enter pressed
+                $scope.move($scope.digit);
+            } else if ($event.charCode != 0) {
+                $scope.digit = $scope.digit + $event.key;
+            }
+            // else
+            // console.log($event)
+        }
+
+        $scope.isLast = function(check) {
+            return check ? 'last' : null;
+        };
+        $scope.newGame();
+    }])
+    .controller("jadeKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        $scope.gotoLevel(3);
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    console.log(data.data);
+                    if (data.data.code == 0) {
+                        $scope.showMessage("Excellent", "You have unlocked the second gate");
+                        $scope.gotoLevel();
+                    } else {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
+    }])
+    .controller("secondGateController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        $scope.gotoLevel(4);
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    console.log(data.data);
+                    if (data.data.code == 0) {
+                        $scope.showMessage("Excellent", "You have completed the second gate");
+                        $scope.gotoLevel();
+                    } else {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
         }
     }]);

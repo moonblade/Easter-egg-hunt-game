@@ -5,13 +5,23 @@ var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
 var apidoc = require('gulp-apidoc');
 var open = require('gulp-open');
+var mocha = require('gulp-mocha');
+gulp.task('default', ['serve'], function() {});
 
-gulp.task('default', ['browser-sync'], function() {});
-
-gulp.task('browser-sync', ['nodemon'], function() {
+gulp.task('serve', ['nodemon'], function() {
     browserSync.init(null, {
-        proxy: "http://localhost:5000",
-        files: ["routes/**/*.*","public/**/*.*","!public/bower_components/**/*.*"],
+        proxy: "http://localhost:5000/src",
+        files: ["routes/**/*.*", "public/**/*.*", "!public/bower_components/**/*.*"],
+        browser: "firefox",
+        port: 3000,
+    });
+    gulp.watch("*/**/*.html").on("change", browserSync.reload);
+});
+
+gulp.task('serve:dist', ['nodemon'], function() {
+    browserSync.init(null, {
+        proxy: "http://localhost:5000/dist",
+        files: ["routes/**/*.*", "public/**/*.*", "!public/bower_components/**/*.*"],
         browser: "firefox",
         port: 3000,
     });
@@ -38,3 +48,15 @@ gulp.task('doc', function(done) {
     gulp.src('docs/index.html')
         .pipe(open());
 });
+
+gulp.task('test', function() {
+    gulp.src('test/*.js')
+        .pipe(mocha());
+});
+
+gulp.task('helper', function() {
+    gulp.src('helper/*.js')
+        .pipe(mocha());
+});
+
+

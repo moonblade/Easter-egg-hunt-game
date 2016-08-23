@@ -16,7 +16,7 @@ angular.module("gunt")
         factory.checkAnswer = function(player, answer) {
             return $http({
                 method: "POST",
-                url: serverUrl + "player/checkAnswer",
+                url: serverUrl + "/player/checkAnswer",
                 data: {
                     "player": player,
                     "answer": answer
@@ -24,7 +24,7 @@ angular.module("gunt")
             });
         }
 
-        factory.scoreBoard = function() {
+        factory.scoreBoard = function(player) {
             return $http.get(serverUrl + "/scoreBoard");
         }
 

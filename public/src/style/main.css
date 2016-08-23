@@ -1,0 +1,15 @@
+/*@import url(https://fonts.googleapis.com/css?family=Chathura);*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#firstGate {
+    background: black;
+    height: 100%;
+    color: white;
+}
+
+#secondGate {
+  height: 100%;
+}

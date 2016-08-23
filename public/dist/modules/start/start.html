@@ -1,6 +1,19 @@
-<md-tabs>
-  <md-tab ui-sref="app.game.dummy" label="Game"></md-tab>
-  <md-tab ui-sref="app.scoreboard" label="Score Board"></md-tab>
-</md-tabs>
-<md-button ng-click="login()" class="md-raised">{{loginAction}}</md-button>
-<ui-view/>
+<md-toolbar layout="row">
+    <md-button ui-sref="app.game.dummy">Game</md-button>
+    <md-button ui-sref="app.scoreboard">Score Board</md-button>
+    <span flex></span>
+    <md-button ng-if="!guntUser" ng-click="login()" class="md-warn">{{loginAction}}</md-button>
+    <md-menu ng-if="guntUser">
+        <md-button class="md-warn" ng-click="openMenu($mdOpenMenu)">{{guntUser.name}}</md-button>
+        <md-menu-content>
+            <md-menu-item>
+                <md-button ng-click="login()">
+                    {{loginAction}}
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</md-toolbar>
+<div layout="column" style="height:100%">
+    <ui-view flex/>
+</div>
