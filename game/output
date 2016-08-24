@@ -1,0 +1,96 @@
+       .byte $FF                  ;XXXXXXXX
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A1                  ;X X    X
+       .byte $AD                  ;X X XX X
+       .byte $BD                  ;X XXXX X
+       .byte $85                  ;X    X X
+       .byte $85                  ;X    X X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A5                  ;X X  X X
+       .byte $BD                  ;X XXXX X
+       .byte $A9                  ;X X X  X
+       .byte $A5                  ;X X  X X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A1                  ;X X    X
+       .byte $B1                  ;X XX   X
+       .byte $A1                  ;X X    X
+       .byte $BD                  ;X XXXX X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A1                  ;X X    X
+       .byte $AD                  ;X X XX X
+       .byte $BD                  ;X XXXX X
+       .byte $85                  ;X    X X
+       .byte $85                  ;X    X X
+       .byte $81                  ;X      X
+       .byte $99                  ;X  XX  X
+       .byte $A5                  ;X X  X X
+       .byte $BD                  ;X XXXX X
+       .byte $A5                  ;X X  X X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A5                  ;X X  X X
+       .byte $BD                  ;X XXXX X
+       .byte $A9                  ;X X X  X
+       .byte $A5                  ;X X  X X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $99                  ;X  XX  X
+       .byte $99                  ;X  XX  X
+       .byte $BD                  ;X XXXX X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A5                  ;X X  X X
+       .byte $A5                  ;X X  X X
+       .byte $BD                  ;X XXXX X
+       .byte $81                  ;X      X
+       .byte $A5                  ;X X  X X
+       .byte $A5                  ;X X  X X
+       .byte $A5                  ;X X  X X
+       .byte $BD                  ;X XXXX X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A1                  ;X X    X
+       .byte $BD                  ;X XXXX X
+       .byte $85                  ;X    X X
+       .byte $BD                  ;X XXXX X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A1                  ;X X    X
+       .byte $AD                  ;X X XX X
+       .byte $BD                  ;X XXXX X
+       .byte $85                  ;X    X X
+       .byte $85                  ;X    X X
+       .byte $81                  ;X      X
+       .byte $99                  ;X  XX  X
+       .byte $A5                  ;X X  X X
+       .byte $BD                  ;X XXXX X
+       .byte $A5                  ;X X  X X
+       .byte $81                  ;X      X
+       .byte $A5                  ;X X  X X
+       .byte $BD                  ;X XXXX X
+       .byte $A5                  ;X X  X X
+       .byte $A5                  ;X X  X X
+       .byte $A5                  ;X X  X X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A1                  ;X X    X
+       .byte $B1                  ;X XX   X
+       .byte $A1                  ;X X    X
+       .byte $BD                  ;X XXXX X
+       .byte $81                  ;X      X
+       .byte $BD                  ;X XXXX X
+       .byte $A1                  ;X X    X
+       .byte $BD                  ;X XXXX X
+       .byte $85                  ;X    X X
+       .byte $BD                  ;X XXXX X
+       .byte $81                  ;X      X
+       .byte $FF                  ;XXXXXXXX
+       .byte $00                  ;        
+       .byte $00                  ;        
+       .byte $00                  ;        
+       .byte $00                  ;        
+       .byte $00                  ;        

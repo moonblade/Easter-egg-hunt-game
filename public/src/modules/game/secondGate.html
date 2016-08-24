@@ -1,6 +1,8 @@
 <div id="secondGate" layout="column" layout-align="center center">
-	<md-input-container>
-		<label>Enter password</label>
-		<input type="text" ng-model="answer">
-	</md-input-container>
+    <form ng-submit="checkAnswer(answer)">
+        <md-input-container>
+            <label></label>
+            <input type="text" ng-model="answer">
+        </md-input-container>
+    </form>
 </div>

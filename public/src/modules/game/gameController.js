@@ -71,7 +71,7 @@ angular.module("gunt")
                 .then(function(data) {
                     console.log(data.data);
                     if (data.data.code == 0) {
-                        // $scope.showMessage("Excellent", "You have completed the second gate");
+                        // $scope.showMessage("Excellent", "You have completed the dummy level");
                         $scope.gotoLevel();
                     } else {
                         // $scope.showMessage("I'm sorry", "Please try again");
