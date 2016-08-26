@@ -11,4 +11,5 @@ cat "$1" | tail -n $tot
 ) > temp
 dasm temp -oa.bin -f3
 rm temp
+rm output
 stella a.bin

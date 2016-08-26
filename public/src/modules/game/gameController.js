@@ -42,13 +42,18 @@ angular.module("gunt")
             state: "app.game.thirdGate",
             number: 9
         }, {
-            name: "bonusRoom",
-            state: "app.game.bonusRoom",
+            name: "credits",
+            state: "app.game.credits",
             number: 10
+        }, {
+            name: "credits",
+            state: "app.game.credits",
+            number: 11
         }];
         $scope.gotoLevelPlayer = function(player) {
             mainFactory.login(player)
                 .then(function(data) {
+                    console.log(data.data)
                     $scope.userLevel = data.data.level;
                     $state.go($scope.levels[$scope.userLevel].state);
                 }).catch(function(error) {
@@ -57,7 +62,7 @@ angular.module("gunt")
         }
 
         $scope.gotoLevel = function(level) {
-            if ($localStorage.guntUser && (!level || level != $scope.userLevel)) {
+            if ($localStorage.guntUser && ((!level || level != $scope.userLevel) && $scope.userLevel < 10)) {
                 $scope.gotoLevelPlayer($localStorage.guntUser);
             }
         }
@@ -69,7 +74,7 @@ angular.module("gunt")
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
-                    console.log(data.data);
+                    // console.log(data.data);
                     if (data.data.code == 0) {
                         // $scope.showMessage("Excellent", "You have completed the dummy level");
                         $scope.gotoLevel();
@@ -87,7 +92,7 @@ angular.module("gunt")
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
-                    console.log(data.data);
+                    // console.log(data.data);
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have unlocked the first gate");
                         $scope.gotoLevel();
@@ -120,8 +125,7 @@ angular.module("gunt")
 
             $scope.playerMark = ($scope.opponentMark === 'x') ? 'o' : 'x';
 
-            if (($scope.goesFirst === 'Them') &&
-                ($scope.opponent === 'human')) {
+            if (($scope.goesFirst === 'Them') && ($scope.opponent === 'human')) {
                 var cache = $scope.playerMark;
                 $scope.playerMark = $scope.opponentMark;
                 $scope.opponentMark = cache;
@@ -131,10 +135,8 @@ angular.module("gunt")
                 AiLogic.me = $scope.opponentMark;
                 AiLogic.them = $scope.playerMark;
             }
-            if (($scope.goesFirst === 'Them') &&
-                ($scope.opponent === 'AI')) {
+            if (($scope.goesFirst === 'Them') && ($scope.opponent === 'AI')) {
                 var openingMove = AiLogic.decideMove($scope.board);
-
                 $scope.aiMove(openingMove);
             }
         };
@@ -153,6 +155,14 @@ angular.module("gunt")
                 $scope.newGame();
             }, 2000);
         };
+
+        $scope.changeCursor = function() {
+            $timeout(function() {
+                $scope.cursor = $scope.cursor == '_' ? '' : '_';
+                $scope.changeCursor();
+            }, 500);
+        }
+        $scope.changeCursor();
 
         $scope.aiMove = function(where) {
 
@@ -259,7 +269,7 @@ angular.module("gunt")
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
-                    console.log(data.data);
+                    // console.log(data.data);
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have unlocked the second gate");
                         $scope.gotoLevel();
@@ -276,7 +286,7 @@ angular.module("gunt")
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
-                    console.log(data.data);
+                    // console.log(data.data);
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have completed the second gate");
                         $scope.gotoLevel();
@@ -286,5 +296,89 @@ angular.module("gunt")
                 }).catch(function(error) {
                     $scope.showError(error);
                 });
+        }
+    }])
+    .controller("crystalKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        $scope.answers = [null, null, null];
+        $scope.answerCodes = [false, false, false];
+        $scope.crystalKeyOne = {
+            top: "PFEESESNRETMPFHA",
+            right: "IRWEOOIGMEENNRMA",
+            bottom: "AAIISNCDSAHSTENE", //reversed
+            left: "IDOLELBFKNRBREEI", //reversed
+        }
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    // console.log(data.data);
+                    if (data.data.code == 0) {
+                        $scope.gotoLevel();
+                    } else {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
+
+        $scope.isRight = function(answerCode, number) {
+            return (answerCode & number) != 0;
+        }
+        $scope.checkAnswerThree = function(answers) {
+            mainFactory.checkAnswer($localStorage.guntUser, answers)
+                .then(function(data) {
+                    // console.log(data.data);
+                    if (data.data.code == 7) {
+                        $scope.showMessage("Excellent", "You have unlocked the third gate");
+                        $scope.gotoLevel();
+                    } else if (data.data.code == 0) {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    } else {
+                        $scope.answerCodes[0] = ((data.data.code & 1) != 0);
+                        $scope.answerCodes[1] = ((data.data.code & 2) != 0);
+                        $scope.answerCodes[2] = ((data.data.code & 4) != 0);
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
+    }]).controller("thirdGateController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        $scope.gotoLevel(9);
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    // console.log(data.data);
+                    if (data.data.code == 0) {
+                        $scope.showMessage("Excellent", "You have completed the third gate");
+                        $scope.gotoLevel();
+                    } else {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
+    }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    // console.log(data.data);
+                    if (data.data.code == 0) {
+                        $scope.showMessage("Excellent", "You have completed the Game");
+
+                        $scope.bonusMode = null;
+                        $scope.gotoLevel();
+                    } else {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    $scope.showError(error);
+                });
+        }
+        $scope.flipCredit = function(){
+            if($scope.userLevel && $scope.userLevel>=11)
+                return;
+            $scope.bonusMode = true;
+            $scope.showMessage("All right", "One last round before the end");
         }
     }]);

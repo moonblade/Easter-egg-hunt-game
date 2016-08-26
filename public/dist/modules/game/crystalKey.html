@@ -1,0 +1,58 @@
+<div style="height: 100%" layout="column" layout-align="center center">
+    <div layout="row" style="width: 100%" class="crystalKeyOne">
+        <span layout="row" layout-align="center center" ng-repeat="letter in crystalKeyOne.top track by $index" class="crystalKeyOne" layout-align="center center" flex>{{letter}}</span>
+    </div>
+    <div style="width:100%" layout="row" layout-align="center center" flex>
+        <div layout="column" style="height: 100%" class="crystalKeyOne">
+            <span layout="column" layout-align="center center" ng-repeat="letter in crystalKeyOne.left track by $index" class="crystalKeyOne" layout-align="center center" flex>{{letter}}</span>
+        </div>
+        <div style="height: 100%" layout="column" layout-align="center center" flex>
+            <span class="crystalKey">Game, book and movie blends</span>
+            <span class="crystalKey">A glitchy egg for our plumber twins</span>
+            <span class="crystalKey">The twist by richard ends</span>
+            <span class="crystalKey">A tribute to where it all begins</span>
+            <div ng-if="userLevel==5">
+                <form ng-submit="checkAnswer(answer)">
+                    <md-input-container>
+                        <label>Insert Key</label>
+                        <input id="inputAnswer" ng-model="answer">
+                    </md-input-container>
+                </form>
+            </div>
+            <div ng-if="userLevel==6">
+                <form ng-submit="checkAnswerThree(answers)" layout="row" layout-align="center center">
+                    <div layout="row">
+                        <md-input-container>
+                            <label>Insert Key</label>
+                            <input id="inputAnswer0" ng-model="answers[0]">
+                        </md-input-container>
+                        <md-checkbox ng-if="answerCodes[0]" ng-model="answerCodes[0]" ng-disabled="true" aria-label="checkbox"></md-checkbox>
+                    </div>
+                    <div layout="row">
+                        <md-input-container>
+                            <label>Insert Key</label>
+                            <input id="inputAnswer1" ng-model="answers[1]">
+                        </md-input-container>
+                        <md-checkbox ng-if="answerCodes[1]" ng-model="answerCodes[1]" ng-disabled="true" aria-label="checkbox"></md-checkbox>
+                    </div>
+                    <div layout="row">
+                        <md-input-container>
+                            <label>Insert Key</label>
+                            <input id="inputAnswer2" ng-model="answers[2]">
+                        </md-input-container>
+                        <md-checkbox ng-if="answerCodes[2]" ng-model="answerCodes[2]" ng-disabled="true" aria-label="checkbox"></md-checkbox>
+                    </div>
+                    <md-input-container>
+                        <input type="submit" id="submitButton" aria-label="submitButton">
+                    </md-input-container>
+                </form>
+            </div>
+        </div>
+        <div layout="column" style="height: 100%" layout-align="center center" class="crystalKeyOne">
+            <span layout="column" layout-align="center center" ng-repeat="letter in crystalKeyOne.right track by $index" class="crystalKeyOne" layout-align="center center" flex>{{letter}}</span>
+        </div>
+    </div>
+    <div layout="row" layout-align="end center" style="width: 100%" class="crystalKeyOne">
+        <span layout="row" layout-align="center center" ng-repeat="letter in crystalKeyOne.bottom track by $index" class="crystalKeyOne" flex>{{letter}}</span>
+    </div>
+</div>

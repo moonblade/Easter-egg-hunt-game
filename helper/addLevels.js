@@ -110,6 +110,15 @@ input = {
         "user": {
             "id": "791a4270d908c5d131e59f4ee95b9f4a"
         }
+    }, {
+        "level": {
+            "level": level++,
+            "key": "garblegarblegarble",
+            "basescore": 0
+        },
+        "user": {
+            "id": "791a4270d908c5d131e59f4ee95b9f4a"
+        }
     }]
 }
 

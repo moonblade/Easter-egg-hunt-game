@@ -62,7 +62,7 @@ angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage', 'm
             })
             .state("app.game.bonusRoom", {
                 url: "",
-                templateUrl: "modules/game/bonusRoom.html",
+                templateUrl: "modules/game/credits.html",
                 controller: "bonusRoomController"
             });
 

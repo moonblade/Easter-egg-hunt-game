@@ -15,23 +15,23 @@ var paths = {
 }
 
 gulp.task('index', function() {
-    var jsSources = gulp.src([paths.src + '/**/*.js'])
-        .pipe(angularFilesort());
-    var cssSources = gulp.src([paths.src + '/**/*.css'], {
-        read: false
-    });
     gulp.src(paths.src + '/index.html')
         .pipe(wiredep())
-        .pipe(inject(jsSources))
-        .pipe(inject(cssSources))
+        .pipe(inject(gulp.src(paths.src + '/**/*.js')
+            .pipe(angularFilesort()), {
+                relative: true
+            }))
+        .pipe(inject(gulp.src(paths.src + '/**/*.css', {
+            read: false
+        }), {
+            relative: true
+        }))
         .pipe(gulp.dest(paths.src));
 });
 
 gulp.task('dist', ['index', 'copy', 'uglify'], function() {})
 gulp.task('copy', function() {
-    gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html'], {
-            read: false
-        })
+    gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html'])
         .pipe(gulp.dest(paths.dist));
 })
 

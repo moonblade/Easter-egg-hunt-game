@@ -9,7 +9,7 @@ var auth = require('./auth');
 
 function e(errMsg) {
     return {
-        error: errMsg
+        error: errMsg ? errMsg : "Unknown Error"
     };
 }
 
@@ -120,85 +120,119 @@ router.put('/', function(req, res, next) {
  * @apiVersion 0.1.0
  */
 router.post('/checkAnswer', auth.player, function(req, res, next) {
-    var answer = req.body.answer;
-    var player = req.body.player;
-    playerModel.findOne({
-        id: req.body.player.id
-    }).exec().then(function(foundPlayer) {
-        if (foundPlayer) {
-            levelModel.findOne({
-                    level: foundPlayer.level
-                }).exec()
-                .then(function(foundLevel) {
-                    if (foundLevel.level >= 6 && foundLevel.level <= 8) {
+            var answer = req.body.answer;
+            var player = req.body.player;
+            playerModel.findOne({
+                id: req.body.player.id
+            }).exec().then(function(foundPlayer) {
+                    if (foundPlayer) {
                         levelModel.findOne({
-                                level: foundPlayer.level + 1
-                            })
-                            .exec()
-                            .then(function(foundLevel1) {
-                                levelModel.findOne({
-                                        level: foundPlayer.level + 2
-                                    })
-                                    .exec()
-                                    .then(function(foundLevel2) {
-                                        var returnCode = 0;
-                                        if (foundLevel.answer == md5(answer[0])) {
-                                            returnCode = returnCode | 1;
-                                        }
-                                        if (foundLevel1.answer == md5(answer[1])) {
-                                            returnCode = returnCode | 2;
-                                        }
-                                        if (foundLevel2.answer == md5(answer[2])) {
-                                            returnCode = returnCode | 4;
-                                        }
-                                        return res.send({code:returnCode,message:"Partial"})
-                                    }).catch(function(error) {
-                                        return res.status(constant.serverError).send(e(error));
-                                    })
-                            }).catch(function(error) {
-                                return res.status(constant.serverError).send(e(error));
-                            })
-                    } else {
-                        if (md5(answer) == foundLevel.key) {
-                            // TODO update level of user and return true
-                            // find number of users with that level
-                            playerModel.count({
-                                level: {
-                                    $gte: foundLevel.level
-                                }
-                            }).exec().then(function(count) {
-                                console.log(count);
-                                // add 5000 to 1000 for the first five people
-                                plusBaseScore = count < 6 ? (6 - count) * 1000 : 0;
-                                scoreToAdd = foundLevel.basescore + plusBaseScore;
-                                playerModel.update(foundPlayer, {
-                                        $set: {
-                                            level: foundPlayer.level + 1,
-                                            score: foundPlayer.score + scoreToAdd
-                                        }
-                                    }).exec()
-                                    .then(function(foundPlayer) {
-                                        return res.json(constant.codes.correctAnswer);
-                                    }).catch(function(error) {
-                                        return res.status(constant.serverError).send(e(error));
-                                    })
+                                level: foundPlayer.level
+                            }).exec()
+                            .then(function(foundLevel) {
+                                    if (foundLevel.level >= 6 && foundLevel.level <= 8) {
+                                        levelModel.findOne({
+                                                level: foundPlayer.level + 1
+                                            })
+                                            .exec()
+                                            .then(function(foundLevel1) {
+                                                    levelModel.findOne({
+                                                            level: foundPlayer.level + 2
+                                                        })
+                                                        .exec()
+                                                        .then(function(foundLevel2) {
+                                                                returnCode = 0;
+                                                                if (answer[0] && foundLevel.key == md5(answer[0])) {
+                                                                    returnCode = returnCode | 1;
+                                                                }
+                                                                if (answer[1] && foundLevel1.key == md5(answer[1])) {
+                                                                    returnCode = returnCode | 2;
+                                                                }
+                                                                if (answer[2] && foundLevel2.key == md5(answer[2])) {
+                                                                    returnCode = returnCode | 4;
+                                                                }
+                                                                if (((returnCode & 1) != 0) && ((returnCode & 2) != 0) && ((returnCode & 4) != 0)) {
+                                                                        playerModel.count({
+                                                                            level: {
+                                                                                $gte: foundLevel.level
+                                                                            }
+                                                                        }).exec().then(function(count) {
 
-                            }).catch(function(error) {
-                                return res.status(constant.serverError).send(e(error));
-                            })
-                        } else {
-                            return res.json(constant.codes.wrongAnswer);
-                        }
-                    }
-                }).catch(function(error) {
+                                                                            // add 5000 to 1000 for the first five people
+                                                                            plusBaseScore = count < 6 ? (6 - count) * 1000 : 0;
+                                                                            scoreToAdd = foundLevel.basescore + plusBaseScore;
+                                                                            console.log(foundPlayer)
+                                                                            playerModel.update(foundPlayer, {
+                                                                                    $set: {
+                                                                                        level: foundPlayer.level + 3,
+                                                                                        score: foundPlayer.score + scoreToAdd
+                                                                                    }
+                                                                                }).exec()
+                                                                                .then(function(foundPlayer) {
+                                                                                    return res.json({
+                                                                                        code: returnCode,
+                                                                                        message: "Partial"
+                                                                                    });
+                                                                                }).catch(function(error) {
+                                                                                    return res.status(constant.serverError).send(e(error));
+                                                                                })
+
+                                                                        }).catch(function(error) {
+                                                                            return res.status(constant.serverError).send(e(error));
+                                                                        });
+                                                                    } else {
+                                                                    return res.json({
+                                                                        code: returnCode,
+                                                                        message: "Partial"
+                                                                    });
+                                                                    }
+                                                                }).catch(function(error) {
+                                                                return res.status(constant.serverError).send(e(error));
+                                                            })
+                                                        }).catch(function(error) {
+                                                    return res.status(constant.serverError).send(e(error));
+                                                })
+                                            } else {
+                                                if (md5(answer) == foundLevel.key) {
+                                                    // TODO update level of user and return true
+                                                    // find number of users with that level
+                                                    playerModel.count({
+                                                        level: {
+                                                            $gte: foundLevel.level
+                                                        }
+                                                    }).exec().then(function(count) {
+                                                        console.log(count);
+                                                        // add 5000 to 1000 for the first five people
+                                                        plusBaseScore = count < 6 ? (6 - count) * 1000 : 0;
+                                                        scoreToAdd = foundLevel.basescore + plusBaseScore;
+                                                        playerModel.update(foundPlayer, {
+                                                                $set: {
+                                                                    level: foundPlayer.level + 1,
+                                                                    score: foundPlayer.score + scoreToAdd
+                                                                }
+                                                            }).exec()
+                                                            .then(function(foundPlayer) {
+                                                                return res.json(constant.codes.correctAnswer);
+                                                            }).catch(function(error) {
+                                                                return res.status(constant.serverError).send(e(error));
+                                                            })
+
+                                                    }).catch(function(error) {
+                                                        return res.status(constant.serverError).send(e(error));
+                                                    })
+                                                } else {
+                                                    return res.json(constant.codes.wrongAnswer);
+                                                }
+                                            }
+                                    }).catch(function(error) {
+                                    return res.status(constant.serverError).send(e(error));
+                                });
+                            } else
+                                return res.status(constant.serverError).send(e(constant.codes.noPlayerFound));
+                    }).catch(function(error) {
                     return res.status(constant.serverError).send(e(error));
-                });
-        } else
-            return res.status(constant.serverError).send(e(constant.codes.noPlayerFound));
-    }).catch(function(error) {
-        return res.status(constant.serverError).send(e(error));
-    })
+                })
 
-});
+            });
 
-module.exports = router;
+        module.exports = router;

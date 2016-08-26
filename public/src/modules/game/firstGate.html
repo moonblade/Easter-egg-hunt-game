@@ -1,13 +1,10 @@
 <div layout="column" layout-align="begin begin" id="firstGate" tabindex="0" ng-keydown="keydown($event)" ng-keypress="keypress($event)" autofocus>
-    <p class="prewrap">mb@oblivion:~$ tic-tac-toe</p>
-    <p class="prewrap"> </p>
+    <p class="prewrap">MB@IMSAI8080:~$ tic-tac-toe</p>
     <p class="prewrap">Instructions : WIN</p>
     <p class="prewrap">Controls : 1-9 - Choose cell</p>
     <p class="prewrap">Controls : {{flipCommand}} - Flip Board upside down</p>
     <p class="prewrap">Controls : {{restartCommand}} - Reset Game</p>
-    <p class="prewrap"> </p>
     <p class="prewrap">Choose number of players (0-2) : 1</p>
-    <p class="prewrap"> </p>
     <section class="agame-board" ng-show="board">
         <div layout="column" layout-align="begin begin">
             <div ng-repeat="(key,row) in board">
@@ -20,6 +17,6 @@
             </div>
         </div>
     </section>
-    <p>Enter Digit : {{digit}}_</p>
+    <p>Enter Digit : {{digit}}{{cursor}}</p>
     <p>{{announcement}}</p>
 </div>
