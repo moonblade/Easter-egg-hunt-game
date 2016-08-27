@@ -1,5 +1,5 @@
 var serverUrl = "dummy";
-angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage', 'md.data.table'])
+angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage', 'md.data.table', 'angular-md5'])
     .config(["$stateProvider", "$urlRouterProvider", "GooglePlusProvider", function($stateProvider, $urlRouterProvider, GooglePlusProvider) {
         $urlRouterProvider.otherwise("/app/game");
         $stateProvider

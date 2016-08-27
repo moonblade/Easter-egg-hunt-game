@@ -359,7 +359,7 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
-    }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+    }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", "md5", function($scope, mainFactory, $localStorage, md5) {
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
@@ -370,6 +370,9 @@ angular.module("gunt")
                         $scope.userLevel = 11;
                         $scope.bonusMode = null;
                     } else {
+                    if(md5.createHash(answer)=="8a30d24f059c3104d4e79c1d4e039997")
+                        $scope.showMessage("Who", "Remember puns?");
+                    else
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {

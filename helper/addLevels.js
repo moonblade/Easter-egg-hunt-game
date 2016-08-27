@@ -9,6 +9,7 @@ var should = require('should'),
     md5 = require('md5'),
     config = require('../config');
 
+var level = 0;
 input = {
     "putLevel": [{
         "level": {
@@ -40,7 +41,7 @@ input = {
     }, {
         "level": {
             "level": 3,
-            "key": "necromancer",
+            "key": "narvi",
             "basescore": 20000
         },
         "user": {
@@ -123,18 +124,160 @@ input = {
 
 describe('Routing', function() {
     var url = config.serverUrl;
-    for(key in input.putLevel) {
-        it('Put level ' + input.putLevel[key].level.level, function(done) {
-            request(url)
-                .put("/level")
-                .send(input.putLevel[key])
-                .expect('Content-Type', /json/)
-                .expect(200)
-                .end(function(err, res) {
-                    should.not.exist(err);
-                    res.body.should.eql(constant.codes.successMessage);
-                    done();
-                });
-        });
-    }
+    it('Put level ' + input.putLevel[0].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[0])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[1].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[1])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[2].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[2])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[3].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[3])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[4].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[4])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[5].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[5])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[6].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[6])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[7].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[7])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
+    it('Put level ' + input.putLevel[8].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[8])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+    
+    it('Put level ' + input.putLevel[9].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[9])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+    
+    it('Put level ' + input.putLevel[10].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[10])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+    
+    it('Put level ' + input.putLevel[11].level.level, function(done) {
+        request(url)
+            .put("/level")
+            .send(input.putLevel[11])
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+                should.not.exist(err);
+                res.body.should.eql(constant.codes.successMessage);
+                done();
+            });
+    });
+
 })
