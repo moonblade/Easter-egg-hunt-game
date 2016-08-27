@@ -53,7 +53,7 @@ angular.module("gunt")
         $scope.gotoLevelPlayer = function(player) {
             mainFactory.login(player)
                 .then(function(data) {
-                    console.log(data.data)
+                    // console.log(data.data)
                     $scope.userLevel = data.data.level;
                     $state.go($scope.levels[$scope.userLevel].state);
                 }).catch(function(error) {
@@ -85,7 +85,8 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
-        $scope.checkAnswer("dummy");
+        if(!$scope.userLevel || $scope.userLevel==1)
+            $scope.checkAnswer("dummy");
     }])
     .controller("copperKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
         $scope.gotoLevel(1);
@@ -364,10 +365,10 @@ angular.module("gunt")
                 .then(function(data) {
                     // console.log(data.data);
                     if (data.data.code == 0) {
-                        $scope.showMessage("Excellent", "You have completed the Game");
-
-                        $scope.bonusMode = null;
+                        $scope.showMessage("Of course you do", "but you have completed the Game");
                         $scope.gotoLevel();
+                        $scope.userLevel = 11;
+                        $scope.bonusMode = null;
                     } else {
                         $scope.showMessage("I'm sorry", "Please try again");
                     }

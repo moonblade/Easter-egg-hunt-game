@@ -3,7 +3,7 @@ angular.module("gunt")
 	mainFactory.scoreBoard().then(function(data){
 		if(data.data.code==0)
 		{
-			console.log(data.data);
+			// console.log(data.data);
 			$scope.scoreBoard = data.data.scoreBoard;
 		}
 	}).catch(function(error){

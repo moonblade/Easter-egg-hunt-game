@@ -1,6 +1,34 @@
-<div layout="column" layout-align="center center">
-    <h1>Credits</h1>
-    <div class="credit" ng-repeat="(key,credit) in credits">
-	    <span>{{credit}}</span>
-    </div>
+<div ng-if="bonusMode" style="height: 100%" layout="column" layout-align="center center">
+    <span class="bonusRoom">The keys were gained</span>
+    <span class="bonusRoom">The tribute was paid</span>
+    <span class="bonusRoom">Cut off the heads claimed</span>
+    <span class="bonusRoom">The bonus key is made</span>
+    <form ng-submit="checkAnswer(answer)">
+        <md-input-container>
+            <label>Insert Key</label>
+            <input id="inputAnswer" ng-model="answer">
+        </md-input-container>
+    </form>
+</div>
+<div ng-if="!bonusMode" layout="column" style="height:100%" layout-align="center center">
+    <h1 class="creditsTitle">Credits</h1>
+    </br>
+    <h2 class="credits">Mo<span ng-click="flipCredit()">o</span>nblade (/u/m00nbl4de)</h2>
+    <h3 class="credits">Based on Ready Player One by Earnest Cline</h3>
+    </br>
+    <h4 class="credits">Icons</h4>
+    <h5 class="credits">Stephanie Wauters</h5>
+    </br>
+    <h4 class="credits">Honourable Mentions</h4>
+    <h5 class="credits">/u/Missionmojo</h5>
+    <h5 class="credits">/u/Cptjack22</h5>
+    </br>
+    <h4 class="credits">Featured Media</h4>
+    <h5 class="credits">WarGames</h5>
+    <h5 class="credits">Lord of the rings</h5>
+    <h5 class="credits">Digital Fortress</h5>
+    <h5 class="credits">Oliver Twist</h5>
+    <h5 class="credits">Super Mario Bros</h5>
+    <h5 class="credits">Ready Player One</h5>
+    <h5 class="credits">Atari Adventure</h5>
 </div>

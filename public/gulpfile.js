@@ -39,7 +39,7 @@ gulp.task('uglify', function() {
     gulp.src(paths.src + '/index.html')
         .pipe(useref())
         .pipe(gulpif('*.js', uglify()))
-        .pipe(gulpif('*.css', cleanCss()))
+        .pipe(gulpif('*.css', cleanCss({processImport:false})))
         .pipe(gulpif('*.html', htmlmin({
             collapseWhitespace: true
         })))
