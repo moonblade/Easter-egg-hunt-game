@@ -10,7 +10,7 @@ gulp.task('default', ['serve'], function() {});
 
 gulp.task('serve', ['nodemon'], function() {
     browserSync.init(null, {
-        proxy: "http://localhost:5000/src",
+        proxy: "http://localhost:5000",
         files: ["routes/**/*.*", "public/**/*.*", "!public/bower_components/**/*.*"],
         browser: "firefox",
         port: 3000,

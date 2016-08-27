@@ -52,12 +52,9 @@ angular.module("gunt")
         }];
         $scope.gotoLevelPlayer = function(player) {
             mainFactory.login(player)
-                .then(function(data) {
-                    // console.log(data.data)
+                .then(function(data, error) {
                     $scope.userLevel = data.data.level;
                     $state.go($scope.levels[$scope.userLevel].state);
-                }).error(function(error) {
-                    $scope.showMessage("Login", "Please login to continue");
                 }).catch(function(error) {
                     $scope.showMessage("Login", "Please login to continue");
                     // $scope.showError(error);
