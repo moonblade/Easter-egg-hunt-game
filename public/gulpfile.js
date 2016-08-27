@@ -9,6 +9,7 @@ var uglify = require('gulp-uglify');
 var cleanCss = require('gulp-clean-css');
 var htmlmin = require('gulp-htmlmin');
 var angularFilesort = require('gulp-angular-filesort');
+var shell = require('gulp-shell');
 var paths = {
     src: "./src",
     dist: "./dist"
@@ -29,19 +30,23 @@ gulp.task('index', function() {
         .pipe(gulp.dest(paths.src));
 });
 
-gulp.task('dist', ['index', 'copy', 'uglify'], function() {})
+gulp.task('dist', ['index', 'copy', 'uglify', 'addImport'], function() {})
 gulp.task('copy', function() {
     gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html'])
         .pipe(gulp.dest(paths.dist));
-})
+});
 
 gulp.task('uglify', function() {
     gulp.src(paths.src + '/index.html')
         .pipe(useref())
         .pipe(gulpif('*.js', uglify()))
-        .pipe(gulpif('*.css', cleanCss({processImport:false})))
+        .pipe(gulpif('*.css', cleanCss({
+            processImport: false
+        })))
         .pipe(gulpif('*.html', htmlmin({
             collapseWhitespace: true
         })))
         .pipe(gulp.dest(paths.dist));
-})
+});
+
+gulp.task('addImport', shell.task(['echo $(cat src/style/main.css | head -n 1) | cat - dist/scripts/main.css > dist/scripts/temp; mv dist/scripts/temp dist/scripts/main.css']));

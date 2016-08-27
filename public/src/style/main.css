@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Ruge+Boogie|Shrikhand|Mogra');
+@import url('https://fonts.googleapis.com/css?family=Ruge+Boogie|Shrikhand|Mogra|Italianno');
 
 * {
     margin: 0;
@@ -19,6 +19,30 @@
   background-image: url("/images/secondGate.png");
   background-size: cover;
   background-position: 50% 50%;
+}
+
+.key
+{
+  font-size: 150%;
+  font-family: "Italianno";
+}
+
+.copperKey
+{
+  font-size: 150%;
+  font-family: "Italianno";
+}
+
+.jadeKey
+{
+  font-size: 150%;
+  font-family: "Italianno";
+}
+
+.crystalKey
+{
+  font-size: 150%;
+  font-family: "Italianno";
 }
 
 .crystalKeyOne {

@@ -70,23 +70,26 @@ angular.module("gunt")
         $scope.gotoLevel();
     }])
     .controller("dummyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+        if('showDummy' in $localStorage)
+            $scope.showDummy=$localStorage.showDummy;
+        else
+            $scope.showDummy=true;
         $scope.gotoLevel(0);
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
                     // console.log(data.data);
                     if (data.data.code == 0) {
-                        // $scope.showMessage("Excellent", "You have completed the dummy level");
+                        $scope.showMessage("Excellent", "You have proved your worth");
+                        $localStorage.showDummy=false;
                         $scope.gotoLevel();
                     } else {
-                        // $scope.showMessage("I'm sorry", "Please try again");
+                        $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
                     $scope.showError(error);
                 });
         }
-        if(!$scope.userLevel || $scope.userLevel==1)
-            $scope.checkAnswer("dummy");
     }])
     .controller("copperKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
         $scope.gotoLevel(1);

@@ -5,16 +5,15 @@
                 <th md-column md-numeric>rank</th>
                 <th md-column md-numeric>name</th>
                 <th md-column md-numeric>score</th>
-                <!-- <th md-column md-numeric>level</th> -->
+                <th md-column md-numeric></th>
             </tr>
         </thead>
         <tbody md-body>
             <tr md-row md-select="player" md-select-id="name" md-auto-select ng-repeat="(key,item) in scoreBoard">
                 <td md-cell>{{key+1}}</td>
                 <td md-cell>{{item.name}}</td>
-                <td md-cell>{{item.score}}<md-icon ng-if="item.level>2" md-svg-src="/images/gate.svg"></md-icon><md-icon ng-if="item.level>4" md-svg-src="/images/gate.svg"></md-icon><md-icon ng-if="item.level>9" md-svg-src="/images/gate.svg"></md-icon></td>
-                <td md-cell></td>
-                <!-- <td md-cell>{{item.level}}</td> -->
+                <td md-cell>{{item.score}}</td>
+                <td md-cell><md-icon ng-if="item.level>2" md-svg-src="/images/gate.svg"></md-icon><md-icon ng-if="item.level>4" md-svg-src="/images/gate.svg"></md-icon><md-icon ng-if="item.level>9" md-svg-src="/images/gate.svg"></md-icon></td>
             </tr>
         </tbody>
     </table>

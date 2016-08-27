@@ -14,7 +14,7 @@ input = {
     "putLevel": [{
         "level": {
             "level": 0,
-            "key": "dummy",
+            "key": "ignition",
             "basescore": 0
         },
         "user": {
