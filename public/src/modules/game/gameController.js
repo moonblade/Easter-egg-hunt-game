@@ -56,8 +56,11 @@ angular.module("gunt")
                     // console.log(data.data)
                     $scope.userLevel = data.data.level;
                     $state.go($scope.levels[$scope.userLevel].state);
+                }).error(function(error) {
+                    $scope.showMessage("Login", "Please login to continue");
                 }).catch(function(error) {
-                    $scope.showError(error);
+                    $scope.showMessage("Login", "Please login to continue");
+                    // $scope.showError(error);
                 });
         }
 

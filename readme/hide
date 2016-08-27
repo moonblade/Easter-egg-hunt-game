@@ -1,10 +1,11 @@
 #!/bin/bash
 xelatex Almanac.tex
-xelatex secret.tex
+# xelatex secret.tex
 echo "Kudos to you for opening the file with a text editor and actually reading through it. Have a clue 'cheatawesome'" >> Almanac.pdf
-zip adventure.zip adventure.bin
-cat adventure.zip >> secret.pdf
+zip --encrypt adventure.zip adventure.bin
+# cat adventure.zip >> secret.pdf
+# zip secret.zip secret.pdf
+# cat secret.zip >> Almanac.pdf
+cat adventure.zip >> Almanac.pdf
+# rm secret.zip
 rm adventure.zip
-zip secret.zip secret.pdf
-cat secret.zip >> Almanac.pdf
-rm secret.zip
