@@ -159,7 +159,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                                         }).exec().then(function(count) {
 
                                                                             // add 5000 to 1000 for the first five people
-                                                                            plusBaseScore = count < 6 ? (6 - count) * 1000 : 0;
+                                                                            plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
                                                                             scoreToAdd = foundLevel.basescore + plusBaseScore;
                                                                             console.log(foundPlayer)
                                                                             playerModel.update(foundPlayer, {
@@ -203,7 +203,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                     }).exec().then(function(count) {
                                                         console.log(count);
                                                         // add 5000 to 1000 for the first five people
-                                                        plusBaseScore = count < 6 ? (6 - count) * 1000 : 0;
+                                                        plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
                                                         scoreToAdd = foundLevel.basescore + plusBaseScore;
                                                         playerModel.update(foundPlayer, {
                                                                 $set: {
