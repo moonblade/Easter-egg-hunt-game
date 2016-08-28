@@ -154,7 +154,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                                 if (((returnCode & 1) != 0) && ((returnCode & 2) != 0) && ((returnCode & 4) != 0)) {
                                                                         playerModel.count({
                                                                             level: {
-                                                                                $gte: foundLevel.level
+                                                                                $gt: foundLevel.level
                                                                             }
                                                                         }).exec().then(function(count) {
 
@@ -198,7 +198,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                     // find number of users with that level
                                                     playerModel.count({
                                                         level: {
-                                                            $gte: foundLevel.level
+                                                            $gt: foundLevel.level
                                                         }
                                                     }).exec().then(function(count) {
                                                         console.log(count);
