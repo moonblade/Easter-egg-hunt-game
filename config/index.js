@@ -11,7 +11,7 @@ var config = {
     },
     production: {
         port: 3000,
-        mongoUrl: 'mongodb://admin:ClqPNtpPvYzR@'+dbhost+':'+dbport+'/'+db,
+        mongoUrl: 'mongodb://guntUser:guntPassword@ds017736.mlab.com:17736/heroku_m4xcpq22',
         serverUrl: 'http://localhost:3000'
     }
 };

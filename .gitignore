@@ -2,3 +2,4 @@ bower_components
 *.log
 node_modules
 docs
+helper/addLevels.js
