@@ -12,6 +12,23 @@ angular.module("gunt")
             );
         }
 
+        $scope.gotoLevelPlayer = function(player) {
+            mainFactory.login(player)
+                .then(function(data, error) {
+                    $scope.userLevel = data.data.level;
+                    $state.go($scope.levels[$scope.userLevel].state);
+                }).catch(function(error) {
+                    $scope.showMessage("Login", "Please login to continue");
+                    // $scope.showError(error);
+                });
+        }
+
+        $scope.gotoLevel = function(level) {
+            if ($localStorage.guntUser && ((!level || level != $scope.userLevel) && $scope.userLevel < 10)) {
+                $scope.gotoLevelPlayer($localStorage.guntUser);
+            }
+        }
+
         $scope.showError = function(err) {
             if (err) {
                 if (err.error) {
@@ -80,7 +97,7 @@ angular.module("gunt")
                                                         name: player.name
                                                     };
                                                     $scope.guntUser = $localStorage.guntUser;
-
+                                                    $scope.gotoLevel();
                                                 }).error(function(err) {
                                                     console.log(err);
                                                     $scope.showError(err);
@@ -93,6 +110,7 @@ angular.module("gunt")
                                             name: result.name
                                         };
                                         $scope.guntUser = $localStorage.guntUser;
+                                        $scope.gotoLevel();
                                     }
                                 }).error(function(err) {
                                     $scope.showError(err);

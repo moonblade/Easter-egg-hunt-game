@@ -14,6 +14,11 @@ angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage', 'm
                 templateUrl: "modules/scoreboard/scoreboard.html",
                 controller: "scoreController",
             })
+            .state("app.about", {
+                url: "/almanac",
+                templateUrl: "modules/about/about.html",
+                controller: "aboutController",
+            })
             .state("app.game", {
                 url: "/game",
                 templateUrl: "modules/game/game.html",

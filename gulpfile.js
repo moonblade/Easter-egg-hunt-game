@@ -12,7 +12,7 @@ gulp.task('serve', ['nodemon'], function() {
     browserSync.init(null, {
         proxy: "http://localhost:5000",
         files: ["routes/**/*.*", "public/**/*.*", "!public/bower_components/**/*.*"],
-        browser: "firefox",
+        browser: "google-chrome",
         port: 3000,
     });
     gulp.watch("*/**/*.html").on("change", browserSync.reload);
@@ -22,7 +22,7 @@ gulp.task('serve:dist', ['nodemon'], function() {
     browserSync.init(null, {
         proxy: "http://localhost:5000/dist",
         files: ["routes/**/*.*", "public/**/*.*", "!public/bower_components/**/*.*"],
-        browser: "firefox",
+        browser: "google-chrome",
         port: 3000,
     });
     gulp.watch("*/**/*.html").on("change", browserSync.reload);

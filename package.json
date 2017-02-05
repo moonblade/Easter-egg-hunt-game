@@ -21,7 +21,7 @@
     "node-env": "^0.1.6",
     "serve-favicon": "~2.3.0",
     "should": "^9.0.2",
-    "supertest": "^1.2.0",
+    "supertest": "^3.0.0",
     "winston": "^2.2.0"
   },
   "devDependencies": {

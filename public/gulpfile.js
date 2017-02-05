@@ -30,7 +30,7 @@ gulp.task('index', function() {
         .pipe(gulp.dest(paths.src));
 });
 
-gulp.task('dist', ['index', 'copy', 'uglify', 'addImport'], function() {})
+gulp.task('dist', ['index', 'copy', 'uglify'], function() {})
 gulp.task('copy', function() {
     gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html'])
         .pipe(gulp.dest(paths.dist));

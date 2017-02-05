@@ -1,5 +1,5 @@
 angular.module("gunt")
-    .controller("gameController", ["$scope", "mainFactory", "$localStorage", "$state", function($scope, mainFactory, $localStorage, $state) {
+    .controller("gameController", ["$scope", "mainFactory", "$localStorage", "$state", "$mdDialog", function($scope, mainFactory, $localStorage, $state, $mdDialog) {
         $scope.userLevel = 0;
         $scope.levels = [{
             name: "dummy",
@@ -50,6 +50,7 @@ angular.module("gunt")
             state: "app.game.credits",
             number: 11
         }];
+
         $scope.gotoLevelPlayer = function(player) {
             mainFactory.login(player)
                 .then(function(data, error) {
@@ -57,7 +58,8 @@ angular.module("gunt")
                     $state.go($scope.levels[$scope.userLevel].state);
                 }).catch(function(error) {
                     $scope.showMessage("Login", "Please login to continue");
-                    // $scope.showError(error);
+                    console.log(error); // 
+                    $scope.showError(error);
                 });
         }
 
@@ -69,7 +71,7 @@ angular.module("gunt")
 
         $scope.gotoLevel();
     }])
-    .controller("dummyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+    .controller("dummyController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", function($scope, mainFactory, $localStorage, $mdDialog) {
         if ('showDummy' in $localStorage)
             $scope.showDummy = $localStorage.showDummy;
         else
@@ -87,7 +89,14 @@ angular.module("gunt")
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
-                    $scope.showError(error);
+                    console.log(error);
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title("Error")
+                        .textContent(error.data.error.message + ", Please login with a valid account")
+                        .ok('Okay')
+                    );
                 });
         }
     }])
@@ -104,6 +113,7 @@ angular.module("gunt")
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }
@@ -241,6 +251,7 @@ angular.module("gunt")
                         }
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }
@@ -272,6 +283,7 @@ angular.module("gunt")
     }])
     .controller("jadeKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
         $scope.gotoLevel(3);
+        var clue = "Seriously? you even check the js part of this for a clue? Man you're good, All right Here you go, I'll give you a pointer to more clues, there are many clues in the almanac, one from the first letters of the bullet points, one in its metadata, another can be obtained by reading the pdf as a text file, yet another is hidden in white text as morse code.";
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
@@ -283,6 +295,7 @@ angular.module("gunt")
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }
@@ -300,6 +313,7 @@ angular.module("gunt")
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }
@@ -323,6 +337,7 @@ angular.module("gunt")
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }
@@ -345,6 +360,7 @@ angular.module("gunt")
                         $scope.answerCodes[2] = ((data.data.code & 4) != 0);
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }
@@ -361,6 +377,7 @@ angular.module("gunt")
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }
@@ -381,6 +398,7 @@ angular.module("gunt")
                             $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
+                    console.log(error);
                     $scope.showError(error);
                 });
         }

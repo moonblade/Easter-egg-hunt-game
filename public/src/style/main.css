@@ -24,25 +24,25 @@
 .key
 {
   font-size: 150%;
-  font-family: "Italianno";
+  font-family: "Italianno"!important;
 }
 
 .copperKey
 {
   font-size: 150%;
-  font-family: "Italianno";
+  font-family: "Italianno"!important;
 }
 
 .jadeKey
 {
   font-size: 150%;
-  font-family: "Italianno";
+  font-family: "Italianno"!important;
 }
 
 .crystalKey
 {
   font-size: 150%;
-  font-family: "Italianno";
+  font-family: "Italianno"!important;
 }
 
 .crystalKeyOne {
@@ -55,6 +55,10 @@
   font-family: "Shrikhand";
   color: #1E08A1;
   text-decoration: underline;
+}
+
+.aboutText {
+  font-family: "Mogra";
 }
 
 .credits {
