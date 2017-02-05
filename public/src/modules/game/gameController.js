@@ -70,10 +70,10 @@ angular.module("gunt")
         $scope.gotoLevel();
     }])
     .controller("dummyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
-        if('showDummy' in $localStorage)
-            $scope.showDummy=$localStorage.showDummy;
+        if ('showDummy' in $localStorage)
+            $scope.showDummy = $localStorage.showDummy;
         else
-            $scope.showDummy=true;
+            $scope.showDummy = true;
         $scope.gotoLevel(0);
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
@@ -81,7 +81,7 @@ angular.module("gunt")
                     // console.log(data.data);
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have proved your worth");
-                        $localStorage.showDummy=false;
+                        $localStorage.showDummy = false;
                         $scope.gotoLevel();
                     } else {
                         $scope.showMessage("I'm sorry", "Please try again");
@@ -267,6 +267,8 @@ angular.module("gunt")
             return check ? 'last' : null;
         };
         $scope.newGame();
+
+        // TODO hack for opening keyboard in android
     }])
     .controller("jadeKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
         $scope.gotoLevel(3);
@@ -373,17 +375,17 @@ angular.module("gunt")
                         $scope.userLevel = 11;
                         $scope.bonusMode = null;
                     } else {
-                    if(md5.createHash(answer)=="8a30d24f059c3104d4e79c1d4e039997")
-                        $scope.showMessage("Who", "Remember puns?");
-                    else
-                        $scope.showMessage("I'm sorry", "Please try again");
+                        if (md5.createHash(answer) == "8a30d24f059c3104d4e79c1d4e039997")
+                            $scope.showMessage("Who", "Remember puns?");
+                        else
+                            $scope.showMessage("I'm sorry", "Please try again");
                     }
                 }).catch(function(error) {
                     $scope.showError(error);
                 });
         }
-        $scope.flipCredit = function(){
-            if($scope.userLevel && $scope.userLevel>=11)
+        $scope.flipCredit = function() {
+            if ($scope.userLevel && $scope.userLevel >= 11)
                 return;
             $scope.bonusMode = true;
             $scope.showMessage("All right", "One last round before the end");
