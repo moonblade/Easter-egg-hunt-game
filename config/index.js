@@ -5,14 +5,14 @@ var dbport = process.env.OPENSHIFT_MONGODB_DB_PORT || '27017';
 var db = 'gunt'
 var config = {
     local: {
-        port: 3000,
+        port: 5000,
         mongoUrl: 'mongodb://localhost/gunt',
-        serverUrl: 'http://localhost:3000'
+        serverUrl: 'http://localhost:5000'
     },
     production: {
-        port: 3000,
+        port: 5000,
         mongoUrl: 'mongodb://guntUser:guntPassword@ds141209.mlab.com:41209/drishti',
-        serverUrl: 'http://localhost:3000'
+        serverUrl: 'http://localhost:5000'
     }
 };
 
