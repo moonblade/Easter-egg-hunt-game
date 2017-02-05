@@ -283,7 +283,10 @@ angular.module("gunt")
     }])
     .controller("jadeKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
         $scope.gotoLevel(3);
-        var clue = "Seriously? you even check the js part of this for a clue? Man you're good, All right Here you go, I'll give you a pointer to more clues, there are many clues in the almanac, one from the first letters of the bullet points, one in its metadata, another can be obtained by reading the pdf as a text file, yet another is hidden in white text as morse code.";
+        donothing = function(text) {
+
+        }
+        $scope.clue = "Seriously? you even check the js part of this for a clue? Man you're good, All right Here you go, I'll give you a pointer to more clues, there are many clues in the almanac, one from the first letters of the bullet points, one in its metadata, another can be obtained by reading the pdf as a text file, yet another is hidden in white text as morse code.";
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
