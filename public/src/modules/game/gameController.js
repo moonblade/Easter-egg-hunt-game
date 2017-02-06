@@ -72,7 +72,7 @@ angular.module("gunt")
         $scope.gotoLevel();
     }])
     .controller("dummyController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", function($scope, mainFactory, $localStorage, $mdDialog) {
-        if ('showDummy' in $localStorage)
+        if ('showDummy' in $localStorage && $localStorage.showDummy != null)
             $scope.showDummy = $localStorage.showDummy;
         else
             $scope.showDummy = true;

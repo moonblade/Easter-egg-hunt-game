@@ -6,6 +6,8 @@ var playerModel = require('../../models/player');
 var levelModel = require('../../models/level');
 var constant = require('../../config/constant');
 var auth = require('./auth');
+var http = require('http');
+var querystring = require('querystring');
 
 function e(errMsg) {
     return {
@@ -93,13 +95,40 @@ router.delete('/', auth.admin, function(req, res, next) {
 router.put('/', function(req, res, next) {
     var player = new playerModel(req.body.player);
     debug(player);
-    // Apparently promise violates some rules and creates a copy, weird
-    player.save(function(error) {
-        debug(error);
-        if (error)
-            return res.status(constant.serverError).send(e(error));
-        return res.json(constant.codes.successMessage);
+    debug(req.body);
+    var post_data = querystring.stringify({
+        'idToken': req.body.idToken,
     });
+
+    var post_options = {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(post_data)
+        },
+        method: 'POST',
+        port: 3000,
+        path: '/user/login',
+    };
+
+    var post_req = http.request(post_options, (response) => {
+        if (response.statusCode == 200) {
+            player.save((error) => {
+                if (error) {
+                    debug(error);
+                    return res.status(constant.serverError).send(e(error));
+                }
+                return res.json(constant.codes.successMessage);
+            });
+
+        } else {
+            return res.status(constant.serverError).send(e(error));
+
+        }
+    });
+
+    // post the data
+    post_req.write(post_data);
+    post_req.end();
 });
 
 /**
@@ -162,7 +191,8 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                 // add 5000 to 1000 for the first five people
                                                 plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
                                                 scoreToAdd = foundLevel.basescore + plusBaseScore;
-                                                normalisedScore = foundLevel.level / count;
+                                                normalisedScore = (foundLevel.level + 1) / (count + 1);
+                                                debug(normalisedScore);
                                                 console.log(foundPlayer)
                                                 playerModel.update(foundPlayer, {
                                                         $set: {
@@ -172,10 +202,36 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                         }
                                                     }).exec()
                                                     .then(function(foundPlayer) {
-                                                        return res.json({
-                                                            code: returnCode,
-                                                            message: "Partial"
+                                                        var post_data = querystring.stringify({
+                                                            'uid': foundPlayer.id,
+                                                            'normalisedScore': foundPlayer.normalisedScore
                                                         });
+
+                                                        var post_options = {
+                                                            headers: {
+                                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                                                'Content-Length': Buffer.byteLength(post_data),
+                                                                'x-auth-token': 'yhZ1EftMKZa9'
+                                                            },
+                                                            method: 'POST',
+                                                            port: 3000,
+                                                            // host: 'http://localhost',
+                                                            path: '/user/updateGuntScore',
+                                                        };
+
+                                                        var post_req = http.request(post_options, (response) => {
+                                                            if (response.statusCode == 200)
+                                                                return res.json({
+                                                                    code: returnCode,
+                                                                    message: "Partial"
+                                                                });
+                                                            else
+                                                                return res.status(constant.serverError).send(e(error));
+                                                        });
+
+                                                        // post the data
+                                                        post_req.write(post_data);
+                                                        post_req.end();
                                                     }).catch(function(error) {
                                                         return res.status(constant.serverError).send(e(error));
                                                     })
@@ -208,14 +264,45 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                 // add 5000 to 1000 for the first five people
                                 plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
                                 scoreToAdd = foundLevel.basescore + plusBaseScore;
+                                normalisedScore = (foundLevel.level + 1) / (count + 1);
                                 playerModel.update(foundPlayer, {
                                         $set: {
                                             level: foundPlayer.level + 1,
-                                            score: foundPlayer.score + scoreToAdd
+                                            score: foundPlayer.score + scoreToAdd,
+                                            normalisedScore: foundPlayer.normalisedScore + normalisedScore
                                         }
                                     }).exec()
-                                    .then(function(foundPlayer) {
-                                        return res.json(constant.codes.correctAnswer);
+                                    .then((result)=> {
+                                        debug(foundPlayer);
+                                        var post_data = querystring.stringify({
+                                            'uid': foundPlayer.id,
+                                            'normalisedScore': foundPlayer.normalisedScore + normalisedScore
+                                        });
+
+                                        var post_options = {
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                                'Content-Length': Buffer.byteLength(post_data),
+                                                'x-auth-token': 'yhZ1EftMKZa9'
+                                            },
+                                            method: 'POST',
+                                            port: 3000,
+                                            // host: 'http://localhost',
+                                            path: '/user/updateGuntScore',
+                                        };
+
+                                        var post_req = http.request(post_options, (response) => {
+                                            if (response.statusCode == 200)
+                                                return res.json(constant.codes.correctAnswer);
+                                            else
+                                                return res.status(constant.serverError).send(e(error));
+                                        });
+
+
+                                        // post the data
+                                        post_req.write(post_data);
+                                        post_req.end();
+
                                     }).catch(function(error) {
                                         return res.status(constant.serverError).send(e(error));
                                     })

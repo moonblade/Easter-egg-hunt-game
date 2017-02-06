@@ -3,14 +3,12 @@ angular.module("gunt")
         var factory = {};
         serverUrl = $location.$$protocol + "://" + $location.$$host + ":" + $location.$$port;
 
-        factory.login = function(player, idToken) {
-            console.log(player,idToken);
+        factory.login = function(player) {
             return $http({
                 method: "GET",
                 url: serverUrl + "/player",
                 params: {
-                    id: player.id,
-                    idToken: idToken
+                    id: player.id
                 }
             });
         }
@@ -30,13 +28,13 @@ angular.module("gunt")
             return $http.get(serverUrl + "/scoreBoard");
         }
 
-        factory.addPlayer = function(player) {
-            console.log(player);
+        factory.addPlayer = function(player, idToken) {
             return $http({
                 method: "PUT",
                 url: serverUrl + "/player",
                 data: {
-                    "player": player
+                    "player": player,
+                    "idToken": idToken
                 }
             })
         }

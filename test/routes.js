@@ -8,7 +8,7 @@ var should = require('should'),
     constant = require('../config/constant'),
     md5 = require('md5'),
     config = require('../config');
-
+var token = "";
 input = {
     putLevel: {
         level: {
