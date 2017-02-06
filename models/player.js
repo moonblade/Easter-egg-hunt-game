@@ -4,7 +4,7 @@ var md5 = require('md5');
 
 var playerSchema = mongoose.Schema({
     id: {
-        type: Number,
+        type: String,
         required: true,
         unique: true,
         index: true
@@ -15,6 +15,10 @@ var playerSchema = mongoose.Schema({
         required: true,
     },
     score: {
+        type: Number,
+        default: 0
+    },
+    normalisedScore: {
         type: Number,
         default: 0
     },

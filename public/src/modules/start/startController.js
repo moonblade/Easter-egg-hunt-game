@@ -1,5 +1,5 @@
 angular.module("gunt")
-    .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus) {
+    .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", "$firebaseAuth", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus, $firebaseAuth) {
 
         $scope.guntUser = $localStorage.guntUser;
         $scope.showMessage = function(title, message) {
@@ -52,8 +52,7 @@ angular.module("gunt")
                     }
 
                 }
-            }
-            else{
+            } else {
                 $scope.showMessage('Error', 'There was an error : ' + (err ? JSON.stringify(err) : "Unknown Error"));
             }
         }
@@ -71,6 +70,7 @@ angular.module("gunt")
             return $mdDialog.show(confirm);
         };
         $scope.loginAction = $localStorage.guntUser ? "Logout" : "Login";
+
         $scope.login = function() {
             if ($localStorage.guntUser) {
                 // logout
@@ -78,54 +78,100 @@ angular.module("gunt")
                 $scope.guntUser = $localStorage.guntUser;
 
                 $scope.loginAction = "Login";
-                GooglePlus.logout();
+                // GooglePlus.logout();
             } else {
                 // login
-                GooglePlus.login().then(function(authResult) {
-                        GooglePlus.getUser().then(function(player) {
-                            // console.log(player);
-                            mainFactory.login(player)
-                                .success(function(result) {
-                                    if (!result) {
-                                        $scope.showPrompt("Create Avatar", "Please enter a name for your character", "avatar name").then(function(name) {
-                                            player.name = name;
-                                            mainFactory.addPlayer(player)
-                                                .success(function(result) {
-                                                    $scope.loginAction = "Logout";
-                                                    $localStorage.guntUser = {
-                                                        id: player.id,
-                                                        name: player.name
-                                                    };
-                                                    $scope.guntUser = $localStorage.guntUser;
-                                                    $scope.gotoLevel();
-                                                }).error(function(err) {
-                                                    console.log(err);
-                                                    $scope.showError(err);
-                                                })
-                                        }, function() {});
-                                    } else {
+                var auth = $firebaseAuth();
+                auth.$signInWithPopup("google").then(function(firebaseUser) {
+                    console.log("Signed in as:", firebaseUser.user);
+                    console.log(firebaseUser.credential.idToken);
+
+                    // Legacy code backwards compatibility
+                    $scope.player = {};
+                    $scope.player.id = firebaseUser.user.uid;
+                    mainFactory.login($scope.player, firebaseUser.credential.idToken)
+                        .success(function(result) {
+                            console.log(result);
+                            if (!result) {
+                                $scope.showPrompt("Create Avatar", "Please enter a name for your character", "avatar name")
+                                    .then(function(name) {
+                                        $scope.player.name = name;
+                                        mainFactory.addPlayer($scope.player);
+                                    }).then(function(result) {
                                         $scope.loginAction = "Logout";
                                         $localStorage.guntUser = {
-                                            id: player.id,
-                                            name: result.name
+                                            id: $scope.player.id,
+                                            name: $scope.player.name
                                         };
                                         $scope.guntUser = $localStorage.guntUser;
                                         $scope.gotoLevel();
-                                    }
-                                }).error(function(err) {
-                                    $scope.showError(err);
-                                    console.log(err)
-                                })
+                                    }).catch(function(error) {
+                                        throw error;
+                                    });
+                            } else {
+                                $scope.loginAction = "Logout";
+                                $localStorage.guntUser = {
+                                    id: $scope.player.id,
+                                    name: result.name
+                                };
+                                $scope.guntUser = $localStorage.guntUser;
+                                $scope.gotoLevel();
+
+                            }
+
+                        }).error(function(error) {
+                            throw error;
                         });
-                    },
-                    function(err) {
-                        console.log(err);
-                        $scope.showError(err);
-                    });
+                }).catch(function(error) {
+                    console.log("Authentication failed:", error);
+                    $scope.showError(error);
+                });
+
+                // GooglePlus.login().then(function(authResult) {
+                //         GooglePlus.getUser().then(function(player) {
+                //             // console.log(player);
+                //             mainFactory.login(player)
+                //                 .success(function(result) {
+                //                     if (!result) {
+                //                         $scope.showPrompt("Create Avatar", "Please enter a name for your character", "avatar name").then(function(name) {
+                //                             player.name = name;
+                //                             mainFactory.addPlayer(player)
+                //                                 .success(function(result) {
+                //                                     $scope.loginAction = "Logout";
+                //                                     $localStorage.guntUser = {
+                //                                         id: player.id,
+                //                                         name: player.name
+                //                                     };
+                //                                     $scope.guntUser = $localStorage.guntUser;
+                //                                     $scope.gotoLevel();
+                //                                 }).error(function(err) {
+                //                                     console.log(err);
+                //                                     $scope.showError(err);
+                //                                 })
+                //                         }, function() {});
+                //                     } else {
+                //                         $scope.loginAction = "Logout";
+                //                         $localStorage.guntUser = {
+                //                             id: player.id,
+                //                             name: result.name
+                //                         };
+                //                         $scope.guntUser = $localStorage.guntUser;
+                //                         $scope.gotoLevel();
+                //                     }
+                //                 }).error(function(err) {
+                //                     $scope.showError(err);
+                //                     console.log(err)
+                //                 })
+                //         });
+                //     },
+                //     function(err) {
+                //         console.log(err);
+                //         $scope.showError(err);
+                //     });
             }
         }
 
-        $scope.openMenu = function($mdOpenMenu){
+        $scope.openMenu = function($mdOpenMenu) {
             $mdOpenMenu();
         }
     }]);

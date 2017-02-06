@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "angular-md5": "^0.1.10",
+    "angularfire": "^2.3.0",
     "assert": "^1.4.1",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
