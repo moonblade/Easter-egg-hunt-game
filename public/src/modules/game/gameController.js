@@ -71,7 +71,8 @@ angular.module("gunt")
 
         $scope.gotoLevel();
     }])
-    .controller("dummyController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", function($scope, mainFactory, $localStorage, $mdDialog) {
+    .controller("dummyController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "$rootScope", function($scope, mainFactory, $localStorage, $mdDialog, $rootScope) {
+        $rootScope.title = "Level 0";
         if ('showDummy' in $localStorage && $localStorage.showDummy != null)
             $scope.showDummy = $localStorage.showDummy;
         else
@@ -100,7 +101,8 @@ angular.module("gunt")
                 });
         }
     }])
-    .controller("copperKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+    .controller("copperKeyController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+        $rootScope.title = "Copper Key";
         $scope.gotoLevel(1);
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
@@ -119,8 +121,9 @@ angular.module("gunt")
         }
 
     }])
-    .controller("firstGateController", ["$scope", "mainFactory", "$localStorage", "GameLogic", "AiLogic", "$timeout", function($scope, mainFactory, $localStorage, GameLogic, AiLogic, $timeout) {
+    .controller("firstGateController", ["$scope", "mainFactory", "$localStorage", "GameLogic", "AiLogic", "$timeout", "$rootScope", function($scope, mainFactory, $localStorage, GameLogic, AiLogic, $timeout, $rootScope) {
         $scope.gotoLevel(2);
+        $rootScope.title = "First Gate"
         $scope.digit = '';
         $scope.flipBoard = $localStorage.flipBoardState ? $localStorage.flipBoardState : true;
         $scope.opponent = 'AI';
@@ -281,7 +284,8 @@ angular.module("gunt")
 
         // TODO hack for opening keyboard in android
     }])
-    .controller("jadeKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+    .controller("jadeKeyController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+        $rootScope.title = "Jade Key";
         $scope.gotoLevel(3);
         donothing = function(text) {
 
@@ -303,7 +307,8 @@ angular.module("gunt")
                 });
         }
     }])
-    .controller("secondGateController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+    .controller("secondGateController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+        $rootScope.title = "Second Gate";
         $scope.gotoLevel(4);
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
@@ -321,7 +326,8 @@ angular.module("gunt")
                 });
         }
     }])
-    .controller("crystalKeyController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+    .controller("crystalKeyController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+        $rootScope.title = "Crystal Key";
         $scope.answers = [null, null, null];
         $scope.answerCodes = [false, false, false];
         $scope.crystalKeyOne = {
@@ -367,7 +373,8 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
-    }]).controller("thirdGateController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+    }]).controller("thirdGateController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+        $rootScope.title = "Third Gate";
         $scope.gotoLevel(9);
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
@@ -384,7 +391,8 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
-    }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", "md5", function($scope, mainFactory, $localStorage, md5) {
+    }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", "md5", "$rootScope", function($scope, mainFactory, $localStorage, md5, $rootScope) {
+        $rootScope.title = "Credits";
         $scope.checkAnswer = function(answer) {
             mainFactory.checkAnswer($localStorage.guntUser, answer)
                 .then(function(data) {
@@ -408,6 +416,7 @@ angular.module("gunt")
         $scope.flipCredit = function() {
             if ($scope.userLevel && $scope.userLevel >= 11)
                 return;
+            $rootScope.title = "Bonus Key";
             $scope.bonusMode = true;
             $scope.showMessage("All right", "One last round before the end");
         }

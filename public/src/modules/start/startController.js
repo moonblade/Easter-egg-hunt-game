@@ -1,6 +1,6 @@
 angular.module("gunt")
-    .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", "$firebaseAuth", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus, $firebaseAuth) {
-
+    .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", "$firebaseAuth", "$rootScope", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus, $firebaseAuth, $rootScope) {
+        $rootScope.title="Game";
         $scope.guntUser = $localStorage.guntUser;
         $scope.showMessage = function(title, message) {
             $mdDialog.show(

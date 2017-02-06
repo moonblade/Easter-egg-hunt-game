@@ -13,7 +13,12 @@
                 <td md-cell>{{key+1}}</td>
                 <td md-cell>{{item.name}}</td>
                 <td md-cell>{{item.score}}</td>
-                <td md-cell><md-icon ng-if="item.level>2" md-svg-src="/images/gate.svg"></md-icon><md-icon ng-if="item.level>4" md-svg-src="/images/gate.svg"></md-icon><md-icon ng-if="item.level>9" md-svg-src="/images/gate.svg"></md-icon></td>
+                <td md-cell>
+                    <md-icon ng-if="item.level>2" md-svg-src="/images/gate.svg"></md-icon>
+                    <md-icon ng-if="item.level>4" md-svg-src="/images/gate.svg"></md-icon>
+                    <md-icon ng-if="item.level>9" md-svg-src="/images/gate.svg"></md-icon>
+                    <md-icon ng-if="item.level>10" md-svg-src="/images/egg.svg"></md-icon>
+                </td>
             </tr>
         </tbody>
     </table>

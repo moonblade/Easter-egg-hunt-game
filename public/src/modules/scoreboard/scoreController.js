@@ -1,5 +1,6 @@
 angular.module("gunt")
-.controller("scoreController", ["$scope", "mainFactory", "$localStorage", function($scope, mainFactory, $localStorage) {
+.controller("scoreController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+	$rootScope.title="Scoreboard";
 	mainFactory.scoreBoard().then(function(data){
 		if(data.data.code==0)
 		{
