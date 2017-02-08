@@ -11,7 +11,6 @@ var playerSchema = mongoose.Schema({
     },
     name: {
         type: String,
-        unique: true,
         required: true,
     },
     score: {

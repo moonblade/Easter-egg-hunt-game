@@ -107,7 +107,7 @@ router.put('/', function(req, res, next) {
         },
         method: 'POST',
         port: 3000,
-        path: '/user/login',
+        path: '/student/login',
     };
 
     var post_req = http.request(post_options, (response) => {
@@ -121,7 +121,7 @@ router.put('/', function(req, res, next) {
             });
 
         } else {
-            return res.status(constant.serverError).send(e(error));
+            return res.status(constant.serverError).send(e({}));
 
         }
     });
