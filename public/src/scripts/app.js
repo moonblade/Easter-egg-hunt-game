@@ -1,6 +1,6 @@
 var serverUrl = "dummy";
 angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage', 'md.data.table', 'angular-md5', 'firebase'])
-    .config(["$stateProvider", "$urlRouterProvider", "GooglePlusProvider", function($stateProvider, $urlRouterProvider, GooglePlusProvider) {
+    .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/app/game");
         $stateProvider
             .state("app", {
@@ -71,10 +71,6 @@ angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage', 'm
                 controller: "bonusRoomController"
             });
 
-        GooglePlusProvider.init({
-            clientId: '244830570730-3e20m76uc4q9pnkkusljpmq6qnur472d.apps.googleusercontent.com',
-            apiKey: 'AIzaSyD98IUTYTnag2GoQsINaujL7kfLQxh76H4'
-        });
     }]).directive('autofocus', ['$timeout', function($timeout) {
         return {
             restrict: 'A',

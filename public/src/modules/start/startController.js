@@ -71,7 +71,7 @@ angular.module("gunt")
         };
         $scope.loginAction = $localStorage.guntUser ? "Logout" : "Login";
 
-        $scope.login = function() {
+        $scope.login = function(provider) {
             if ($localStorage.guntUser) {
                 // logout
                 $localStorage.guntUser = null;
@@ -82,7 +82,7 @@ angular.module("gunt")
             } else {
                 // login
                 var auth = $firebaseAuth();
-                auth.$signInWithPopup("google").then(function(firebaseUser) {
+                auth.$signInWithPopup(provider).then(function(firebaseUser) {
                     console.log("Signed in as:", firebaseUser.user);
 
                     // Legacy code backwards compatibility
