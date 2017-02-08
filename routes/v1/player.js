@@ -226,7 +226,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                                     message: "Partial"
                                                                 });
                                                             else
-                                                                return res.status(constant.serverError).send(e(error));
+                                                                return res.status(constant.serverError).send(e());
                                                         });
 
                                                         // post the data
@@ -288,14 +288,14 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                             method: 'POST',
                                             port: 3000,
                                             // host: 'http://localhost',
-                                            path: '/user/updateGuntScore',
+                                            path: '/student/updateGuntScore',
                                         };
 
                                         var post_req = http.request(post_options, (response) => {
                                             if (response.statusCode == 200)
                                                 return res.json(constant.codes.correctAnswer);
                                             else
-                                                return res.status(constant.serverError).send(e(error));
+                                                return res.status(constant.serverError).send(e());
                                         });
 
 
