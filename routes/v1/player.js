@@ -216,7 +216,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                             method: 'POST',
                                                             port: 3000,
                                                             // host: 'http://localhost',
-                                                            path: '/user/updateGuntScore',
+                                                            path: '/student/updateGuntScore',
                                                         };
 
                                                         var post_req = http.request(post_options, (response) => {
