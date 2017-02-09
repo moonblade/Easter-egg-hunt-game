@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Ruge+Boogie|Shrikhand|Mogra|Italianno');
-
 * {
     margin: 0;
     padding: 0;
@@ -12,78 +11,78 @@
 }
 
 #submitButton {
-	display: none;
+    display: none;
 }
+
 #secondGate {
-  height: 100%;
-  background-image: url("/images/secondGate.png");
-  background-size: cover;
-  background-position: 50% 50%;
+    height: 100%;
+    background-image: url("/images/secondGate.png");
+    background-size: cover;
+    background-position: 50% 50%;
 }
 
-.key
-{
-  font-size: 150%;
-  font-family: "Italianno"!important;
+.key {
+    font-size: 150%;
+    font-family: "Italianno"!important;
 }
 
-.copperKey
-{
-  font-size: 150%;
-  font-family: "Italianno"!important;
+.copperKey {
+    font-size: 150%;
+    font-family: "Italianno"!important;
 }
 
-.jadeKey
-{
-  font-size: 150%;
-  font-family: "Italianno"!important;
+.hideCopperKey {
+    font-size: 1px;
+    color: transparent;
 }
 
-.thirdGate
-{
-  font-size: 150%;
-  font-family: "Italianno"!important;
+.jadeKey {
+    font-size: 150%;
+    font-family: "Italianno"!important;
 }
 
-.bonusRoom
-{
-  font-size: 150%;
-  font-family: "Italianno"!important;
+.thirdGate {
+    font-size: 150%;
+    font-family: "Italianno"!important;
 }
 
-.crystalKey
-{
-  font-size: 150%;
-  font-family: "Italianno"!important;
+.bonusRoom {
+    font-size: 150%;
+    font-family: "Italianno"!important;
+}
+
+.crystalKey {
+    font-size: 150%;
+    font-family: "Italianno"!important;
 }
 
 .crystalKeyOne {
-  color: #66CCFF;
-  font-family: "Ruge Boogie";
-  background: #993300;
+    color: #66CCFF;
+    font-family: "Ruge Boogie";
+    background: #993300;
 }
 
 .creditsTitle {
-  font-family: "Shrikhand";
-  color: #1E08A1;
-  text-decoration: underline;
+    font-family: "Shrikhand";
+    color: #1E08A1;
+    text-decoration: underline;
 }
 
 .aboutText {
-  font-family: "Mogra";
+    font-family: "Mogra";
 }
 
 .credits {
-  font-family: "Mogra";
-  color: #D1510F;
+    font-family: "Mogra";
+    color: #D1510F;
 }
 
 .click {
-  background-image: url("/images/click.png");
-  position: absolute;
-  top: 130px;
-  left:200px;
-  height: 20px;
-  width: 20px;
-  z-index: 10000;
+    background-image: url("/images/click.png");
+    position: absolute;
+    top: 130px;
+    left: 200px;
+    height: 20px;
+    width: 20px;
+    z-index: 10000;
 }
