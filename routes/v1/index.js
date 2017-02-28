@@ -8,6 +8,9 @@ router.get('/', function(req, res, next) {
     res.send("Gunt backend");
 });
 
+router.get('/logoandlink', function(req, res, next) {
+    
+});
 /**
  * @api {get} /scoreBoard get Score Board
  * @apiSuccessExample {json} success

@@ -1,5 +1,5 @@
 angular.module("gunt")
-    .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", "$firebaseAuth", "$rootScope", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus, $firebaseAuth, $rootScope) {
+    .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", "$firebaseAuth", "$rootScope", "$state", "$window", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus, $firebaseAuth, $rootScope, $state, $window) {
         $rootScope.title="Game";
         $scope.guntUser = $localStorage.guntUser;
         $scope.showMessage = function(title, message) {
@@ -10,6 +10,10 @@ angular.module("gunt")
                 .textContent(message)
                 .ok('Okay')
             );
+        }
+        
+        $scope.gotoDrishti = function() {
+            $window.open('http://drishticet.org');
         }
 
         $scope.gotoLevelPlayer = function(player) {
@@ -56,6 +60,27 @@ angular.module("gunt")
                 $scope.showMessage('Error', 'There was an error : ' + (err ? JSON.stringify(err) : "Unknown Error"));
             }
         }
+        
+        $scope.gotoGame = function(){
+            $state.go('app.game.dummy');
+        }
+
+        $scope.gotoScoreBoard = function(){
+            $state.go('app.scoreboard');
+        }
+
+        $scope.gotoAlmanac = function(){
+            $state.go('app.about');
+        }
+
+
+        $scope.gotoClues =function(){
+            $window.open('https://www.facebook.com/guntdrishticet/');
+        }
+
+        $scope.wallPost = function(){
+            
+        }
 
         $scope.showPrompt = function(title, message, placeholder) {
             var confirm = $mdDialog.prompt()
@@ -71,6 +96,7 @@ angular.module("gunt")
         };
         $scope.loginAction = $localStorage.guntUser ? "Logout" : "Login";
 
+        var auth = $firebaseAuth();
         $scope.login = function(provider) {
             if ($localStorage.guntUser) {
                 // logout
@@ -81,10 +107,15 @@ angular.module("gunt")
                 // GooglePlus.logout();
             } else {
                 // login
-                var auth = $firebaseAuth();
                 auth.$signInWithPopup(provider).then(function(firebaseUser) {
                     console.log("Signed in as:", firebaseUser.user);
-
+                    if(provider=='facebook'){
+                        console.log(firebaseUser.credential.accessToken);
+                        $localStorage.facebookAccessToken=firebaseUser.credential.accessToken;
+                    }
+                    else{
+                        $localStorage.facebookAccessToken=null;
+                    }
                     // Legacy code backwards compatibility
                     $scope.player = {};
                     $scope.player.id = firebaseUser.user.uid;
