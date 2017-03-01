@@ -41,7 +41,7 @@ router.get('/scoreBoard', function(req, res, next) {
             auth: 0
         }).sort({
             normalisedScore: -1
-        }).limit(100)
+        })
         .exec()
         .then(function(playerList) {
             toAdd = Math.max(10 - playerList.length, 0);
