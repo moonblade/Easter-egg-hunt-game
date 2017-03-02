@@ -11,7 +11,7 @@ angular.module("gunt")
                 .ok('Okay')
             );
         }
-        
+
         $scope.gotoDrishti = function() {
             $window.open('http://drishticet.org');
         }
@@ -60,7 +60,7 @@ angular.module("gunt")
                 $scope.showMessage('Error', 'There was an error : ' + (err ? JSON.stringify(err) : "Unknown Error"));
             }
         }
-        
+
         $scope.gotoGame = function(){
             $state.go('app.game.dummy');
         }
@@ -75,11 +75,11 @@ angular.module("gunt")
 
 
         $scope.gotoClues =function(){
-            $window.open('https://www.facebook.com/guntdrishticet/');
+            $window.open('https://www.facebook.com/Obscura-Drishti-Cet-162301407611403/');
         }
 
         $scope.wallPost = function(){
-            
+
         }
 
         $scope.showPrompt = function(title, message, placeholder) {
