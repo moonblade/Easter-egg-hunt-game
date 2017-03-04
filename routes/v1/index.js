@@ -41,6 +41,7 @@ router.get('/scoreBoard', function(req, res, next) {
             auth: 0
         }).sort({
             score: -1,
+            level: -1,
             normalisedScore: -1
         })
         .exec()
