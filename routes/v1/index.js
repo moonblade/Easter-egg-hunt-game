@@ -37,8 +37,8 @@ router.get('/scoreBoard', function(req, res, next) {
     playerModel.find({
             auth: 0
         }).sort({
-            score: -1,
             level: -1,
+            updated_at: -1,
             normalisedScore: -1
         })
         .exec()

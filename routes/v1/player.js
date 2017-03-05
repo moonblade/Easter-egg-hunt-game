@@ -208,9 +208,9 @@ function e(errMsg) {
                                                                                 plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
                                                                                 scoreToAdd=0;
                                                                                 if(foundLevel.level>11)
-                                                                                    scoreToAdd=plusBaseScore;
+                                                                                scoreToAdd=plusBaseScore;
                                                                                 else
-                                                                                    scoreToAdd = foundLevel.basescore + plusBaseScore;
+                                                                                scoreToAdd = foundLevel.basescore + plusBaseScore;
                                                                                 normalisedScore = (foundLevel.level + 1) / (count + 1);
                                                                                 debug(normalisedScore);
                                                                                 console.log(foundPlayer)
@@ -218,7 +218,8 @@ function e(errMsg) {
                                                                                     $set: {
                                                                                         level: foundPlayer.level + 3,
                                                                                         score: foundPlayer.score + scoreToAdd,
-                                                                                        normalisedScore: foundPlayer.normalisedScore + normalisedScore
+                                                                                        normalisedScore: foundPlayer.normalisedScore + normalisedScore,
+                                                                                        updated_at: now
                                                                                     }
                                                                                 }).exec()
                                                                                 .then(function(foundPlayer) {
@@ -293,7 +294,8 @@ function e(errMsg) {
                                                                             $set: {
                                                                                 level: foundPlayer.level + 1,
                                                                                 score: foundPlayer.score + scoreToAdd,
-                                                                                normalisedScore: foundPlayer.normalisedScore + normalisedScore
+                                                                                normalisedScore: foundPlayer.normalisedScore + normalisedScore,
+                                                                                updated_at: now
                                                                             }
                                                                         }).exec()
                                                                         .then((result)=> {

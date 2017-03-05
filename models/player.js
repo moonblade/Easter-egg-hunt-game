@@ -40,6 +40,28 @@ var playerSchema = mongoose.Schema({
             // 1 - Inactive
             // 2 - Banned
     }
+    , created_at    : { type: Date }
+    , updated_at    : { type: Date }
+    
+});
+
+
+playerSchema.pre('save', function(next){
+  now = new Date();
+  this.updated_at = now;
+  if ( !this.created_at ) {
+    this.created_at = now;
+  }
+  next();
+});
+
+playerSchema.pre('update', function(next){
+  now = new Date();
+  this.updated_at = now;
+  if ( !this.created_at ) {
+    this.created_at = now;
+  }
+  next();
 });
 
 playerSchema.index({
