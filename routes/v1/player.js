@@ -4,6 +4,7 @@ var debug = require('debug')('player');
 var md5 = require('md5');
 var playerModel = require('../../models/player');
 var levelModel = require('../../models/level');
+var historyModel = require('../../models/history');
 var constant = require('../../config/constant');
 var auth = require('./auth');
 var http = require('http');
@@ -265,6 +266,10 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                 plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
                                 scoreToAdd = foundLevel.basescore + plusBaseScore;
                                 normalisedScore = (foundLevel.level + 1) / (count + 1);
+                                new historyModel({
+                                    level: foundLevel.level,
+                                    player: foundPlayer.name
+                                }).save();
                                 playerModel.update(foundPlayer, {
                                         $set: {
                                             level: foundPlayer.level + 1,
