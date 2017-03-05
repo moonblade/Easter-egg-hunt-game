@@ -10,9 +10,15 @@ var levelSchema = mongoose.Schema({
         required: true,
         index: true
     },
+    text: {
+        type : String   
+    },
     key: {
         type: String,
         required: true
+    },
+    image: {
+        type: String
     },
     basescore: {
         type: Number,

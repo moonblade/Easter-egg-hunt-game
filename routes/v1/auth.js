@@ -1,7 +1,7 @@
 var debug = require('debug')('auth');
 var playerModel = require('../../models/player');
 var levelModel = require('../../models/level');
-
+var constant = require('../../config/constant');
 function e(errMsg) {
     return {
         error: errMsg

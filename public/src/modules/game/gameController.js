@@ -46,8 +46,8 @@ angular.module("gunt")
             state: "app.game.credits",
             number: 10
         }, {
-            name: "credits",
-            state: "app.game.credits",
+            name: "allRooms",
+            state: "app.game.allRooms",
             number: 11
         }];
 
@@ -55,7 +55,10 @@ angular.module("gunt")
             mainFactory.login(player)
                 .then(function(data, error) {
                     $scope.userLevel = data.data.level;
-                    $state.go($scope.levels[$scope.userLevel].state);
+                    if ($scope.userLevel<11)
+                        $state.go($scope.levels[$scope.userLevel].state);
+                    else
+                        $state.go("app.game.allRooms");
                 }).catch(function(error) {
                     $scope.showMessage("Login", "Please login to continue");
                     console.log(error); // 
@@ -382,6 +385,40 @@ angular.module("gunt")
                     // console.log(data.data);
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have completed the third gate");
+                        $scope.gotoLevel();
+                    } else {
+                        $scope.showMessage("I'm sorry", "Please try again");
+                    }
+                }).catch(function(error) {
+                    console.log(error);
+                    $scope.showError(error);
+                });
+        }
+    }]).controller("allRoomController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+        $rootScope.title = "Obscura";
+        $scope.lines=[];
+        $scope.image=null;
+        $scope.return={};
+        $scope.getLevel = function(){
+            mainFactory.getLevel($localStorage.guntUser)
+            .then(function(data){
+                $scope.return = data.data;
+                $scope.lines = data.data.text.split('$');
+                if (data.data.image)
+                    $scope.image=data.data.image;
+                else
+                    $scope.image=null;
+                console.log($scope.lines);
+            }).catch(function(error){
+                $scope.showMessage("Error", "This level does not exist yet");
+            });
+        }
+        $scope.getLevel();
+        $scope.checkAnswer = function(answer) {
+            mainFactory.checkAnswer($localStorage.guntUser, answer)
+                .then(function(data) {
+                    if (data.data.code == 0) {
+                        $scope.showMessage("Excellent", "You have completed the level");
                         $scope.gotoLevel();
                     } else {
                         $scope.showMessage("I'm sorry", "Please try again");

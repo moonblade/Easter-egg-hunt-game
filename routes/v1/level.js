@@ -103,7 +103,7 @@ router.delete('/', auth.admin, function(req, res, next) {
 router.put('/', auth.admin, function(req, res, next) {
     var level = req.body.level;
     level.key = md5(level.key);
-    debug(level);
+    debug("level",level);
     levelModel.update({
             "level": level.level
         }, {
@@ -113,6 +113,7 @@ router.put('/', auth.admin, function(req, res, next) {
         })
         .exec()
         .then(function(level) {
+            console.log(constant.codes);
             return res.json(constant.codes.successMessage);
         }).catch(function(error) {
             return res.status(constant.serverError).send(e(error));

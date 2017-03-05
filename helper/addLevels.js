@@ -113,7 +113,8 @@ input = {
     }, {
         "level": {
             "level": 11,
-            "key": "garblegarblegarble",
+            "text":"3_1+2-7/A=1*B(7.3)",
+            "key": "eightyseven",
             "basescore": 0
         },
         "user": {

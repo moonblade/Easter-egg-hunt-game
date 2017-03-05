@@ -36,6 +36,11 @@
     font-family: "Italianno"!important;
 }
 
+.slabo {
+    font-size: 150%;
+    font-family: 'Slabo 27px', serif;
+}
+
 .hideCopperKey {
     font-size: 1px;
     color: transparent;

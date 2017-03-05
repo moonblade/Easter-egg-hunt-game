@@ -13,6 +13,13 @@ angular.module("gunt")
             });
         }
 
+        factory.getLevel = function(player) {
+            return $http({
+                method: "GET",
+                url: serverUrl + "/player/getLevel/"+player.id
+            })
+        }
+
         factory.checkAnswer = function(player, answer) {
             return $http({
                 method: "POST",
