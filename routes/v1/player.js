@@ -61,7 +61,7 @@ function e(errMsg) {
             return res.status(400).json(error);
         })
     });
-
+    
     /**
     * @api {delete} /player delete player
     * @apiParamExample {json} request
@@ -206,7 +206,11 @@ function e(errMsg) {
                                                                                 
                                                                                 // add 5000 to 1000 for the first five people
                                                                                 plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
-                                                                                scoreToAdd = foundLevel.basescore + plusBaseScore;
+                                                                                scoreToAdd=0;
+                                                                                if(foundLevel.level>11)
+                                                                                    scoreToAdd=plusBaseScore;
+                                                                                else
+                                                                                    scoreToAdd = foundLevel.basescore + plusBaseScore;
                                                                                 normalisedScore = (foundLevel.level + 1) / (count + 1);
                                                                                 debug(normalisedScore);
                                                                                 console.log(foundPlayer)
