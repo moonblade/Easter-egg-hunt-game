@@ -23,6 +23,9 @@ var levelSchema = mongoose.Schema({
     basescore: {
         type: Number,
         required: true
+    },
+    plainKey: {
+        type: String
     }
 });
 

@@ -102,6 +102,7 @@ router.delete('/', auth.admin, function(req, res, next) {
  */
 router.put('/', auth.admin, function(req, res, next) {
     var level = req.body.level;
+    level.plainKey = req.body.level.key;
     level.key = md5(level.key);
     debug("level",level);
     levelModel.update({

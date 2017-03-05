@@ -9,6 +9,7 @@ var constant = require('../../config/constant');
 var auth = require('./auth');
 var http = require('http');
 var querystring = require('querystring');
+var _ = require('underscore');
 
 function e(errMsg) {
     return {
@@ -56,7 +57,7 @@ function e(errMsg) {
                 level: player.level
             }).exec();
         }).then(level=>{
-            return res.json(level);
+            return res.json(_.pick(level,'level', 'text', 'key', 'image', 'basescore'));
         }).catch(error=>{
             return res.status(400).json(error);
         })
