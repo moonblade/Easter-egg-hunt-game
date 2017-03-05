@@ -35,7 +35,10 @@ router.get('/logoandlink', function(req, res, next) {
  */
 router.get('/scoreBoard', function(req, res, next) {
     playerModel.find({
-            auth: 0
+            auth: 0,
+            id: {
+                $ne: "u2ZFeqDAuJgtYsdmmXbnExVo1Kf2"
+            }
         }).sort({
             level: -1,
             updated_at: -1,
