@@ -35,9 +35,6 @@ router.get('/logoandlink', function(req, res, next) {
  */
 router.get('/scoreBoard', function(req, res, next) {
     playerModel.find({
-            score: {
-                $gt: 0
-            },
             auth: 0
         }).sort({
             score: -1,
