@@ -419,7 +419,7 @@ angular.module("gunt")
                 .then(function(data) {
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have completed the level");
-                        $scope.gotoLevel();
+                        $scope.getLevel();
                     } else {
                         $scope.showMessage("I'm sorry", "Please try again");
                     }

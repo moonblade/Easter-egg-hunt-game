@@ -6,8 +6,8 @@ var db = 'gunt'
 var config = {
     local: {
         port: 5000,
-        // mongoUrl: 'mongodb://guntUser:guntPassword@ds141209.mlab.com:41209/drishti',
-        mongoUrl: 'mongodb://localhost/gunt',
+        mongoUrl: 'mongodb://guntUser:guntPassword@ds141209.mlab.com:41209/drishti',
+        // mongoUrl: 'mongodb://localhost/gunt',
         serverUrl: 'http://localhost:5000'
     },
     production: {
