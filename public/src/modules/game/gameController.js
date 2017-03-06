@@ -443,7 +443,7 @@ angular.module("gunt")
                 .then(function(data) {
                     // console.log(data.data);
                     if (data.data.code == 0) {
-                        $scope.showMessage("Of course you do", "but you have completed the Game");
+                        $scope.showMessage("Of course you do", "but you have completed the Game<- this was supposed to be the message, but apparently I don't have a say in it anymore, so the game continues");
                         $scope.gotoLevel();
                         $scope.userLevel = 11;
                         $scope.bonusMode = null;
