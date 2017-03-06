@@ -395,14 +395,15 @@ angular.module("gunt")
                 });
         }
     }]).controller("allRoomController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
-        $rootScope.title = "Obscura";
+        $scope.level="";
+        $rootScope.title = "Obscura " +$scope.level;
         $scope.lines=[];
         $scope.image=null;
         $scope.return={};
         $scope.getLevel = function(){
             mainFactory.getLevel($localStorage.guntUser)
             .then(function(data){
-                $scope.return = data.data;
+                $scope.level = data.data.level;
                 $scope.lines = data.data.text.split('$');
                 if (data.data.image)
                     $scope.image=data.data.image;
@@ -420,6 +421,7 @@ angular.module("gunt")
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have completed the level");
                         $scope.getLevel();
+                        $scope.answer="";
                     } else {
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
