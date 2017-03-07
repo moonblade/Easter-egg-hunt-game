@@ -220,7 +220,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                                                             level: foundPlayer.level + 3,
                                                             score: foundPlayer.score + scoreToAdd,
                                                             normalisedScore: foundPlayer.normalisedScore + normalisedScore,
-                                                            updated_at: now
+                                                            updated_at: Date.now()
                                                         }
                                                     }).exec()
                                                     .then(function(foundPlayer) {
@@ -277,66 +277,72 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
                         if (md5(answer) == foundLevel.key) {
                             // TODO update level of user and return true
                             // find number of users with that level
-                            playerModel.count({
-                                level: {
-                                    $gt: foundLevel.level
-                                }
-                            }).exec().then(function(count) {
-                                console.log(count);
-                                // add 5000 to 1000 for the first five people
-                                plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
-                                scoreToAdd = foundLevel.basescore + plusBaseScore;
-                                normalisedScore = (foundLevel.level + 1) / (count + 1);
-                                new historyModel({
-                                    level: foundLevel.level,
-                                    player: foundPlayer.name
-                                }).save();
-                                playerModel.update(foundPlayer, {
-                                        $set: {
-                                            level: foundPlayer.level + 1,
-                                            score: foundPlayer.score + scoreToAdd,
-                                            normalisedScore: foundPlayer.normalisedScore + normalisedScore,
-                                            updated_at: now
-                                        }
-                                    }).exec()
-                                    .then((result) => {
-                                        debug(foundPlayer);
-                                        var post_data = querystring.stringify({
-                                            'uid': foundPlayer.id,
-                                            'normalisedScore': foundPlayer.normalisedScore + normalisedScore
-                                        });
+                            try {
+                                playerModel.count({
+                                    level: {
+                                        $gt: foundLevel.level
+                                    }
+                                }).exec().then(function(count) {
+                                    console.log(count);
+                                    // add 5000 to 1000 for the first five people
+                                    plusBaseScore = count < 5 ? (5 - count) * 1000 : 0;
+                                    scoreToAdd = foundLevel.basescore + plusBaseScore;
+                                    normalisedScore = (foundLevel.level + 1) / (count + 1);
+                                    new historyModel({
+                                        level: foundLevel.level,
+                                        player: foundPlayer.name
+                                    }).save();
+                                    playerModel.update(foundPlayer, {
+                                            $set: {
+                                                level: foundPlayer.level + 1,
+                                                score: foundPlayer.score + scoreToAdd,
+                                                normalisedScore: foundPlayer.normalisedScore + normalisedScore,
+                                                updated_at: Date.now()
+                                            }
+                                        }).exec()
+                                        .then((result) => {
+                                            console.log("here");
+                                            debug(foundPlayer);
+                                            var post_data = querystring.stringify({
+                                                'uid': foundPlayer.id,
+                                                'normalisedScore': foundPlayer.normalisedScore + normalisedScore
+                                            });
 
-                                        var post_options = {
-                                            headers: {
-                                                'Content-Type': 'application/x-www-form-urlencoded',
-                                                'Content-Length': Buffer.byteLength(post_data),
-                                                'x-auth-token': 'yhZ1EftMKZa9'
-                                            },
-                                            method: 'POST',
-                                            port: 3000,
-                                            // host: 'http://localhost',
-                                            path: '/student/updateGuntScore',
-                                        };
+                                            var post_options = {
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                    'Content-Length': Buffer.byteLength(post_data),
+                                                    'x-auth-token': 'yhZ1EftMKZa9'
+                                                },
+                                                method: 'POST',
+                                                port: 3000,
+                                                // host: 'http://localhost',
+                                                path: '/student/updateGuntScore',
+                                            };
 
-                                        var post_req = http.request(post_options, (response) => {
-                                            if (response.statusCode == 200)
-                                                return res.json(constant.codes.correctAnswer);
-                                            else
-                                                return res.status(constant.serverError).send(e());
-                                        });
+                                            var post_req = http.request(post_options, (response) => {
+                                                if (response.statusCode == 200)
+                                                    return res.json(constant.codes.correctAnswer);
+                                                else
+                                                    return res.status(constant.serverError).send(e());
+                                            });
 
 
-                                        // post the data
-                                        post_req.write(post_data);
-                                        post_req.end();
+                                            // post the data
+                                            post_req.write(post_data);
+                                            post_req.end();
 
-                                    }).catch(function(error) {
-                                        return res.status(constant.serverError).send(e(error));
-                                    })
-
-                            }).catch(function(error) {
-                                return res.status(constant.serverError).send(e(error));
-                            })
+                                        }).catch(function(error) {
+                                            return res.status(constant.serverError).send(e(error));
+                                        })
+                                }).catch(function(error) {
+                                    console.log(error);
+                                    return res.status(constant.serverError).send(e(error));
+                                })
+                            } catch (error) {
+                                console.log("error", error);
+                                return res.status(500).json(error);
+                            }
                         } else {
                             return res.json(constant.codes.wrongAnswer);
                         }
@@ -347,6 +353,7 @@ router.post('/checkAnswer', auth.player, function(req, res, next) {
         } else
             return res.status(constant.serverError).send(e(constant.codes.noPlayerFound));
     }).catch(function(error) {
+        console.log("error", error);
         return res.status(constant.serverError).send(e(error));
     })
 

@@ -1,11 +1,11 @@
-<div layout="column" layout-align="begin begin" tabindex="0" ng-keydown="keydown($event)" ng-keypress="keypress($event)" autofocus>
+<div layout="column" layout-align="begin begin" tabindex="0">
     <p class="prewrap">MB@MB_PC:~$ zork</p>
     <p class="prewrap">Controls : inventory, look, north, south, east, west, take [object], put [object], open [box]</p>
     <p ng-repeat="line in gameText track by $index" class="prewrap ">{{line}}</p>
     <form ng-submit="doCommand(command) ">
         <md-input-container>
             <label></label>
-            <input id="inputAnswer " ng-model="command ">
+            <input id="inputAnswer " ng-model="command " autofocus>
         </md-input-container>
     </form>
 </div>

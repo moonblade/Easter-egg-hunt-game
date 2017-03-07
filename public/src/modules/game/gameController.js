@@ -442,70 +442,72 @@ angular.module("gunt")
         $scope.level = "";
         $scope.gameText = [];
         $rootScope.title = "Final Level";
+        // $scope.character = { 'inventory': ['trophy'], 'location': 'centre room' };
+        $scope.character = { 'inventory': [], 'location': 'west room' };
+        var boxes = {
+            'silver box': {
+                'contents': 'gold key',
+                'opens_with': 'silver key'
+            },
+
+            'copper box': {
+                'contents': 'silver key',
+                'opens_with': 'copper key'
+            },
+
+            'gold box': {
+                'contents': 'wooden key',
+                'opens_with': 'gold key'
+            },
+
+            'platinum box': {
+                'contents': 'trophy',
+                'opens_with': 'platinum key'
+            }
+        }
+        var dungeon = {
+            'north room': {
+                'short_description': 'north room',
+                'long_description': 'a dimly room littered with skulls, there is a wooden door to the east, looks sturdy.',
+                'contents': ['silver box'],
+                'exits': { 'east': 'treasure room', 'south': 'centre room' }
+            },
+            'south room': {
+                'short_description': 'south room',
+                'long_description': 'a damp musty smelling room. A small window overlooks a cliff',
+                'contents': ['gold box'],
+                'exits': { 'north': 'centre room' }
+            },
+            'west room': {
+                'short_description': 'west room',
+                'long_description': 'the west end of a sloping east-west passage of barren rock',
+                'contents': ['platinum key'],
+                'exits': { 'east': 'centre room' }
+            },
+            'east room': {
+                'short_description': 'east room',
+                'long_description': 'a room of finished stone with high arched ceiling and soaring columns',
+                'contents': ['copper box'],
+                'exits': { 'west': 'centre room' }
+            },
+            'centre room': {
+                'short_description': 'centre room',
+                'long_description': 'the very heart of the dungeon, a windowless chamber lit only by the eerie light of glowing fungi high above. There is a prominent trophy stand in the middle, there is no trophy on it.',
+                'contents': ['copper key'],
+                'exits': { 'east': 'east room', 'west': 'west room', 'north': 'north room', 'south': 'south room' }
+            },
+            'treasure room': {
+                'short_description': 'treasure room',
+                'long_description': 'a room filled with treasures of all kinds imaginable',
+                'contents': ['platinum box'],
+                'exits': { 'west': 'north room' }
+            }
+        };
+        var room, command, verb, obj;
         $scope.doCommand = function(command) {
             $scope.gameText.push(".");
             $scope.command = "";
-            var character = { 'inventory': [], 'location': 'west room' };
 
-            var boxes = {
-                'silver box': {
-                    'contents': 'gold key',
-                    'opens_with': 'silver key'
-                },
-
-                'copper box': {
-                    'contents': 'silver key',
-                    'opens_with': 'copper key'
-                },
-
-                'gold box': {
-                    'contents': 'wooden key',
-                    'opens_with': 'gold key'
-                },
-
-                'platinum box': {
-                    'contents': 'trophy',
-                    'opens_with': 'platinum key'
-                }
-            }
-            var dungeon = {
-                'north room': {
-                    'short_description': 'north room',
-                    'long_description': 'a dimly room littered with skulls, there is a wooden door to the east, looks sturdy.',
-                    'contents': ['silver box'],
-                    'exits': { 'east': 'treasure room', 'south': 'centre room' }
-                },
-                'south room': {
-                    'short_description': 'south room',
-                    'long_description': 'a damp musty smelling room. A small window overlooks a cliff',
-                    'contents': ['gold box'],
-                    'exits': { 'north': 'centre room' }
-                },
-                'west room': {
-                    'short_description': 'west room',
-                    'long_description': 'the west end of a sloping east-west passage of barren rock',
-                    'contents': ['platinum key'],
-                    'exits': { 'east': 'centre room' }
-                },
-                'east room': {
-                    'short_description': 'east room',
-                    'long_description': 'a room of finished stone with high arched ceiling and soaring columns',
-                    'contents': ['copper box'],
-                    'exits': { 'west': 'centre room' }
-                },
-                'centre room': {
-                    'short_description': 'centre room',
-                    'long_description': 'the very heart of the dungeon, a windowless chamber lit only by the eerie light of glowing fungi high above. There is a prominent trophy stand in the middle, there is no trophy on it.',
-                    'contents': ['copper key'],
-                    'exits': { 'east': 'east room', 'west': 'west room', 'north': 'north room', 'south': 'south room' }
-                },
-                'treasure room': {
-                    'short_description': 'treasure room',
-                    'long_description': 'a room filled with treasures of all kinds imaginable',
-                    'contents': ['platinum box'],
-                    'exits': { 'west': 'north room' }
-                }
-            };
 
             function print(line) {
                 if (line)
@@ -519,10 +521,9 @@ angular.module("gunt")
                 return [command, object];
             }
 
-            var room, command, verb, obj;
 
             function has(item) {
-                return character.inventory.indexOf(item) > -1;
+                return $scope.character.inventory.indexOf(item) > -1;
             }
 
             function remove(array, item) {
@@ -537,8 +538,8 @@ angular.module("gunt")
                     if (room.short_description == 'north room' && direction == 'east' && !has('wooden key')) {
                         print('The door is locked');
                     } else {
-                        character.location = room.exits[direction];
-                        room = dungeon[character.location];
+                        $scope.character.location = room.exits[direction];
+                        room = dungeon[$scope.character.location];
                         describe(room);
                     }
                 } else {
@@ -548,7 +549,7 @@ angular.module("gunt")
 
             function printInventory() {
                 print('You are carrying:');
-                character['inventory'].forEach(function(item) {
+                $scope.character['inventory'].forEach(function(item) {
                     print(item);
                     print("\n");
                 });
@@ -581,8 +582,10 @@ angular.module("gunt")
                                 if (has(boxes[item]['opens_with'])) {
                                     print('The box contains : ');
                                     print(boxes[item]['contents']);
-                                    character['inventory'].push(boxes[item]['contents']);
-                                    remove(character['inventory'], boxes[item]['opens_with']);
+                                    $scope.character['inventory'].push(boxes[item]['contents']);
+                                    remove($scope.character['inventory'], boxes[item]['opens_with']);
+                                    remove(room['contents'], item);
+                                    console.log(room);
                                     delete boxes[item]['contents'];
                                     print('Added to inventory');
 
@@ -600,7 +603,7 @@ angular.module("gunt")
                 }
             }
 
-            room = dungeon[character['location']];
+            room = dungeon[$scope.character['location']];
             command = command_split(command);
             verb = command[0];
             obj = command[1];
@@ -611,13 +614,13 @@ angular.module("gunt")
             } else if (verb == 'put') {
                 if (obj == 'trophy') {
                     if (has('trophy')) {
-                        if (character.location == 'centre room') {
+                        if ($scope.character.location == 'centre room') {
                             print('Thank you, you have completed the game');
                             mainFactory.checkAnswer($localStorage.guntUser, "f054bbd2f5ebab9cb5571000b2c50c02")
                                 .then(function(data) {
                                     if (data.data.code == 0) {
                                         $scope.showMessage("Excellent", "You have completed the level");
-                                        $scope.getLevel();
+                                        $scope.gotoLevel();
                                         $scope.answer = "";
                                     } else {}
                                 }).catch(function(error) {
@@ -634,17 +637,16 @@ angular.module("gunt")
                     print('You can only put trophies');
                 }
             } else if (verb == 'inventory') {
-                console.log(character);
+                console.log($scope.character);
                 printInventory();
             } else if (verb == 'take') {
                 room['contents'].slice().forEach(function(item) {
                     if (item.indexOf(obj) > -1) { // does the word in obj match any part of the text of item?
                         if (item.indexOf('box') == -1) {
-
                             print('You pick up the ' + item)
-                            console.log(character)
-                            character['inventory'].push(item);
-                            console.log(character)
+                            console.log($scope.character)
+                            $scope.character['inventory'].push(item);
+                            console.log($scope.character)
                             remove(room['contents'], item);
                         } else {
                             print('The box is too heavy');
@@ -652,7 +654,7 @@ angular.module("gunt")
                     }
                 });
             } else if (verb == 'look') {
-                describe(dungeon[character.location]);
+                describe(dungeon[$scope.character.location]);
             }
         }
         $scope.doCommand('look');
