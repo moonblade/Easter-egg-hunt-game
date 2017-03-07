@@ -71,9 +71,14 @@ angular.module("gunt", ["ngMaterial", "ui.router", 'googleplus', 'ngStorage', 'm
                 controller: "bonusRoomController"
             })
             .state("app.game.allRooms", {
-                url: "fml",
+                url: "",
                 templateUrl: "modules/game/allRoom.html",
                 controller: "allRoomController"
+            })
+            .state("app.game.final", {
+                url: "final",
+                templateUrl: "modules/game/final.html",
+                controller: "finalController"
             });
 
     }]).directive('autofocus', ['$timeout', function($timeout) {

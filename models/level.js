@@ -17,6 +17,8 @@ var levelSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    final: Boolean,
+    isEndMarker: Boolean,
     image: {
         type: String
     },

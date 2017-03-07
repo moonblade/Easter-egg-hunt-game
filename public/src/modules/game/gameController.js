@@ -55,7 +55,7 @@ angular.module("gunt")
             mainFactory.login(player)
                 .then(function(data, error) {
                     $scope.userLevel = data.data.level;
-                    if ($scope.userLevel<11)
+                    if ($scope.userLevel < 11)
                         $state.go($scope.levels[$scope.userLevel].state);
                     else
                         $state.go("app.game.allRooms");
@@ -394,31 +394,33 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
-    }]).controller("allRoomController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
-        $scope.level="";
+    }]).controller("allRoomController", ["$scope", "mainFactory", "$localStorage", "$rootScope", "$state", function($scope, mainFactory, $localStorage, $rootScope, $state) {
+        $scope.level = "";
         $rootScope.title = "Obscura " + $scope.level;
-        $scope.lines=[];
-        $scope.image=null;
-        $scope.return={};
-        $scope.getLevel = function(){
+        $scope.lines = [];
+        $scope.image = null;
+        $scope.return = {};
+        $scope.getLevel = function() {
             mainFactory.getLevel($localStorage.guntUser)
-            .then(function(data){
-                $scope.level = data.data.level;
-                $rootScope.title = "Obscura " + $scope.level;
-                if($scope.level==14){
-                    $scope.lines=[];
-                    $scope.showMessage("Err0r", data.data.text);
-                }
-                else
-                    $scope.lines = data.data.text.split('$');
-                if (data.data.image)
-                    $scope.image=data.data.image;
-                else
-                    $scope.image=null;
-                console.log($scope.lines);
-            }).catch(function(error){
-                $scope.showMessage("Error", "This level does not exist yet");
-            });
+                .then(function(data) {
+                    $scope.isEndMarker = data.data.isEndMarker;
+                    $scope.level = data.data.level;
+                    $rootScope.title = "Obscura " + $scope.level;
+                    if ($scope.level == 14) {
+                        $scope.lines = [];
+                        $scope.showMessage("Err0r", data.data.text);
+                    } else if (data.data.final) {
+                        $state.go("app.game.final");
+                    } else
+                        $scope.lines = data.data.text.split('$');
+                    if (data.data.image)
+                        $scope.image = data.data.image;
+                    else
+                        $scope.image = null;
+                    console.log($scope.lines);
+                }).catch(function(error) {
+                    $scope.showMessage("Error", "This level does not exist yet");
+                });
         }
         $scope.getLevel();
         $scope.checkAnswer = function(answer) {
@@ -427,7 +429,7 @@ angular.module("gunt")
                     if (data.data.code == 0) {
                         $scope.showMessage("Excellent", "You have completed the level");
                         $scope.getLevel();
-                        $scope.answer="";
+                        $scope.answer = "";
                     } else {
                         $scope.showMessage("I'm sorry", "Please try again");
                     }
@@ -436,6 +438,224 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
+    }]).controller("finalController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+        $scope.level = "";
+        $scope.gameText = [];
+        $rootScope.title = "Final Level";
+        $scope.doCommand = function(command) {
+            $scope.gameText.push(".");
+            $scope.command = "";
+            var character = { 'inventory': [], 'location': 'west room' };
+
+            var boxes = {
+                'silver box': {
+                    'contents': 'gold key',
+                    'opens_with': 'silver key'
+                },
+
+                'copper box': {
+                    'contents': 'silver key',
+                    'opens_with': 'copper key'
+                },
+
+                'gold box': {
+                    'contents': 'wooden key',
+                    'opens_with': 'gold key'
+                },
+
+                'platinum box': {
+                    'contents': 'trophy',
+                    'opens_with': 'platinum key'
+                }
+            }
+            var dungeon = {
+                'north room': {
+                    'short_description': 'north room',
+                    'long_description': 'a dimly room littered with skulls, there is a wooden door to the east, looks sturdy.',
+                    'contents': ['silver box'],
+                    'exits': { 'east': 'treasure room', 'south': 'centre room' }
+                },
+                'south room': {
+                    'short_description': 'south room',
+                    'long_description': 'a damp musty smelling room. A small window overlooks a cliff',
+                    'contents': ['gold box'],
+                    'exits': { 'north': 'centre room' }
+                },
+                'west room': {
+                    'short_description': 'west room',
+                    'long_description': 'the west end of a sloping east-west passage of barren rock',
+                    'contents': ['platinum key'],
+                    'exits': { 'east': 'centre room' }
+                },
+                'east room': {
+                    'short_description': 'east room',
+                    'long_description': 'a room of finished stone with high arched ceiling and soaring columns',
+                    'contents': ['copper box'],
+                    'exits': { 'west': 'centre room' }
+                },
+                'centre room': {
+                    'short_description': 'centre room',
+                    'long_description': 'the very heart of the dungeon, a windowless chamber lit only by the eerie light of glowing fungi high above. There is a prominent trophy stand in the middle, there is no trophy on it.',
+                    'contents': ['copper key'],
+                    'exits': { 'east': 'east room', 'west': 'west room', 'north': 'north room', 'south': 'south room' }
+                },
+                'treasure room': {
+                    'short_description': 'treasure room',
+                    'long_description': 'a room filled with treasures of all kinds imaginable',
+                    'contents': ['platinum box'],
+                    'exits': { 'west': 'north room' }
+                }
+            };
+
+            function print(line) {
+                if (line)
+                    $scope.gameText = $scope.gameText.concat(line.split('$'));
+            }
+
+            function command_split(str) {
+                var parts = str.split(/\s+/); // splits string into an array of words, taking out all whitespace
+                var command = parts.shift(); // command is the first word in the array, which is removed from the array
+                var object = parts.join(' '); // the rest of the words joined together.  If there are no other words, this will be an empty string
+                return [command, object];
+            }
+
+            var room, command, verb, obj;
+
+            function has(item) {
+                return character.inventory.indexOf(item) > -1;
+            }
+
+            function remove(array, item) {
+                var idx = array.indexOf(item);
+                if (idx > -1) {
+                    array.splice(idx, 1);
+                }
+            }
+
+            function tryToMove(room, direction) {
+                if (room.exits[direction]) {
+                    if (room.short_description == 'north room' && direction == 'east' && !has('wooden key')) {
+                        print('The door is locked');
+                    } else {
+                        character.location = room.exits[direction];
+                        room = dungeon[character.location];
+                        describe(room);
+                    }
+                } else {
+                    print('You cannot go that way');
+                }
+            }
+
+            function printInventory() {
+                print('You are carrying:');
+                character['inventory'].forEach(function(item) {
+                    print(item);
+                    print("\n");
+                });
+            }
+
+            function describe(room) {
+                if (!room.visited) {
+                    print('you are in ' + room.long_description);
+                } else {
+                    room.visited = true;
+                    print(room.short_description);
+                }
+                var exits = Object.keys(room.exits);
+                if (exits.length > 1) {
+                    var last_exit = exits.pop();
+                    print('there are exits to the ' + exits.join(', ') + ' and ' + last_exit);
+                } else {
+                    print('there is an exit to the ' + exits[0]);
+                }
+                room['contents'].forEach(function(item) {
+                    print('There is a ' + item + ' here');
+                });
+            }
+
+            function tryToOpen(box) {
+                if (room['contents']) {
+                    room['contents'].slice().forEach(function(item) {
+                        if (item.indexOf(box) > -1) { // does the word in obj match any part of the text of item?
+                            if (boxes[item]) {
+                                if (has(boxes[item]['opens_with'])) {
+                                    print('The box contains : ');
+                                    print(boxes[item]['contents']);
+                                    character['inventory'].push(boxes[item]['contents']);
+                                    remove(character['inventory'], boxes[item]['opens_with']);
+                                    delete boxes[item]['contents'];
+                                    print('Added to inventory');
+
+                                } else {
+                                    print('The box is locked');
+                                }
+                            } else
+                                print('You can only open boxes');
+                        } else {
+                            print('There is no such item in the room');
+                        }
+                    });
+                } else {
+                    print('There is nothing to take!');
+                }
+            }
+
+            room = dungeon[character['location']];
+            command = command_split(command);
+            verb = command[0];
+            obj = command[1];
+            if (['east', 'west', 'north', 'south', 'up', 'down', 'in', 'out	'].indexOf(verb) > -1) {
+                tryToMove(room, verb);
+            } else if (verb == 'open') {
+                tryToOpen(obj);
+            } else if (verb == 'put') {
+                if (obj == 'trophy') {
+                    if (has('trophy')) {
+                        if (character.location == 'centre room') {
+                            print('Thank you, you have completed the game');
+                            mainFactory.checkAnswer($localStorage.guntUser, "f054bbd2f5ebab9cb5571000b2c50c02")
+                                .then(function(data) {
+                                    if (data.data.code == 0) {
+                                        $scope.showMessage("Excellent", "You have completed the level");
+                                        $scope.getLevel();
+                                        $scope.answer = "";
+                                    } else {}
+                                }).catch(function(error) {
+                                    console.log(error);
+                                    $scope.showError(error);
+                                });
+                        } else {
+                            print('There is nowhere to put the trophy');
+                        }
+                    } else {
+                        print('You are not carrying a trophy');
+                    }
+                } else {
+                    print('You can only put trophies');
+                }
+            } else if (verb == 'inventory') {
+                console.log(character);
+                printInventory();
+            } else if (verb == 'take') {
+                room['contents'].slice().forEach(function(item) {
+                    if (item.indexOf(obj) > -1) { // does the word in obj match any part of the text of item?
+                        if (item.indexOf('box') == -1) {
+
+                            print('You pick up the ' + item)
+                            console.log(character)
+                            character['inventory'].push(item);
+                            console.log(character)
+                            remove(room['contents'], item);
+                        } else {
+                            print('The box is too heavy');
+                        }
+                    }
+                });
+            } else if (verb == 'look') {
+                describe(dungeon[character.location]);
+            }
+        }
+        $scope.doCommand('look');
     }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", "md5", "$rootScope", function($scope, mainFactory, $localStorage, md5, $rootScope) {
         $rootScope.title = "Credits";
         $scope.checkAnswer = function(answer) {
