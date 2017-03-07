@@ -438,12 +438,15 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
-    }]).controller("finalController", ["$scope", "mainFactory", "$localStorage", "$rootScope", function($scope, mainFactory, $localStorage, $rootScope) {
+    }]).controller("finalController", ["$scope", "mainFactory", "$localStorage", "$rootScope", "$window", function($scope, mainFactory, $localStorage, $rootScope, $window) {
         $scope.level = "";
         $scope.gameText = [];
         $rootScope.title = "Final Level";
-        // $scope.character = { 'inventory': ['trophy'], 'location': 'centre room' };
-        $scope.character = { 'inventory': [], 'location': 'west room' };
+        var unlocked = false;
+        var unlockedDoors = [];
+        var killedEnemy = "";
+        // var character = { 'inventory': ['sword'], 'location': 'north room' };
+        var character = { 'inventory': [], 'location': 'west room' };
         var boxes = {
             'silver box': {
                 'contents': 'gold key',
@@ -461,16 +464,28 @@ angular.module("gunt")
             },
 
             'platinum box': {
-                'contents': 'trophy',
+                'contents': 'sword',
                 'opens_with': 'platinum key'
             }
         }
         var dungeon = {
             'north room': {
                 'short_description': 'north room',
-                'long_description': 'a dimly room littered with skulls, there is a wooden door to the east, looks sturdy.',
+                'long_description': 'a dimly room littered with skulls.',
                 'contents': ['silver box'],
-                'exits': { 'east': 'treasure room', 'south': 'centre room' }
+                'lockedDoors': { 'east': 'wooden', 'west': 'iron' },
+                'exits': { 'east': 'treasure room', 'south': 'centre room', 'west': 'cell' }
+            },
+            'cell': {
+                'short_description': 'cell',
+                'long_description': 'A cell block filled with the pungent smell of decay and rot',
+                'exits': { 'east': 'north room' },
+                'contents': [],
+                'enemies': {
+                    'snake': {
+                        'desc': 'a nasty looking cobra with its hood raised poised to strike, It looks like it had a recent meal'
+                    }
+                }
             },
             'south room': {
                 'short_description': 'south room',
@@ -488,7 +503,8 @@ angular.module("gunt")
                 'short_description': 'east room',
                 'long_description': 'a room of finished stone with high arched ceiling and soaring columns',
                 'contents': ['copper box'],
-                'exits': { 'west': 'centre room' }
+                'exits': { 'west': 'centre room' },
+                'enemies': { 'scorpion': { 'desc': 'a poisonous scorpion rearing its tail', 'reward': 'iron key' } }
             },
             'centre room': {
                 'short_description': 'centre room',
@@ -509,9 +525,19 @@ angular.module("gunt")
             $scope.command = "";
 
 
+
             function print(line) {
                 if (line)
                     $scope.gameText = $scope.gameText.concat(line.split('$'));
+            }
+
+            function addInventory(item) {
+                character.inventory.push(item);
+                print(item + ' added to inventory');
+            }
+
+            function removeInventory(item) {
+                remove(character.inventory, item);
             }
 
             function command_split(str) {
@@ -523,7 +549,17 @@ angular.module("gunt")
 
 
             function has(item) {
-                return $scope.character.inventory.indexOf(item) > -1;
+                for (var i = 0; i < character.inventory.length; i++) {
+                    var itemFullName = character.inventory[i];
+                    console.log(itemFullName)
+                    console.log(item)
+                    console.log(itemFullName.indexOf(item))
+                    if (itemFullName.indexOf(item) > -1) {
+                        console.log("returning", true)
+                        return true;
+                    }
+                }
+                return false;
             }
 
             function remove(array, item) {
@@ -533,13 +569,62 @@ angular.module("gunt")
                 }
             }
 
+            function unlock(room) {
+                // check if empyt
+                hasLockedDoors = !(JSON.stringify(room.lockedDoors) == JSON.stringify({}));
+                if (room.lockedDoors && hasLockedDoors) {
+                    unlocked = false;
+                    unlockedDoors = [];
+                    for (var key in room.lockedDoors) {
+                        if (has(room.lockedDoors[key] + ' key')) {
+                            print('Unlocked ' + room.lockedDoors[key] + ' door');
+                            unlocked = true;
+                            unlockedDoors.push(key);
+                            remove(character.inventory, room.lockedDoors[key] + ' key')
+                        }
+                    }
+                    if (!unlocked)
+                        print('Could not unlock any doors');
+                    else {
+                        unlockedDoors.forEach(function(x) {
+                            delete(room.lockedDoors[x]);
+                        });
+                    }
+                } else {
+                    print("No locked doors in room")
+                }
+            }
+
+            function attack(room, enemy) {
+                killedEnemy = "";
+                if (room.enemies && room.enemies[enemy]) {
+                    if (has("sword")) {
+                        room.contents.push(enemy + ' carcass');
+                        killedEnemy = enemy;
+                        print('you defeated the ' + enemy);
+                        if (room.enemies[enemy].reward) {
+                            print('The ' + enemy + ' dropped a ' + room.enemies[enemy].reward);
+                            addInventory(room.enemies[enemy].reward);
+                        }
+                    } else {
+                        print('You tried to attack the ' + enemy + ', and you died.');
+                        print('Restarting game');
+                        $window.location.reload();
+                    }
+                } else {
+                    print('No ' + enemy + ' in room (try different name)');
+                }
+                if (killedEnemy != "")
+                    delete(room.enemies[killedEnemy]);
+            }
+
             function tryToMove(room, direction) {
                 if (room.exits[direction]) {
-                    if (room.short_description == 'north room' && direction == 'east' && !has('wooden key')) {
+                    if (room.lockedDoors && room.lockedDoors[direction]) {
                         print('The door is locked');
                     } else {
-                        $scope.character.location = room.exits[direction];
-                        room = dungeon[$scope.character.location];
+                        character.location = room.exits[direction];
+                        room = dungeon[character.location];
                         describe(room);
                     }
                 } else {
@@ -548,8 +633,9 @@ angular.module("gunt")
             }
 
             function printInventory() {
+                // console.log(character.inventory)
                 print('You are carrying:');
-                $scope.character['inventory'].forEach(function(item) {
+                character['inventory'].forEach(function(item) {
                     print(item);
                     print("\n");
                 });
@@ -569,52 +655,94 @@ angular.module("gunt")
                 } else {
                     print('there is an exit to the ' + exits[0]);
                 }
+                if (room.lockedDoors) {
+                    var lockedDoors = Object.keys(room.lockedDoors);
+                    lockedDoors.forEach(function(key) {
+                        print('The ' + key + ' exit is blocked by a ' + room.lockedDoors[key] + ' door');
+                    })
+                }
+                if (room.enemies) {
+                    for (var key in room.enemies) {
+                        print('There is a ' + key + ' in the room. ' + room.enemies[key].desc);
+                    }
+                }
                 room['contents'].forEach(function(item) {
                     print('There is a ' + item + ' here');
                 });
             }
 
-            function tryToOpen(box) {
-                if (room['contents']) {
-                    room['contents'].slice().forEach(function(item) {
-                        if (item.indexOf(box) > -1) { // does the word in obj match any part of the text of item?
-                            if (boxes[item]) {
-                                if (has(boxes[item]['opens_with'])) {
-                                    print('The box contains : ');
-                                    print(boxes[item]['contents']);
-                                    $scope.character['inventory'].push(boxes[item]['contents']);
-                                    remove($scope.character['inventory'], boxes[item]['opens_with']);
-                                    remove(room['contents'], item);
-                                    console.log(room);
-                                    delete boxes[item]['contents'];
-                                    print('Added to inventory');
-
-                                } else {
-                                    print('The box is locked');
-                                }
-                            } else
-                                print('You can only open boxes');
+            function take(room, obj) {
+                room['contents'].slice().forEach(function(item) {
+                    if (item.indexOf(obj) > -1) { // does the word in obj match any part of the text of item?
+                        if (item.indexOf('box') == -1) {
+                            print('You pick up the ' + item)
+                            character['inventory'].push(item);
+                            remove(room['contents'], item);
                         } else {
-                            print('There is no such item in the room');
+                            if (item.indexOf('carcass') > -1) {
+                                print('You cannot pick up a carcass');
+                            } else {
+                                print('The box is too heavy');
+                            }
                         }
-                    });
-                } else {
-                    print('There is nothing to take!');
+                    }
+                });
+            }
+
+            function tryToOpen(box, room) {
+                switch (box) {
+                    case 'box':
+                        if (room['contents']) {
+                            room['contents'].slice().forEach(function(item) {
+                                if (item.indexOf(box) > -1) { // does the word in obj match any part of the text of item?
+                                    if (boxes[item]) {
+                                        if (has(boxes[item]['opens_with'])) {
+                                            print('The box contains : ');
+                                            print(boxes[item]['contents']);
+                                            addInventory(boxes[item]['contents'])
+                                            removeInventory(boxes[item]['opens_with']);
+                                            remove(room['contents'], item);
+                                            delete boxes[item]['contents'];
+
+                                        } else {
+                                            print('The box is locked');
+                                        }
+                                    } else
+                                        print('You can only open boxes');
+                                } else {
+                                    print('There is no such item in the room');
+                                }
+                            });
+                        } else {
+                            print('There is nothing to take!');
+                        }
+                        break;
+                    case 'door':
+                        unlock(room);
+                        break;
+                    case 'snake':
+                    case 'cobra':
+                    case 'snake carcass':
+                        if (room.contents.indexOf('snake carcass') > -1) {
+                            if (has('sword')) {
+                                print('You carefully cut open the snake with your sword, and in its belly you find a trophy');
+                                addInventory('trophy');
+                            } else {
+                                print('You got poisoned by the ' + box);
+                            }
+                        } else {
+                            'cannot open' + box;
+                        }
+                        break;
+                    default:
+                        print('cannot open ' + (box || 'nothing'))
                 }
             }
 
-            room = dungeon[$scope.character['location']];
-            command = command_split(command);
-            verb = command[0];
-            obj = command[1];
-            if (['east', 'west', 'north', 'south', 'up', 'down', 'in', 'out	'].indexOf(verb) > -1) {
-                tryToMove(room, verb);
-            } else if (verb == 'open') {
-                tryToOpen(obj);
-            } else if (verb == 'put') {
+            function putTrophy(room, obj) {
                 if (obj == 'trophy') {
                     if (has('trophy')) {
-                        if ($scope.character.location == 'centre room') {
+                        if (character.location == 'centre room') {
                             print('Thank you, you have completed the game');
                             mainFactory.checkAnswer($localStorage.guntUser, "f054bbd2f5ebab9cb5571000b2c50c02")
                                 .then(function(data) {
@@ -636,25 +764,42 @@ angular.module("gunt")
                 } else {
                     print('You can only put trophies');
                 }
-            } else if (verb == 'inventory') {
-                console.log($scope.character);
-                printInventory();
-            } else if (verb == 'take') {
-                room['contents'].slice().forEach(function(item) {
-                    if (item.indexOf(obj) > -1) { // does the word in obj match any part of the text of item?
-                        if (item.indexOf('box') == -1) {
-                            print('You pick up the ' + item)
-                            console.log($scope.character)
-                            $scope.character['inventory'].push(item);
-                            console.log($scope.character)
-                            remove(room['contents'], item);
-                        } else {
-                            print('The box is too heavy');
-                        }
-                    }
-                });
-            } else if (verb == 'look') {
-                describe(dungeon[$scope.character.location]);
+            }
+            room = dungeon[character['location']];
+            command = command_split(command);
+            verb = command[0];
+            obj = command[1];
+            switch (verb) {
+                case 'east':
+                case 'west':
+                case 'north':
+                case 'south':
+                    tryToMove(room, verb);
+                    break;
+                case 'unlock':
+                case 'open':
+                    tryToOpen(obj, room);
+                    break;
+                case 'attack':
+                case 'kill':
+                    attack(room, obj);
+                    break;
+                case 'put':
+                case 'place':
+                    put(room, obj);
+                    break;
+                case 'inventory':
+                    printInventory();
+                    break;
+                case 'take':
+                case 'pick':
+                    take(room, obj);
+                    break;
+                case 'look':
+                    describe(dungeon[character.location]);
+                    break;
+                default:
+                    print('Unknown command');
             }
         }
         $scope.doCommand('look');
