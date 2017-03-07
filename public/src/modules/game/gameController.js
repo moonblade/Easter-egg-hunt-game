@@ -445,8 +445,7 @@ angular.module("gunt")
         var unlocked = false;
         var unlockedDoors = [];
         var killedEnemy = "";
-        var character = { 'inventory': ['sword', 'ivory key', 'bottle', 'fire', 'water'], 'location': 'burning room' };
-        // var character = { 'inventory': [], 'location': 'west room' };
+        var character = { 'inventory': [], 'location': 'west room' };
         var boxes = {
             'silver box': {
                 'contents': 'gold key',
@@ -494,7 +493,7 @@ angular.module("gunt")
             },
             'cell': {
                 'short_description': 'cell',
-                'long_description': 'A cell block filled with the pungent smell of decay and rot. there is moss growing on one corner of the cell',
+                'long_description': 'a cell block filled with the pungent smell of decay and rot. there is moss growing on one corner of the cell',
                 'exits': { 'east': 'north room' },
                 'contents': [],
                 'enemies': {
@@ -550,7 +549,7 @@ angular.module("gunt")
             'cavern': {
                 'short_description': 'cavern',
                 'long_description': 'a small caver, theres barely enough room to stand, on the wall there is a drawing of a man hunting a dear and another roasting it',
-                'contents': ['bottle'],
+                'contents': [],
                 'exits': { 'north': 'east room' },
                 'enemies': {
                     'spider': {
@@ -614,11 +613,11 @@ angular.module("gunt")
             function has(item) {
                 for (var i = 0; i < character.inventory.length; i++) {
                     var itemFullName = character.inventory[i];
-                    console.log(itemFullName)
-                    console.log(item)
-                    console.log(itemFullName.indexOf(item))
+                    // console.log(itemFullName)
+                    // console.log(item)
+                    // console.log(itemFullName.indexOf(item))
                     if (itemFullName.indexOf(item) > -1) {
-                        console.log("returning", true)
+                        // console.log("returning", true)
                         return true;
                     }
                 }
@@ -660,9 +659,9 @@ angular.module("gunt")
 
             function attack(room, enemy) {
                 killedEnemy = "";
-                if (room.enemies && (room.enemies[enemy] || (obj == 'box' && room.enemies['red glowing box']))) {
-                    if ((obj == 'box' && room.enemies['red glowing box']))
-                        obj = 'red glowing box';
+                if (room.enemies && (room.enemies[enemy] || (enemy == 'box' && room.enemies['red glowing box']))) {
+                    if ((enemy == 'box' && room.enemies['red glowing box']))
+                        enemy = 'red glowing box';
                     if (has(room.enemies[enemy].weakness)) {
                         killedEnemy = enemy;
                         print(room.enemies[enemy].defeat);
@@ -675,7 +674,7 @@ angular.module("gunt")
                             print('The fire is out you see a red glowing box inside the embers')
                             removeInventory('water');
                             room.enemies['red glowing box'] = {
-                                'desc': 'a red glowing box, sitting in the embers',
+                                'desc': 'sitting in the embers',
                                 'weakness': 'water',
                                 'death': 'Ignoring the crackle from the box, you tried to open the box, but forgot that it was inside a roaring fire, it sizzled your palms off, you can do nothing but scream in agony. you die',
                                 'defeat': 'you pour water on top of the box, it sizzles and fries and finally cools down'
@@ -689,7 +688,7 @@ angular.module("gunt")
                     } else {
                         print(room.enemies[enemy].death);
                         print('Restarting game');
-                        // $window.location.reload();
+                        $window.location.reload();
                     }
                 } else {
                     print('No ' + (enemy || 'enemy') + ' in room (try different name)');
@@ -763,14 +762,14 @@ angular.module("gunt")
                         addInventory('fire');
                     } else {
                         print('You tried to cup the fire in your hands, severely burned, you writhe in agony for a few minutes before dying');
-                        // $window.location.reload();
+                        $window.location.reload();
                     }
                 } else if (obj == 'box' && room.enemies && room.enemies['red glowing box']) {
                     attack(room, 'red glowing box');
                 }
                 room['contents'].slice().forEach(function(item) {
                     if (isItA(item, obj)) { // does the word in obj match any part of the text of item?
-                        console.log(isItA(item, 'carcass'));
+                        // console.log(isItA(item, 'carcass'));
                         if (isItA(item, 'carcass')) {
                             print('You cannot pick up ' + item);
                         } else if (isItA(item, 'box')) {
@@ -803,8 +802,8 @@ angular.module("gunt")
                             room['contents'].slice().forEach(function(item) {
                                 if (item.indexOf(box) > -1) { // does the word in obj match any part of the text of item?
                                     if (boxes[item]) {
-                                        console.log(boxes[item]);
-                                        console.log(has(boxes[item]));
+                                        // console.log(boxes[item]);
+                                        // console.log(has(boxes[item]));
                                         if (has(boxes[item]['opens_with'])) {
                                             print('The box contains : ');
                                             print(boxes[item]['contents']);
@@ -833,8 +832,14 @@ angular.module("gunt")
                     case 'snake carcass':
                         if (room.contents.indexOf('snake carcass') > -1) {
                             if (has('sword')) {
-                                print('You carefully cut open the snake with your sword, and in its belly you find a trophy');
-                                addInventory('trophy');
+                                {
+                                    if (has('trophy')) {
+                                        print('The snake is already cut open');
+                                    } else {
+                                        print('You carefully cut open the snake with your sword, and in its belly you find a trophy');
+                                        addInventory('trophy');
+                                    }
+                                }
                             } else {
                                 print('You got poisoned by the ' + box);
                             }
