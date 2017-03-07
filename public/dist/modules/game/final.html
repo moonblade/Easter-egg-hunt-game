@@ -1,6 +1,6 @@
 <div layout="column" layout-align="begin begin" tabindex="0">
     <p class="prewrap">MB@MB_PC:~$ zork</p>
-    <p class="prewrap">Controls : inventory, look, north, south, east, west, take [object], put [object], open [box]</p>
+    <p class="prewrap">Controls : inventory, look, north, south, east, west, take [object], put [object], open [object], kill [object]</p>
     <p ng-repeat="line in gameText track by $index" class="prewrap ">{{line}}</p>
     <form ng-submit="doCommand(command) ">
         <md-input-container>

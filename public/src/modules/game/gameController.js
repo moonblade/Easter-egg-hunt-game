@@ -548,7 +548,7 @@ angular.module("gunt")
             },
             'cavern': {
                 'short_description': 'cavern',
-                'long_description': 'a small caver, theres barely enough room to stand, on the wall there is a drawing of a man hunting a dear and another roasting it',
+                'long_description': 'a small cavern, theres barely enough room to stand, on the wall there is a drawing of a man hunting a dear and another roasting it',
                 'contents': [],
                 'exits': { 'north': 'east room' },
                 'enemies': {
