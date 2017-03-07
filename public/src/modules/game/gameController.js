@@ -445,45 +445,52 @@ angular.module("gunt")
         var unlocked = false;
         var unlockedDoors = [];
         var killedEnemy = "";
-        // var character = { 'inventory': ['sword'], 'location': 'north room' };
-        var character = { 'inventory': [], 'location': 'west room' };
+        var character = { 'inventory': ['sword'], 'location': 'east room' };
+        // var character = { 'inventory': [], 'location': 'west room' };
         var boxes = {
             'silver box': {
                 'contents': 'gold key',
-                'opens_with': 'silver key'
+                'opens_with': 'silver key',
+                'heavy': true
             },
 
             'copper box': {
                 'contents': 'silver key',
-                'opens_with': 'copper key'
+                'opens_with': 'copper key',
+                'heavy': true
             },
 
             'gold box': {
                 'contents': 'wooden key',
-                'opens_with': 'gold key'
+                'opens_with': 'gold key',
+                'heavy': true
             },
 
             'platinum box': {
                 'contents': 'sword',
-                'opens_with': 'platinum key'
+                'opens_with': 'platinum key',
+                'heavy': true
             }
         }
         var dungeon = {
             'north room': {
                 'short_description': 'north room',
-                'long_description': 'a dimly room littered with skulls.',
+                'long_description': 'a dimly room littered with skulls. It has an eerie quiteness about it, the sound of death',
                 'contents': ['silver box'],
                 'lockedDoors': { 'east': 'wooden', 'west': 'iron' },
                 'exits': { 'east': 'treasure room', 'south': 'centre room', 'west': 'cell' }
             },
             'cell': {
                 'short_description': 'cell',
-                'long_description': 'A cell block filled with the pungent smell of decay and rot',
+                'long_description': 'A cell block filled with the pungent smell of decay and rot. there is moss growing on one corner of the cell',
                 'exits': { 'east': 'north room' },
                 'contents': [],
                 'enemies': {
                     'snake': {
-                        'desc': 'a nasty looking cobra with its hood raised poised to strike, It looks like it had a recent meal'
+                        'desc': 'a nasty looking cobra with its hood raised poised to strike, It looks like it had a recent meal',
+                        'weakness': 'sword',
+                        'death': 'You tried to attack the snake by going around it and grabbing its tail, but in one swift move, it bit you, and you\'re dead',
+                        'defeat': 'With a mighty swing of the sword you cut off the head of the snake, killing it instantly'
                     }
                 }
             },
@@ -504,7 +511,15 @@ angular.module("gunt")
                 'long_description': 'a room of finished stone with high arched ceiling and soaring columns',
                 'contents': ['copper box'],
                 'exits': { 'west': 'centre room' },
-                'enemies': { 'scorpion': { 'desc': 'a poisonous scorpion rearing its tail', 'reward': 'iron key' } }
+                'enemies': {
+                    'scorpion': {
+                        'desc': 'a poisonous scorpion rearing its tail',
+                        'weakness': 'sword',
+                        'reward': 'iron key',
+                        'death': 'You tried to attack the scorpion with your bare hands, but it was faster than you anticipated and struck you with its poisonous tail',
+                        'defeat': 'You quickly sidestep the scorpion and swing your sword, it takes of its tail, You swing again and split the scorpion in two.'
+                    }
+                }
             },
             'centre room': {
                 'short_description': 'centre room',
@@ -514,10 +529,11 @@ angular.module("gunt")
             },
             'treasure room': {
                 'short_description': 'treasure room',
-                'long_description': 'a room filled with treasures of all kinds imaginable',
+                'long_description': 'a room filled with treasures of all kinds imaginable, there are mounds of glittering gold and shining diamonds in a huge pile',
                 'contents': ['platinum box'],
                 'exits': { 'west': 'north room' }
-            }
+            },
+
         };
         var room, command, verb, obj;
         $scope.doCommand = function(command) {
@@ -551,11 +567,11 @@ angular.module("gunt")
             function has(item) {
                 for (var i = 0; i < character.inventory.length; i++) {
                     var itemFullName = character.inventory[i];
-                    console.log(itemFullName)
-                    console.log(item)
-                    console.log(itemFullName.indexOf(item))
+                    // console.log(itemFullName)
+                    // console.log(item)
+                    // console.log(itemFullName.indexOf(item))
                     if (itemFullName.indexOf(item) > -1) {
-                        console.log("returning", true)
+                        // console.log("returning", true)
                         return true;
                     }
                 }
@@ -596,23 +612,27 @@ angular.module("gunt")
             }
 
             function attack(room, enemy) {
+                if (enemy == 'carcass') {
+                    print("It's already dead");
+                    return;
+                }
                 killedEnemy = "";
                 if (room.enemies && room.enemies[enemy]) {
-                    if (has("sword")) {
+                    if (has(room.enemies[enemy].weakness)) {
                         room.contents.push(enemy + ' carcass');
                         killedEnemy = enemy;
-                        print('you defeated the ' + enemy);
+                        print(room.enemies[enemy].defeat);
                         if (room.enemies[enemy].reward) {
-                            print('The ' + enemy + ' dropped a ' + room.enemies[enemy].reward);
+                            print('The ' + enemy + ' dropped ' + room.enemies[enemy].reward);
                             addInventory(room.enemies[enemy].reward);
                         }
                     } else {
-                        print('You tried to attack the ' + enemy + ', and you died.');
+                        print(room.enemies[enemy].death);
                         print('Restarting game');
                         $window.location.reload();
                     }
                 } else {
-                    print('No ' + enemy + ' in room (try different name)');
+                    print('No ' + (enemy || 'enemy') + ' in room (try different name)');
                 }
                 if (killedEnemy != "")
                     delete(room.enemies[killedEnemy]);
@@ -671,19 +691,47 @@ angular.module("gunt")
                 });
             }
 
+            function isItA(item, smallItem) {
+                return item.indexOf(smallItem) > -1;
+            }
+
             function take(room, obj) {
                 room['contents'].slice().forEach(function(item) {
-                    if (item.indexOf(obj) > -1) { // does the word in obj match any part of the text of item?
-                        if (item.indexOf('box') == -1) {
-                            print('You pick up the ' + item)
-                            character['inventory'].push(item);
-                            remove(room['contents'], item);
-                        } else {
-                            if (item.indexOf('carcass') > -1) {
-                                print('You cannot pick up a carcass');
+                    if (isItA(item, obj)) { // does the word in obj match any part of the text of item?
+                        console.log(isItA(item, 'carcass'));
+                        if (isItA(item, 'carcass')) {
+                            print('You cannot pick up a carcass');
+                        } else if (isItA(item, 'box')) {
+                            if (boxes[item] && boxes[item].heavy) {
+                                print('The box is too heavy');
                             } else {
+                                addInventory(item);
+                            }
+                        } else if (isItA(item, 'water')) {
+                            if (has('bottle')) {
+                                print('You fill your bottle with ' + item)
+                                addInventory(item);
+                            } else
+                                print('You have no container to take water with');
+                        } else {
+                            print('You pick up the ' + item)
+                            addInventory(item);
+                            remove(room['contents'], item);
+                        }
+                        if (item.indexOf('box') == -1) {
+                            if (item.indexOf('carcass') > -1) {} else {
                                 print('The box is too heavy');
                             }
+                        } else if (item.indexOf('water') > -1) {
+                            if (has('bottle')) {
+                                print('You fill your bottle with ' + item)
+                                addInventory(item);
+                            } else {}
+
+                        } else {
+                            print('You pick up the ' + item)
+                            addInventory(item);
+                            remove(room['contents'], item);
                         }
                     }
                 });
@@ -739,30 +787,34 @@ angular.module("gunt")
                 }
             }
 
-            function putTrophy(room, obj) {
-                if (obj == 'trophy') {
-                    if (has('trophy')) {
-                        if (character.location == 'centre room') {
-                            print('Thank you, you have completed the game');
-                            mainFactory.checkAnswer($localStorage.guntUser, "f054bbd2f5ebab9cb5571000b2c50c02")
-                                .then(function(data) {
-                                    if (data.data.code == 0) {
-                                        $scope.showMessage("Excellent", "You have completed the level");
-                                        $scope.gotoLevel();
-                                        $scope.answer = "";
-                                    } else {}
-                                }).catch(function(error) {
-                                    console.log(error);
-                                    $scope.showError(error);
-                                });
-                        } else {
-                            print('There is nowhere to put the trophy');
-                        }
-                    } else {
-                        print('You are not carrying a trophy');
+            function put(room, obj) {
+                if (has(obj)) {
+                    switch (obj) {
+                        case 'trophy':
+                            if (character.location == 'centre room') {
+                                print('Thank you, you have completed the game');
+                                mainFactory.checkAnswer($localStorage.guntUser, "f054bbd2f5ebab9cb5571000b2c50c02")
+                                    .then(function(data) {
+                                        if (data.data.code == 0) {
+                                            $scope.showMessage("Excellent", "You have completed the level");
+                                            $scope.gotoLevel();
+                                            $scope.answer = "";
+                                        } else {}
+                                    }).catch(function(error) {
+                                        console.log(error);
+                                        $scope.showError(error);
+                                    });
+                            } else
+                                print('There is nowhere to put the trophy');
+                            break;
+                        case 'water':
+                            attack(room, 'fire');
+                            break;
+                        default:
+                            print('You cannot put ' + (obj || 'nothing'));
                     }
                 } else {
-                    print('You can only put trophies');
+                    print('You do not have ' + obj);
                 }
             }
             room = dungeon[character['location']];
@@ -786,6 +838,7 @@ angular.module("gunt")
                     break;
                 case 'put':
                 case 'place':
+                case 'pour':
                     put(room, obj);
                     break;
                 case 'inventory':
@@ -793,6 +846,7 @@ angular.module("gunt")
                     break;
                 case 'take':
                 case 'pick':
+                case 'fill':
                     take(room, obj);
                     break;
                 case 'look':
