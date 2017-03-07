@@ -445,7 +445,7 @@ angular.module("gunt")
         var unlocked = false;
         var unlockedDoors = [];
         var killedEnemy = "";
-        var character = { 'inventory': ['sword'], 'location': 'east room' };
+        var character = { 'inventory': ['sword', 'ivory key', 'bottle', 'fire', 'water'], 'location': 'burning room' };
         // var character = { 'inventory': [], 'location': 'west room' };
         var boxes = {
             'silver box': {
@@ -470,13 +470,25 @@ angular.module("gunt")
                 'contents': 'sword',
                 'opens_with': 'platinum key',
                 'heavy': true
+            },
+
+            'ivory box': {
+                'contents': 'stone key',
+                'opens_with': 'ivory key',
+                'heavy': true
+            },
+
+            'decaying box': {
+                'contents': 'stick',
+                'opens_with': 'decaying key',
+                'heavy': true
             }
         }
         var dungeon = {
             'north room': {
                 'short_description': 'north room',
                 'long_description': 'a dimly room littered with skulls. It has an eerie quiteness about it, the sound of death',
-                'contents': ['silver box'],
+                'contents': ['silver box', 'bottle'],
                 'lockedDoors': { 'east': 'wooden', 'west': 'iron' },
                 'exits': { 'east': 'treasure room', 'south': 'centre room', 'west': 'cell' }
             },
@@ -496,28 +508,30 @@ angular.module("gunt")
             },
             'south room': {
                 'short_description': 'south room',
-                'long_description': 'a damp musty smelling room. A small window overlooks a cliff',
-                'contents': ['gold box'],
-                'exits': { 'north': 'centre room' }
+                'long_description': 'a damp musty smelling room. A small window overlooks a cliff where faint sounds of waves crashing can be heard',
+                'contents': ['gold box', 'ivory key'],
+                'lockedDoors': { 'west': 'granite' },
+                'exits': { 'north': 'centre room', 'west': 'burning room' }
             },
             'west room': {
                 'short_description': 'west room',
                 'long_description': 'the west end of a sloping east-west passage of barren rock',
-                'contents': ['platinum key'],
+                'contents': ['platinum key', 'water'],
                 'exits': { 'east': 'centre room' }
             },
             'east room': {
                 'short_description': 'east room',
                 'long_description': 'a room of finished stone with high arched ceiling and soaring columns',
                 'contents': ['copper box'],
-                'exits': { 'west': 'centre room' },
+                'lockedDoors': { 'south': 'stone' },
+                'exits': { 'west': 'centre room', 'south': 'cavern' },
                 'enemies': {
                     'scorpion': {
                         'desc': 'a poisonous scorpion rearing its tail',
                         'weakness': 'sword',
-                        'reward': 'iron key',
+                        'reward': 'granite key',
                         'death': 'You tried to attack the scorpion with your bare hands, but it was faster than you anticipated and struck you with its poisonous tail',
-                        'defeat': 'You quickly sidestep the scorpion and swing your sword, it takes of its tail, You swing again and split the scorpion in two.'
+                        'defeat': 'You quickly sidestep the scorpion and swing your sword, it takes off its tail, You swing again and split the scorpion in two.'
                     }
                 }
             },
@@ -530,10 +544,39 @@ angular.module("gunt")
             'treasure room': {
                 'short_description': 'treasure room',
                 'long_description': 'a room filled with treasures of all kinds imaginable, there are mounds of glittering gold and shining diamonds in a huge pile',
-                'contents': ['platinum box'],
+                'contents': ['platinum box', 'decaying box'],
                 'exits': { 'west': 'north room' }
             },
+            'cavern': {
+                'short_description': 'cavern',
+                'long_description': 'a small caver, theres barely enough room to stand, on the wall there is a drawing of a man hunting a dear and another roasting it',
+                'contents': ['bottle'],
+                'exits': { 'north': 'east room' },
+                'enemies': {
+                    'spider': {
+                        'desc': 'a monstrous hairy spider',
+                        'weakness': 'fire',
+                        'reward': 'iron key',
+                        'death': 'You tried to attack the spider with the sword, but it jumped up, and grabbed you in its web, it cocooned you in and is having you for dinner, you are dead',
+                        'defeat': 'The spider shoots its web at you, but you burn the webs, you set fire to the spiders hairy body, it goes up in flames'
+                    }
+                }
+            },
+            'burning room': {
+                'short_description': 'burning room',
+                'long_description': 'a room with granite slabs for floors and ceiling, the room is really hot, you can barely stand on the floor',
+                'contents': ['decaying key'],
+                'enemies': {
+                    'fire': {
+                        'desc': 'a roaring fire in the middle of the room, its flame nearly licking the surface',
+                        'weakness': 'water',
+                        'death': 'You tried to stomp out a seven feet tall fire, it quickly consumes you in fiery agony, you scream and die',
+                        'defeat': 'You take your bottle, and with the luck of the gods, it had enough water to just stop the fire'
+                    }
+                },
+                'exits': { 'east': 'south room' }
 
+            }
         };
         var room, command, verb, obj;
         $scope.doCommand = function(command) {
@@ -548,6 +591,10 @@ angular.module("gunt")
             }
 
             function addInventory(item) {
+                if (has(item)) {
+                    print(item + ' already in inventory');
+                    return;
+                }
                 character.inventory.push(item);
                 print(item + ' added to inventory');
             }
@@ -567,11 +614,11 @@ angular.module("gunt")
             function has(item) {
                 for (var i = 0; i < character.inventory.length; i++) {
                     var itemFullName = character.inventory[i];
-                    // console.log(itemFullName)
-                    // console.log(item)
-                    // console.log(itemFullName.indexOf(item))
+                    console.log(itemFullName)
+                    console.log(item)
+                    console.log(itemFullName.indexOf(item))
                     if (itemFullName.indexOf(item) > -1) {
-                        // console.log("returning", true)
+                        console.log("returning", true)
                         return true;
                     }
                 }
@@ -612,24 +659,37 @@ angular.module("gunt")
             }
 
             function attack(room, enemy) {
-                if (enemy == 'carcass') {
-                    print("It's already dead");
-                    return;
-                }
                 killedEnemy = "";
-                if (room.enemies && room.enemies[enemy]) {
+                if (room.enemies && (room.enemies[enemy] || (obj == 'box' && room.enemies['red glowing box']))) {
+                    if ((obj == 'box' && room.enemies['red glowing box']))
+                        obj = 'red glowing box';
                     if (has(room.enemies[enemy].weakness)) {
-                        room.contents.push(enemy + ' carcass');
                         killedEnemy = enemy;
                         print(room.enemies[enemy].defeat);
                         if (room.enemies[enemy].reward) {
                             print('The ' + enemy + ' dropped ' + room.enemies[enemy].reward);
                             addInventory(room.enemies[enemy].reward);
                         }
+
+                        if (enemy == 'fire') {
+                            print('The fire is out you see a red glowing box inside the embers')
+                            removeInventory('water');
+                            room.enemies['red glowing box'] = {
+                                'desc': 'a red glowing box, sitting in the embers',
+                                'weakness': 'water',
+                                'death': 'Ignoring the crackle from the box, you tried to open the box, but forgot that it was inside a roaring fire, it sizzled your palms off, you can do nothing but scream in agony. you die',
+                                'defeat': 'you pour water on top of the box, it sizzles and fries and finally cools down'
+                            }
+                        } else if (enemy == 'red glowing box') {
+                            removeInventory('water');
+                            room.contents.push('ivory box');
+                        } else {
+                            room.contents.push(enemy + ' carcass');
+                        }
                     } else {
                         print(room.enemies[enemy].death);
                         print('Restarting game');
-                        $window.location.reload();
+                        // $window.location.reload();
                     }
                 } else {
                     print('No ' + (enemy || 'enemy') + ' in room (try different name)');
@@ -696,11 +756,23 @@ angular.module("gunt")
             }
 
             function take(room, obj) {
+                if (room.enemies && room.enemies[obj] && obj == 'fire') {
+                    if (has('stick')) {
+                        print('You light your stick on fire, and keep it with you');
+                        removeInventory('stick');
+                        addInventory('fire');
+                    } else {
+                        print('You tried to cup the fire in your hands, severely burned, you writhe in agony for a few minutes before dying');
+                        // $window.location.reload();
+                    }
+                } else if (obj == 'box' && room.enemies && room.enemies['red glowing box']) {
+                    attack(room, 'red glowing box');
+                }
                 room['contents'].slice().forEach(function(item) {
                     if (isItA(item, obj)) { // does the word in obj match any part of the text of item?
                         console.log(isItA(item, 'carcass'));
                         if (isItA(item, 'carcass')) {
-                            print('You cannot pick up a carcass');
+                            print('You cannot pick up ' + item);
                         } else if (isItA(item, 'box')) {
                             if (boxes[item] && boxes[item].heavy) {
                                 print('The box is too heavy');
@@ -718,21 +790,6 @@ angular.module("gunt")
                             addInventory(item);
                             remove(room['contents'], item);
                         }
-                        if (item.indexOf('box') == -1) {
-                            if (item.indexOf('carcass') > -1) {} else {
-                                print('The box is too heavy');
-                            }
-                        } else if (item.indexOf('water') > -1) {
-                            if (has('bottle')) {
-                                print('You fill your bottle with ' + item)
-                                addInventory(item);
-                            } else {}
-
-                        } else {
-                            print('You pick up the ' + item)
-                            addInventory(item);
-                            remove(room['contents'], item);
-                        }
                     }
                 });
             }
@@ -740,10 +797,14 @@ angular.module("gunt")
             function tryToOpen(box, room) {
                 switch (box) {
                     case 'box':
-                        if (room['contents']) {
+                        if (room.enemies && room.enemies['red glowing box']) {
+                            attack(room, 'red glowing box');
+                        } else if (room['contents']) {
                             room['contents'].slice().forEach(function(item) {
                                 if (item.indexOf(box) > -1) { // does the word in obj match any part of the text of item?
                                     if (boxes[item]) {
+                                        console.log(boxes[item]);
+                                        console.log(has(boxes[item]));
                                         if (has(boxes[item]['opens_with'])) {
                                             print('The box contains : ');
                                             print(boxes[item]['contents']);
@@ -751,9 +812,8 @@ angular.module("gunt")
                                             removeInventory(boxes[item]['opens_with']);
                                             remove(room['contents'], item);
                                             delete boxes[item]['contents'];
-
                                         } else {
-                                            print('The box is locked');
+                                            print('The box is locked, you do not have the key');
                                         }
                                     } else
                                         print('You can only open boxes');
@@ -783,7 +843,7 @@ angular.module("gunt")
                         }
                         break;
                     default:
-                        print('cannot open ' + (box || 'nothing'))
+                        print('cannot open ' + (box || 'nothing, specify what should be opened'))
                 }
             }
 
@@ -808,7 +868,10 @@ angular.module("gunt")
                                 print('There is nowhere to put the trophy');
                             break;
                         case 'water':
-                            attack(room, 'fire');
+                            if (room.enemies && room.enemies['fire'])
+                                attack(room, 'fire');
+                            else if (room.enemies && room.enemies['red glowing box'])
+                                attack(room, 'red glowing box');
                             break;
                         default:
                             print('You cannot put ' + (obj || 'nothing'));
