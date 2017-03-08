@@ -444,146 +444,169 @@ angular.module("gunt")
         $scope.gameText = [];
         $rootScope.title = "Final Level";
         var unlocked = false;
-        var unlockedDoors = [];
-        var killedEnemy = "";
-        var character = { 'inventory': [], 'location': 'west room' };
-        var boxes = {
-            'silver box': {
-                'contents': 'gold key',
-                'opens_with': 'silver key',
-                'heavy': true
-            },
-
-            'copper box': {
-                'contents': 'silver key',
-                'opens_with': 'copper key',
-                'heavy': true
-            },
-
-            'gold box': {
-                'contents': 'wooden key',
-                'opens_with': 'gold key',
-                'heavy': true
-            },
-
-            'platinum box': {
-                'contents': 'sword',
-                'opens_with': 'platinum key',
-                'heavy': true
-            },
-
-            'ivory box': {
-                'contents': 'stone key',
-                'opens_with': 'ivory key',
-                'heavy': true
-            },
-
-            'decaying box': {
-                'contents': 'stick',
-                'opens_with': 'decaying key',
-                'heavy': true
-            }
-        }
-        var dungeon = {
-            'north room': {
-                'short_description': 'north room',
-                'long_description': 'a dimly room littered with skulls. It has an eerie quiteness about it, the sound of death',
-                'contents': ['silver box', 'bottle'],
-                'lockedDoors': { 'east': 'wooden', 'west': 'iron' },
-                'exits': { 'east': 'treasure room', 'south': 'centre room', 'west': 'cell' }
-            },
-            'cell': {
-                'short_description': 'cell',
-                'long_description': 'a cell block filled with the pungent smell of decay and rot. there is moss growing on one corner of the cell',
-                'exits': { 'east': 'north room' },
-                'contents': [],
-                'enemies': {
-                    'snake': {
-                        'desc': 'a nasty looking cobra with its hood raised poised to strike, It looks like it had a recent meal',
-                        'weakness': 'sword',
-                        'death': 'You tried to attack the snake by going around it and grabbing its tail, but in one swift move, it bit you, and you\'re dead',
-                        'defeat': 'With a mighty swing of the sword you cut off the head of the snake, killing it instantly'
-                    }
-                }
-            },
-            'south room': {
-                'short_description': 'south room',
-                'long_description': 'a damp musty smelling room. A small window overlooks a cliff where faint sounds of waves crashing can be heard',
-                'contents': ['gold box', 'ivory key'],
-                'lockedDoors': { 'west': 'granite' },
-                'exits': { 'north': 'centre room', 'west': 'burning room' }
-            },
-            'west room': {
-                'short_description': 'west room',
-                'long_description': 'the west end of a sloping east-west passage of barren rock',
-                'contents': ['platinum key', 'water'],
-                'exits': { 'east': 'centre room' }
-            },
-            'east room': {
-                'short_description': 'east room',
-                'long_description': 'a room of finished stone with high arched ceiling and soaring columns',
-                'contents': ['copper box'],
-                'lockedDoors': { 'south': 'stone' },
-                'exits': { 'west': 'centre room', 'south': 'cavern' },
-                'enemies': {
-                    'scorpion': {
-                        'desc': 'a poisonous scorpion rearing its tail',
-                        'weakness': 'sword',
-                        'reward': 'granite key',
-                        'death': 'You tried to attack the scorpion with your bare hands, but it was faster than you anticipated and struck you with its poisonous tail',
-                        'defeat': 'You quickly sidestep the scorpion and swing your sword, it takes off its tail, You swing again and split the scorpion in two.'
-                    }
-                }
-            },
-            'centre room': {
-                'short_description': 'centre room',
-                'long_description': 'the very heart of the dungeon, a windowless chamber lit only by the eerie light of glowing fungi high above. There is a prominent trophy stand in the middle, there is no trophy on it.',
-                'contents': ['copper key'],
-                'exits': { 'east': 'east room', 'west': 'west room', 'north': 'north room', 'south': 'south room' }
-            },
-            'treasure room': {
-                'short_description': 'treasure room',
-                'long_description': 'a room filled with treasures of all kinds imaginable, there are mounds of glittering gold and shining diamonds in a huge pile',
-                'contents': ['platinum box', 'decaying box'],
-                'exits': { 'west': 'north room' }
-            },
-            'cavern': {
-                'short_description': 'cavern',
-                'long_description': 'a small cavern, theres barely enough room to stand, on the wall there is a drawing of a man hunting a dear and another roasting it',
-                'contents': [],
-                'exits': { 'north': 'east room' },
-                'enemies': {
-                    'spider': {
-                        'desc': 'a monstrous hairy spider',
-                        'weakness': 'fire',
-                        'reward': 'iron key',
-                        'death': 'You tried to attack the spider with the sword, but it jumped up, and grabbed you in its web, it cocooned you in and is having you for dinner, you are dead',
-                        'defeat': 'The spider shoots its web at you, but you burn the webs, you set fire to the spiders hairy body, it goes up in flames'
-                    }
-                }
-            },
-            'burning room': {
-                'short_description': 'burning room',
-                'long_description': 'a room with granite slabs for floors and ceiling, the room is really hot, you can barely stand on the floor',
-                'contents': ['decaying key'],
-                'enemies': {
-                    'fire': {
-                        'desc': 'a roaring fire in the middle of the room, its flame nearly licking the surface',
-                        'weakness': 'water',
-                        'death': 'You tried to stomp out a seven feet tall fire, it quickly consumes you in fiery agony, you scream and die',
-                        'defeat': 'You take your bottle, and with the luck of the gods, it had enough water to just stop the fire'
-                    }
-                },
-                'exits': { 'east': 'south room' }
-
-            }
-        };
-        var room, command, verb, obj, savedText = [];
+        var unlockedDoors;
+        var killedEnemy;
+        var character;
+        var boxes;
+        var dungeon;
+        var vampireHurt;
+        var flag = false;
+        var room, command, verb, obj, savedText = [],
+            decayingWoodCount = 2;
         $scope.doCommand = function(command) {
             print(command);
             $scope.command = "";
+            if (!flag) {
+                flag = true;
+                resetGame();
+            }
 
+            function resetGame() {
+                unlocked = false;
+                unlockedDoors = [];
+                killedEnemy = "";
+                // character = { 'inventory': ['water'], 'location': 'east room' };
+                character = { 'inventory': [], 'location': 'west room' };
+                boxes = {
+                    'silver box': {
+                        'contents': 'gold key',
+                        'opens_with': 'silver key',
+                        'heavy': true
+                    },
 
+                    'copper box': {
+                        'contents': 'silver key',
+                        'opens_with': 'copper key',
+                        'heavy': true
+                    },
+
+                    'gold box': {
+                        'contents': 'wooden key',
+                        'opens_with': 'gold key',
+                        'heavy': true
+                    },
+
+                    'platinum box': {
+                        'contents': 'sword',
+                        'opens_with': 'platinum key',
+                        'heavy': true
+                    },
+
+                    'ivory box': {
+                        'contents': 'stone key',
+                        'opens_with': 'ivory key',
+                        'heavy': true
+                    },
+
+                    'decaying box': {
+                        'contents': 'stick',
+                        'opens_with': 'wooden club',
+                        'heavy': true
+                    }
+                }
+                dungeon = {
+                    'north room': {
+                        'short_description': 'north room',
+                        'long_description': 'a dimly room littered with skulls. It has an eerie quiteness about it, the sound of death',
+                        'contents': ['silver box', 'bottle'],
+                        'lockedDoors': { 'east': 'wooden', 'west': 'iron' },
+                        'exits': { 'east': 'treasure room', 'south': 'centre room', 'west': 'cell' }
+                    },
+                    'cell': {
+                        'short_description': 'cell',
+                        'long_description': 'a cell block filled with the pungent smell of garlic. there is moss growing on one corner of the cell, the smell seems to be emanating from it',
+                        'exits': { 'east': 'north room' },
+                        'contents': ['garlic moss'],
+                        'enemies': {
+                            'snake': {
+                                'desc': 'a nasty looking cobra with its hood raised poised to strike, It looks like it had a recent meal',
+                                'weakness': 'sword',
+                                'death': 'You tried to attack the snake by going around it and grabbing its tail, but in one swift move, it bit you, and you\'re dead',
+                                'defeat': 'With a mighty swing of the sword you cut off the head of the snake, killing it instantly'
+                            }
+                        }
+                    },
+                    'south room': {
+                        'short_description': 'south room',
+                        'long_description': 'a damp musty smelling room. A small window overlooks a cliff where faint sounds of waves crashing can be heard',
+                        'contents': ['gold box', 'ivory key'],
+                        'lockedDoors': { 'west': 'granite' },
+                        'exits': { 'north': 'centre room', 'west': 'burning room' }
+                    },
+                    'west room': {
+                        'short_description': 'west room',
+                        'long_description': 'the west end of a sloping east-west passage of barren rock',
+                        'contents': ['platinum key', 'water'],
+                        'exits': { 'east': 'centre room' }
+                    },
+                    'east room': {
+                        'short_description': 'east room',
+                        'long_description': 'a room of finished stone with high arched ceiling and soaring columns. The room has an aura of holyness to it.',
+                        'contents': ['copper box'],
+                        'lockedDoors': { 'south': 'stone' },
+                        'exits': { 'west': 'centre room', 'south': 'cavern' },
+                        'enemies': {
+                            'scorpion': {
+                                'desc': 'the scorpion is rearing its tail poised to strike',
+                                'weakness': 'sword',
+                                'reward': 'granite key',
+                                'death': 'You tried to attack the scorpion with your bare hands, but it was faster than you anticipated and struck you with its poisonous tail',
+                                'defeat': 'You quickly sidestep the scorpion and swing your sword, it takes off its tail, You swing again and split the scorpion in two.'
+                            }
+                        }
+                    },
+                    'centre room': {
+                        'short_description': 'centre room',
+                        'long_description': 'the very heart of the dungeon, a windowless chamber lit only by the eerie light of glowing fungi high above. There is a prominent trophy stand in the middle, there is no trophy on it.',
+                        'contents': ['copper key'],
+                        'exits': { 'east': 'east room', 'west': 'west room', 'north': 'north room', 'south': 'south room' }
+                    },
+                    'treasure room': {
+                        'short_description': 'treasure room',
+                        'long_description': 'a room filled with treasures of all kinds imaginable, there are mounds of glittering gold and shining diamonds in a huge pile',
+                        'contents': ['platinum box', 'decaying box'],
+                        'exits': { 'west': 'north room' }
+                    },
+                    'cavern': {
+                        'short_description': 'cavern',
+                        'long_description': 'a small cavern, theres barely enough room to stand, on the wall there is a drawing of a man hunting a dear and another roasting it. A piece of jagged rock is jutting out',
+                        'contents': [],
+                        'lockedDoors': { 'down': 'emerald' },
+                        'exits': { 'north': 'east room', 'down': 'boss room' },
+                        'enemies': {
+                            'spider': {
+                                'desc': 'a monstrous hairy spider',
+                                'weakness': 'fire',
+                                'reward': 'iron key',
+                                'death': 'You tried to attack the spider with the sword, but it jumped up, and grabbed you in its web, it cocooned you in and is having you for dinner, you are dead',
+                                'defeat': 'The spider shoots its web at you, but you burn the webs, you set fire to the spiders hairy body, it goes up in flames'
+                            }
+                        }
+                    },
+                    'burning room': {
+                        'short_description': 'burning room',
+                        'long_description': 'a room with granite slabs for floors and ceiling, the room is really hot, you can barely stand on the floor',
+                        'contents': ['wooden club'],
+                        'enemies': {
+                            'fire': {
+                                'desc': 'a roaring fire in the middle of the room, its flame nearly licking the surface',
+                                'weakness': 'water',
+                                'death': 'You tried to stomp out a seven feet tall fire, it quickly consumes you in fiery agony, you scream and die',
+                                'defeat': 'You take your bottle, and with the luck of the gods, it had enough water to just stop the fire'
+                            }
+                        },
+                        'exits': { 'east': 'south room' }
+
+                    },
+                    'boss room': {
+                        'short_description': 'boss room',
+                        'long_description': 'a pitch black room, you cannot see anything',
+                        'exits': {},
+                        'contents': [],
+                        'enemies': {}
+                    }
+                };
+            }
 
             function print(line) {
                 savedText = savedText.concat(line.split("$"));
@@ -666,36 +689,74 @@ angular.module("gunt")
                 if (room.enemies && (room.enemies[enemy] || (enemy == 'box' && room.enemies['red glowing box']))) {
                     if ((enemy == 'box' && room.enemies['red glowing box']))
                         enemy = 'red glowing box';
-                    if (has(room.enemies[enemy].weakness)) {
-                        killedEnemy = enemy;
-                        print(room.enemies[enemy].defeat);
-                        if (room.enemies[enemy].reward) {
-                            print('The ' + enemy + ' dropped ' + room.enemies[enemy].reward);
-                            addInventory(room.enemies[enemy].reward);
-                        }
-
-                        if (enemy == 'fire') {
-                            print('The fire is out you see a red glowing box inside the embers')
-                            removeInventory('water');
-                            room.enemies['red glowing box'] = {
-                                'desc': 'sitting in the embers',
-                                'weakness': 'water',
-                                'death': 'Ignoring the crackle from the box, you tried to open the box, but forgot that it was inside a roaring fire, it sizzled your palms off, you can do nothing but scream in agony. you die',
-                                'defeat': 'you pour water on top of the box, it sizzles and fries and finally cools down'
+                    if (enemy != 'vampire') {
+                        if (has(room.enemies[enemy].weakness)) {
+                            killedEnemy = enemy;
+                            print(room.enemies[enemy].defeat);
+                            if (room.enemies[enemy].reward) {
+                                print('The ' + enemy + ' dropped ' + room.enemies[enemy].reward);
+                                addInventory(room.enemies[enemy].reward);
                             }
-                        } else if (enemy == 'red glowing box') {
-                            removeInventory('water');
-                            room.contents.push('ivory box');
+
+                            if (enemy == 'fire') {
+                                print('The fire is out you see a red glowing box inside the embers')
+                                removeInventory('water');
+                                room.enemies['red glowing box'] = {
+                                    'desc': 'sitting in the embers',
+                                    'weakness': 'water',
+                                    'death': 'Ignoring the crackle from the box, you tried to open the box, but forgot that it was inside a roaring fire, it sizzled your palms off, you can do nothing but scream in agony. you die',
+                                    'defeat': 'you pour water on top of the box, it sizzles and fries and finally cools down'
+                                }
+                            } else if (enemy == 'red glowing box') {
+                                removeInventory('water');
+                                room.contents.push('ivory box');
+                            } else if (enemy == 'liquid') {
+                                removeInventory('sword');
+                            } else {
+                                room.contents.push(enemy + ' carcass');
+                            }
                         } else {
-                            room.contents.push(enemy + ' carcass');
+                            print(room.enemies[enemy].death);
+                            print('Restarting game');
+                            resetGame();
                         }
                     } else {
-                        print(room.enemies[enemy].death);
-                        print('Restarting game');
-                        $window.location.reload();
+                        // vampire is boss so have to be different
+                        vampireHurt = false;
+                        vampire = room.enemies[enemy];
+                        if (vampire.health > 0) {
+                            for (var i = 0; i < vampire.weaknesses.length; i++) {
+                                weakness = vampire.weaknesses[i];
+                                if (has(weakness)) {
+                                    print(vampire.defeat[weakness]);
+                                    print('You lose the ' + weakness + ' in the process');
+                                    vampireHurt = true;
+                                    removeInventory(weakness);
+                                    vampire.health = vampire.health - 1;
+                                    print('Vampire health - ' + vampire.health);
+                                    break;
+                                }
+                            }
+                            if (!vampireHurt) {
+                                print(vampire.death);
+                                print('Restarting game');
+                                resetGame();
+                            } else {
+                                if (vampire.health == 0) {
+                                    print('You defeated the vampire');
+                                    print('The vampire dropped a ' + vampire.reward);
+                                    addInventory(vampire.reward);
+                                }
+                            }
+                        } else {
+                            print('The vampire is dead')
+                        }
                     }
                 } else {
-                    print('No ' + (enemy || 'enemy') + ' in room (try different name)');
+                    if (enemy)
+                        print('No ' + enemy + ' in room (try different name/spelling)');
+                    else
+                        print('Cannot attack nothing, please specify what to attack');
                 }
                 if (killedEnemy != "")
                     delete(room.enemies[killedEnemy]);
@@ -706,6 +767,12 @@ angular.module("gunt")
                     if (room.lockedDoors && room.lockedDoors[direction]) {
                         print('The door is locked');
                     } else {
+                        if (direction == 'down') {
+                            print('You jump down');
+                        }
+                        if (direction == 'up') {
+                            print('You climb up');
+                        }
                         character.location = room.exits[direction];
                         room = dungeon[character.location];
                         describe(room);
@@ -736,8 +803,10 @@ angular.module("gunt")
                 if (exits.length > 1) {
                     var last_exit = exits.pop();
                     print('there are exits to the ' + exits.join(', ') + ' and ' + last_exit);
-                } else {
+                } else if (exits.length == 1) {
                     print('there is an exit to the ' + exits[0]);
+                } else {
+                    print('there are no exits');
                 }
                 if (room.lockedDoors) {
                     var lockedDoors = Object.keys(room.lockedDoors);
@@ -748,10 +817,13 @@ angular.module("gunt")
                 if (room.enemies) {
                     for (var key in room.enemies) {
                         print('There is a ' + key + ' here. ' + room.enemies[key].desc);
+                        if (room.enemies[key].health) {
+                            print(key + ' health is ' + room.enemies[key].health);
+                        }
                     }
                 }
                 room['contents'].forEach(function(item) {
-                    print('There is a ' + item + ' here');
+                    print('There is ' + item + ' here');
                 });
             }
 
@@ -760,6 +832,10 @@ angular.module("gunt")
             }
 
             function take(room, obj) {
+                if (obj == "") {
+                    print('cannot take nothing');
+                    return;
+                }
                 if (room.enemies && room.enemies[obj] && obj == 'fire') {
                     if (has('stick')) {
                         print('You light your stick on fire, and keep it with you');
@@ -767,7 +843,7 @@ angular.module("gunt")
                         addInventory('fire');
                     } else {
                         print('You tried to cup the fire in your hands, severely burned, you writhe in agony for a few minutes before dying');
-                        $window.location.reload();
+                        resetGame();
                     }
                 } else if (obj == 'box' && room.enemies && room.enemies['red glowing box']) {
                     attack(room, 'red glowing box');
@@ -791,8 +867,18 @@ angular.module("gunt")
                                 print('You have no container to take water with');
                         } else {
                             print('You pick up the ' + item)
+                            if (has(item)) {
+                                addInventory(item);
+                                return;
+                            }
                             addInventory(item);
                             remove(room['contents'], item);
+                            if (item == 'decaying wood') {
+                                decayingWoodCount -= 1;
+                                if (decayingWoodCount > 0) {
+                                    room['contents'].push('decaying wood');
+                                }
+                            }
                         }
                     }
                 });
@@ -804,20 +890,24 @@ angular.module("gunt")
                         if (room.enemies && room.enemies['red glowing box']) {
                             attack(room, 'red glowing box');
                         } else if (room['contents']) {
+                            unlockedBox = false;
                             room['contents'].slice().forEach(function(item) {
                                 if (item.indexOf(box) > -1) { // does the word in obj match any part of the text of item?
                                     if (boxes[item]) {
                                         // console.log(boxes[item]);
                                         // console.log(has(boxes[item]));
                                         if (has(boxes[item]['opens_with'])) {
+                                            print('You opened the ' + item + ' with ' + boxes[item]['opens_with']);
                                             print('The box contains : ');
                                             print(boxes[item]['contents']);
                                             addInventory(boxes[item]['contents'])
-                                            removeInventory(boxes[item]['opens_with']);
+                                            if (boxes[item]['opens_with'] != 'silver key')
+                                                removeInventory(boxes[item]['opens_with']);
                                             remove(room['contents'], item);
+                                            if (item == 'decaying box')
+                                                room['contents'].push('decaying wood');
                                             delete boxes[item]['contents'];
-                                        } else {
-                                            print('The box is locked, you do not have the key');
+                                            unlockedBox = true;
                                         }
                                     } else
                                         print('You can only open boxes');
@@ -825,6 +915,8 @@ angular.module("gunt")
                                     print('There is no such item in the room');
                                 }
                             });
+                            if (!unlockedBox)
+                                print('No box can be opened');
                         } else {
                             print('There is nothing to take!');
                         }
@@ -838,11 +930,13 @@ angular.module("gunt")
                         if (room.contents.indexOf('snake carcass') > -1) {
                             if (has('sword')) {
                                 {
-                                    if (has('trophy')) {
+                                    if (has('emerald key')) {
                                         print('The snake is already cut open');
                                     } else {
-                                        print('You carefully cut open the snake with your sword, and in its belly you find a trophy');
-                                        addInventory('trophy');
+                                        print('You carefully cut open the snake with your sword, you had to remove a lot of flesh, but you finally see the inside of its stomach and it it you find an emerald key');
+                                        addInventory('emerald key');
+                                        remove(room.contents, 'snake carcass');
+                                        room.contents.push('snake skin');
                                     }
                                 }
                             } else {
@@ -882,6 +976,73 @@ angular.module("gunt")
                                 attack(room, 'fire');
                             else if (room.enemies && room.enemies['red glowing box'])
                                 attack(room, 'red glowing box');
+                            else {
+                                print('You pour out the water from your bottle');
+                                removeInventory('water');
+                            }
+                            break;
+                        case 'ladder':
+                            if (room.short_description == 'cavern') {
+                                print('You attached the ladder to the piece of jutting rock');
+                                removeInventory(obj);
+                                dungeon['boss room'].exits = { 'up': 'cavern' };
+                            } else {
+                                print('You threw the ' + obj + ' away');
+                                removeInventory(obj);
+                                room.contents.push(obj);
+                            }
+                            break;
+                        case 'fire':
+                            if (room.short_description == 'boss room') {
+                                print('You took your fire out and placed it on the ground casting light to the room');
+                                removeInventory('fire');
+                                room.long_description = 'In the flickering light of the fire, you see a spacious underground cavern filled with bats, you see two red eyes staring at you.'
+                                room.enemies['vampire'] = {
+                                    'desc': 'With a black cloak hiding a muscular body, a pale face wearing a menacing grin, he is truly a being to invoke terror',
+                                    'weaknesses': ['holy water', 'silver sword', 'garlic moss', 'stake'],
+                                    'death': 'You stab the vampire with your sword, plunging it deep into his heart, the vampire takes no notice of the sword and walks near you, with a swift leap he is at your throat, he ravishes in his latest catch. You die from blood loss.',
+                                    'reward': 'trophy',
+                                    'defeat': {
+                                        'garlic moss': 'You the garlic moss and throw it at his general direction, the smell wafts in the room, and he is visibly distressed by it, breaking into a fit of coughing and sneezing with his eyes watering up',
+                                        'holy water': 'You spray the holy water on his face, this blinds him and burns his skin off',
+                                        'stake': 'You drive the wooden stake through his heart, his body starts to burn, he tries to take the stake out, failing and burning his hands in the process',
+                                        'silver sword': 'Using the silver tipped sword, you give a mighty thrust into his abdomen, it sizzles through him and he screams aloud'
+                                    },
+                                    'health': 4
+                                }
+
+                            } else {
+                                print('You threw the ' + obj + ' away');
+                                removeInventory(obj);
+                                room.contents.push(obj);
+                            }
+                            break;
+                        case 'key':
+                        case 'silver key':
+                            if (room.short_description == 'burning room' && room.enemies['fire']) {
+                                print('You put your silver key in the fire, it turns to liquid from the heat');
+                                removeInventory('silver key');
+                                room.enemies['liquid'] = {
+                                    'desc': 'Silver liquid formed in a puddle, it shimmers in bright colors',
+                                    'weakness': 'sword',
+                                    'reward': 'silver sword',
+                                    'death': 'You tried to take the silver liquid in your hands, it burns through you, and you die',
+                                    'defeat': 'You dip your sword in the silver liquid, coating your sword in silver'
+                                }
+                            } else {
+                                print('You threw the ' + obj + ' away');
+                                removeInventory(obj);
+                                room.contents.push(obj);
+                            }
+                            break;
+                        case 'sword':
+                            if (room.short_description == 'burning room' && room.enemies['liquid']) {
+                                attack(room, 'liquid');
+                            } else {
+                                print('You threw the ' + obj + ' away');
+                                removeInventory(obj);
+                                room.contents.push(obj);
+                            }
                             break;
                         default:
                             print('You cannot put ' + (obj || 'nothing'));
@@ -890,16 +1051,101 @@ angular.module("gunt")
                     print('You do not have ' + obj);
                 }
             }
+
+            function make(room, obj) {
+                switch (obj) {
+                    case 'ladder':
+                    case 'rope ladder':
+                    case 'stairs':
+                        if (has('ladder')) {
+                            print('You already have ' + obj);
+                            return;
+                        }
+                        if (has('decaying wood') && has('rope')) {
+                            print('You quickly fashion a makeshift ladder by taking the pieces of decaying wood and tying it together with the rope')
+                            removeInventory('decaying wood');
+                            removeInventory('rope');
+                            addInventory('ladder');
+                        } else {
+                            print('You do not have the materials to make ' + obj);
+                        }
+                        break;
+                    case 'rope':
+                    case 'string':
+                    case 'twine':
+                        if (has('rope')) {
+                            print('You already have ' + obj);
+                            return;
+                        }
+                        if (has('snake skin')) {
+                            print('carefully cutting the snakeskin into long pieces and braiding it, you make a lenghty rope')
+                            removeInventory('snake skin');
+                            addInventory('rope');
+                        }
+                        break;
+                    case 'stake':
+                    case 'wooden stake':
+                    case 'stake':
+                        if (has('stake')) {
+                            print('You already have ' + obj);
+                            return;
+                        }
+                        if (has('decaying wood') && has('sword')) {
+                            print('Using your sword you shape the decaying wood into stakes');
+                            removeInventory('decaying wood');
+                            addInventory('stake');
+                        } else {
+                            print('you do not have the materials to make ' + obj);
+                        }
+                        break;
+                    case 'holy water':
+                    case 'water':
+                        if (has('holy water')) {
+                            print('You already have ' + obj);
+                            return;
+                        }
+                        if (room.short_description == 'east room') {
+                            print('inbuing the holyness of the room in the water, you create holy water');
+                            removeInventory('water');
+                            addInventory('holy water');
+                        }
+                        break;
+                    default:
+                        print('cannot make ' + obj);
+                }
+            }
+
+            function printHelp() {
+                print('look/info - show information about current room');
+                print('go direction, direction - walk in the specified direction');
+                print('inventory/inv - see inventory');
+                print('unlock/open [object] - try to open the object');
+                print('attack/kill [object] - try to attack object');
+                print('put/place/keep/fix/pour [object] - put an object');
+                print('take/pick/fill [object] - take an object');
+                print('clear- clear the screen of game text ');
+                print('make/build/craft [object]- make object if the materials are present');
+                print('reset/redo/reboot - start again from the beginning');
+                print('help - print the help content');
+            }
+
             room = dungeon[character['location']];
             command = command_split(command);
             verb = command[0];
             verb = verb.toLowerCase();
             obj = command[1];
             switch (verb) {
+                case 'go':
+                case 'move':
+                case 'walk':
+                    tryToMove(room, obj);
+                    break;
                 case 'east':
                 case 'west':
                 case 'north':
                 case 'south':
+                case 'up':
+                case 'down':
                     tryToMove(room, verb);
                     break;
                 case 'unlock':
@@ -912,6 +1158,8 @@ angular.module("gunt")
                     break;
                 case 'put':
                 case 'place':
+                case 'keep':
+                case 'fix':
                 case 'pour':
                     put(room, obj);
                     break;
@@ -930,6 +1178,20 @@ angular.module("gunt")
                     break;
                 case 'clear':
                     $scope.gameText = [];
+                    break;
+                case 'make':
+                case 'build':
+                case 'craft':
+                    make(room, obj);
+                    break;
+                case 'reset':
+                case 'redo':
+                case 'reboot':
+                    print('Reset game');
+                    resetGame();
+                    break;
+                case 'help':
+                    printHelp();
                     break;
                 default:
                     print('Unknown command');
