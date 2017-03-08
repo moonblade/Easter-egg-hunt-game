@@ -701,6 +701,7 @@ angular.module("gunt")
                             if (enemy == 'fire') {
                                 print('The fire is out you see a red glowing box inside the embers')
                                 removeInventory('water');
+                                removeInventory('holy water');
                                 room.enemies['red glowing box'] = {
                                     'desc': 'sitting in the embers',
                                     'weakness': 'water',
@@ -709,6 +710,7 @@ angular.module("gunt")
                                 }
                             } else if (enemy == 'red glowing box') {
                                 removeInventory('water');
+                                removeInventory('holy water');
                                 room.contents.push('ivory box');
                             } else if (enemy == 'liquid') {
                                 removeInventory('sword');
@@ -979,6 +981,7 @@ angular.module("gunt")
                             else {
                                 print('You pour out the water from your bottle');
                                 removeInventory('water');
+                                removeInventory('holy water');
                             }
                             break;
                         case 'ladder':
@@ -1104,10 +1107,12 @@ angular.module("gunt")
                             print('You already have ' + obj);
                             return;
                         }
-                        if (room.short_description == 'east room') {
+                        if (room.short_description == 'east room' && has('water')) {
                             print('inbuing the holyness of the room in the water, you create holy water');
                             removeInventory('water');
                             addInventory('holy water');
+                        } else {
+                            print('you don\'t have the ingredients to make holy water');
                         }
                         break;
                     default:
