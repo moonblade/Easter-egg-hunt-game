@@ -36,6 +36,10 @@
     font-family: "Italianno"!important;
 }
 
+.agameTextSpace {
+    overflow: scroll;
+}
+
 .slabo {
     font-size: 150%;
     font-family: 'Slabo 27px', serif;

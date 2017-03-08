@@ -438,8 +438,9 @@ angular.module("gunt")
                     $scope.showError(error);
                 });
         }
-    }]).controller("finalController", ["$scope", "mainFactory", "$localStorage", "$rootScope", "$window", function($scope, mainFactory, $localStorage, $rootScope, $window) {
+    }]).controller("finalController", ["$scope", "mainFactory", "$localStorage", "$rootScope", "$window", "$anchorScroll", "$location", function($scope, mainFactory, $localStorage, $rootScope, $window, $anchorScroll, $location) {
         $scope.level = "";
+        $location.hash('bottom');
         $scope.gameText = [];
         $rootScope.title = "Final Level";
         var unlocked = false;
@@ -577,16 +578,19 @@ angular.module("gunt")
 
             }
         };
-        var room, command, verb, obj;
+        var room, command, verb, obj, savedText = [];
         $scope.doCommand = function(command) {
-            $scope.gameText.push(".");
+            print(command);
             $scope.command = "";
 
 
 
             function print(line) {
-                if (line)
-                    $scope.gameText = $scope.gameText.concat(line.split('$'));
+                savedText = savedText.concat(line.split("$"));
+                if (line == '.') {
+                    $scope.gameText = savedText.concat($scope.gameText);
+                    savedText = [];
+                }
             }
 
             function addInventory(item) {
@@ -721,6 +725,7 @@ angular.module("gunt")
             }
 
             function describe(room) {
+                print(room.short_description);
                 if (!room.visited) {
                     print('you are in ' + room.long_description);
                 } else {
@@ -742,7 +747,7 @@ angular.module("gunt")
                 }
                 if (room.enemies) {
                     for (var key in room.enemies) {
-                        print('There is a ' + key + ' in the room. ' + room.enemies[key].desc);
+                        print('There is a ' + key + ' here. ' + room.enemies[key].desc);
                     }
                 }
                 room['contents'].forEach(function(item) {
@@ -888,6 +893,7 @@ angular.module("gunt")
             room = dungeon[character['location']];
             command = command_split(command);
             verb = command[0];
+            verb = verb.toLowerCase();
             obj = command[1];
             switch (verb) {
                 case 'east':
@@ -910,6 +916,7 @@ angular.module("gunt")
                     put(room, obj);
                     break;
                 case 'inventory':
+                case 'inv':
                     printInventory();
                     break;
                 case 'take':
@@ -918,11 +925,17 @@ angular.module("gunt")
                     take(room, obj);
                     break;
                 case 'look':
+                case 'info':
                     describe(dungeon[character.location]);
+                    break;
+                case 'clear':
+                    $scope.gameText = [];
                     break;
                 default:
                     print('Unknown command');
             }
+            $anchorScroll();
+            print('.');
         }
         $scope.doCommand('look');
     }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", "md5", "$rootScope", function($scope, mainFactory, $localStorage, md5, $rootScope) {
