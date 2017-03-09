@@ -465,7 +465,7 @@ angular.module("gunt")
                 unlocked = false;
                 unlockedDoors = [];
                 killedEnemy = "";
-                // character = { 'inventory': ['water', 'bottle', 'sword', 'silver key', 'granite key'], 'location': 'burning room' };
+                // character = { 'inventory': ['wooden club', 'bottle', 'fire', 'silver key', 'granite key'], 'location': 'boss room' };
                 character = { 'inventory': [], 'location': 'west room' };
                 boxes = {
                     'silver box': {
@@ -718,7 +718,21 @@ angular.module("gunt")
                                 room.contents.push(enemy + ' carcass');
                             }
                         } else {
-                            print(room.enemies[enemy].death);
+                            switch (enemy) {
+                                case 'spider':
+                                    if (has('sword')) {
+                                        print(room.enemies[enemy].death);
+                                    } else if (has('stick')) {
+                                        print('You try to poke the spider with the stick, it grabs the end of the stick in its web, pulls you closer, grabs you with three of its legs. Its hairy face is inches from your face. It bites your head off')
+                                    } else if (has('wooden club')) {
+                                        print('You grib the wooden club and hit the spider upside the head, its eight eyes roll toward you, in one siwft motion, its near you. It takes you in its front legs and breaks your legs. You die');
+                                    } else {
+                                        print('Steeling your resolve, you try to weave between the legs of the spider trying to catch it off guard, but with a mighty stomp, it flattens you. YOu die');
+                                    }
+                                    break;
+                                default:
+                                    print(room.enemies[enemy].death);
+                            }
                             print('Restarting game');
                             resetGame();
                         }
@@ -740,7 +754,18 @@ angular.module("gunt")
                                 }
                             }
                             if (!vampireHurt) {
-                                print(vampire.death);
+                                if (has('sword')) {
+                                    print(room.enemies[enemy].death);
+                                } else if (has('water')) {
+                                    print('You threw water on the vampire, it splashed on his face, he was\'t even fazed. He walks to you, and snaps your neck. You die');
+                                } else if (has('decaying wood')) {
+                                    print('You shove the piece of decaying wood on the vampire, it stops on his body, he swats it away, walks over and with a sneer, kills you and drinks your blood');
+                                } else if (has('wooden club')) {
+                                    removeInventory('wooden club');
+                                    print('Gripping the club in both hands you hit the vampire on the head with all your might, the bat breaks off of his head, he comes at you, and kills you and drinks your blood');
+                                } else {
+                                    print('Gathering your wits, you punch the vampire on the face, the vampire doesn\'t even notice it, he grabs your neck and with a twist takes your head off')
+                                }
                                 print('Restarting game');
                                 resetGame();
                             } else {
@@ -913,6 +938,10 @@ angular.module("gunt")
                                             addInventory(boxes[item]['contents'])
                                             if (boxes[item]['opens_with'] != 'silver key')
                                                 removeInventory(boxes[item]['opens_with']);
+                                            else {
+                                                print('The silver key falls out of the box, and you pick it up');
+                                                print('silver key added to inventory');
+                                            }
                                             remove(room['contents'], item);
                                             if (item == 'decaying box')
                                                 room['contents'].push('decaying wood');
@@ -1021,7 +1050,8 @@ angular.module("gunt")
                                     },
                                     'health': 4
                                 }
-
+                            } else if (room.short_description == 'cavern' && room.enemies['spider']) {
+                                attack(room, 'spider');
                             } else {
                                 print('You threw the ' + obj + ' away');
                                 removeInventory(obj);
