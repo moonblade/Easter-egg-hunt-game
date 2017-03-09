@@ -609,7 +609,7 @@ angular.module("gunt")
             }
 
             function print(line) {
-                savedText = savedText.concat(line.split("$"));
+                savedText = savedText.concat(line.split("&"));
                 if (line == '.') {
                     $scope.gameText = savedText.concat($scope.gameText);
                     savedText = [];
@@ -1189,6 +1189,7 @@ angular.module("gunt")
             }
 
             function printHelp() {
+                print('You can run multiple instructions by seperating them with $ symbol, example take key$go east');
                 print('look/info - show information about current room');
                 print('go direction, direction - walk in the specified direction');
                 print('inventory/inv - see inventory');
@@ -1199,6 +1200,7 @@ angular.module("gunt")
                 print('clear- clear the screen of game text ');
                 print('make/build/craft [object]- make object if the materials are present');
                 print('reset/redo/reboot - start again from the beginning');
+                print('ls - inventory and look');
                 print('help - print the help content');
             }
 
