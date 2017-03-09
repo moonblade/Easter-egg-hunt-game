@@ -448,6 +448,7 @@ angular.module("gunt")
         var killedEnemy;
         var character;
         var boxes;
+        var commandHistory = [];
         var dungeon;
         var vampireHurt;
         var flag = false;
@@ -455,6 +456,7 @@ angular.module("gunt")
             decayingWoodCount = 2;
         $scope.doCommand = function(command) {
             print(command);
+            commandHistory.push(command);
             $scope.command = "";
             if (!flag) {
                 flag = true;
@@ -464,6 +466,7 @@ angular.module("gunt")
             function resetGame() {
                 unlocked = false;
                 unlockedDoors = [];
+                commandHistory = [];
                 killedEnemy = "";
                 // character = { 'inventory': ['wooden club', 'bottle', 'fire', 'silver key', 'granite key'], 'location': 'boss room' };
                 character = { 'inventory': [], 'location': 'west room' };
@@ -1200,6 +1203,7 @@ angular.module("gunt")
                 print('clear- clear the screen of game text ');
                 print('make/build/craft [object]- make object if the materials are present');
                 print('reset/redo/reboot - start again from the beginning');
+                print('now - copy pastable command for your current state from start(for save game use)');
                 print('ls - inventory and look');
                 print('help - print the help content');
             }
@@ -1272,6 +1276,9 @@ angular.module("gunt")
                     break;
                 case 'help':
                     printHelp();
+                    break;
+                case 'now':
+                    print(commandHistory.join('$'));
                     break;
                 default:
                     print('Unknown command');
