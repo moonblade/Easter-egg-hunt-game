@@ -1277,6 +1277,12 @@ angular.module("gunt")
             $anchorScroll();
             print('.');
         }
+        $scope.doCommandWrapper = function(command) {
+            commands = command.split("$");
+            for (var i = 0; i < commands.length; ++i) {
+                $scope.doCommand(commands[i]);
+            }
+        }
         $scope.doCommand('look');
     }]).controller("creditsController", ["$scope", "mainFactory", "$localStorage", "md5", "$rootScope", function($scope, mainFactory, $localStorage, md5, $rootScope) {
         $rootScope.title = "Credits";
