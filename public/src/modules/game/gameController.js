@@ -747,6 +747,7 @@ angular.module("gunt")
                                     print(vampire.defeat[weakness]);
                                     print('You lose the ' + weakness + ' in the process');
                                     vampireHurt = true;
+                                    remove(vampire.weaknesses[weakness]);
                                     removeInventory(weakness);
                                     vampire.health = vampire.health - 1;
                                     print('Vampire health - ' + vampire.health);
