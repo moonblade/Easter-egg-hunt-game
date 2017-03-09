@@ -465,7 +465,7 @@ angular.module("gunt")
                 unlocked = false;
                 unlockedDoors = [];
                 killedEnemy = "";
-                // character = { 'inventory': ['water'], 'location': 'east room' };
+                // character = { 'inventory': ['water', 'bottle', 'sword', 'silver key', 'granite key'], 'location': 'burning room' };
                 character = { 'inventory': [], 'location': 'west room' };
                 boxes = {
                     'silver box': {
@@ -838,7 +838,15 @@ angular.module("gunt")
                     print('cannot take nothing');
                     return;
                 }
-                if (room.enemies && room.enemies[obj] && obj == 'fire') {
+                if (room.enemies && room.enemies[obj] && obj == 'liquid') {
+                    if (has('bottle')) {
+                        print('You tried to take the liquid silver in your bottle, the bottle melts off');
+                        removeInventory('bottle');
+                    } else {
+                        print('You tried to take the liquid silver with your bare hands, your hands get burned off, you die in agony');
+                        resetGame();
+                    }
+                } else if (room.enemies && room.enemies[obj] && obj == 'fire') {
                     if (has('stick')) {
                         print('You light your stick on fire, and keep it with you');
                         removeInventory('stick');
@@ -1034,8 +1042,8 @@ angular.module("gunt")
                                 }
                             } else {
                                 print('You threw the ' + obj + ' away');
-                                removeInventory(obj);
-                                room.contents.push(obj);
+                                removeInventory('silver key');
+                                room.contents.push('silver key');
                             }
                             break;
                         case 'sword':
@@ -1065,12 +1073,12 @@ angular.module("gunt")
                             return;
                         }
                         if (has('decaying wood') && has('rope')) {
-                            print('You quickly fashion a makeshift ladder by taking the pieces of decaying wood and tying it together with the rope')
+                            print('You quickly fashion a makeshift rope ladder by taking the pieces of decaying wood and tying it together with the rope')
                             removeInventory('decaying wood');
                             removeInventory('rope');
                             addInventory('ladder');
                         } else {
-                            print('You do not have the materials to make ' + obj);
+                            print('You do not have the materials to make ' + obj + ' you need wood pieces and something to tie it together');
                         }
                         break;
                     case 'rope':
@@ -1084,6 +1092,8 @@ angular.module("gunt")
                             print('carefully cutting the snakeskin into long pieces and braiding it, you make a lenghty rope')
                             removeInventory('snake skin');
                             addInventory('rope');
+                        } else {
+                            print('You do not have anything that can be made into a ' + obj);
                         }
                         break;
                     case 'stake':
@@ -1094,11 +1104,11 @@ angular.module("gunt")
                             return;
                         }
                         if (has('decaying wood') && has('sword')) {
-                            print('Using your sword you shape the decaying wood into stakes');
+                            print('Using your sword you shape the decaying wood into a stake');
                             removeInventory('decaying wood');
                             addInventory('stake');
                         } else {
-                            print('you do not have the materials to make ' + obj);
+                            print('you do not have the materials to make ' + obj + ' You need wood piece and something to sharpen it');
                         }
                         break;
                     case 'holy water':
@@ -1112,7 +1122,34 @@ angular.module("gunt")
                             removeInventory('water');
                             addInventory('holy water');
                         } else {
-                            print('you don\'t have the ingredients to make holy water');
+                            if (has('water')) {
+                                print('You are not holy enough to make holy water');
+                            } else {
+                                print('you don\'t have any water');
+                            }
+                        }
+                        break;
+                    case 'sword':
+                    case 'silver sword':
+                    case 'coat':
+                    case 'silver coated sword':
+                    case 'silver':
+                        if (room.short_description == 'burning room') {
+                            if (has('sword')) {
+                                if (room.enemies['liquid']) {
+                                    put(room, 'sword');
+                                } else {
+                                    if (has('silver key')) {
+                                        print('You cannot make a ' + obj + ' with a solid silver key');
+                                    } else {
+                                        print('You do not have anything to coat it with');
+                                    }
+                                }
+                            } else {
+                                print('You need a sword to coat it');
+                            }
+                        } else {
+                            print('You cannot make ' + obj + ' from here');
                         }
                         break;
                     default:
@@ -1140,6 +1177,11 @@ angular.module("gunt")
             verb = verb.toLowerCase();
             obj = command[1];
             switch (verb) {
+                case 'ls':
+                    printInventory();
+                    print('..');
+                    describe(dungeon[character.location]);
+                    break;
                 case 'go':
                 case 'move':
                 case 'walk':
