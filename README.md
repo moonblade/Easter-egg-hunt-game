@@ -210,6 +210,145 @@ Since the game was inspired by the book Ready Player One, I wanted that as at le
 
 ### Level 6 - The Crystal Gate
 
+![Crystal gate](https://i.postimg.cc/Gt25Gtb1/image.png)
+
+In the final book of the Harry Potter series, Harry receives a golden snitch from the will of Albus Dumbledore, and on it was written "I open at the close". The password is `snitch`. Seems a bit underwhelming doesn't it.
+
+Typing snitch into the text field does nothing though.
+
+In an unrelated internet browsing session on steganography, I came across two interesting pieces of information. A pdf file has a end marker to tell the pdf software where the file ends. Whereas a zip file has a start marker to tell where the zip file starts. Hmmm, So what would happen if you appended a zip file at the end of a pdf file, would it work as both a pdf and zip? I tried it out and was overjoyed when the command `unzip sample.pdf` spat out the content of the zip file. I figured I'd put the answer to the final level in the almanac and on unzipping they'd get the answer.
+
+Adventure, The Atari 2600 game, is regarded as the first video game to have an easter egg in it. In difficulty levels 2 and 3, the player could find a miniscule grey dot, that would allow him to pass through a barrier in the game to see the easter egg room, with the creators make in it.
+
+![atari easter egg](https://i.postimg.cc/xCHK7Sgb/image.png)
+
+In the climax of the book, the hero has to find the easter egg in the game to finish the last hurdle. I had played Adventure before but had found it too hard to crack and had left it. Coming back to it after reading the book though, I eventually got good enough to get to the easter egg room every time. 
+
+Some time later I came across the [assembly code for adventure game](https://github.com/johnidm/asm-atari-2600/blob/master/adventure.asm). Okay, this got me excited, I built the game, and started playing. I wanted to mess around with the code of it and see if I could get it to do something different. I managed to create test version of the game where the player could walk through the barrier without needing to beat the game. With some trial and error, I setup a small python script to edit the code in the easter egg room to whatever picture I painted. Thus editing the easter egg room to say something different. At this point I was beyond ecstatic. Removing the test version and replacing the original, and adding the new easter egg room and building it, I zipped up the binary and put the password `snitch` on the zip file. This zip file was appended at the end of the almanac.
+
+To beat the final level, the player would need to download the almanac, unzip the pdf, put in the password `snitch`. Get an atari 8600 emulator. Play Atari adventure in difficulty level 2 or 3, and reach the easter egg room. If they did all that successfully, They'd be greeted with the following screen.
+
+![my easter egg room](https://i.postimg.cc/sDkd5Yqf/image.png)
+
+Entering `Gregarious Games`, which was the company that made the game in the book, would solve the level.
+
+### Level 7 - Credits, Bonus key
+
+![Credits](https://i.postimg.cc/q7MT7kW2/image.png) 
+
+On clearing the Crystal Gate, the credits screen is shown. Ostensibly the end of the game.
+
+In hindsight, the actual credits should've been kept outside of the game, since few would have actually reached this stage.
+
+Couldn't help but add another level as an easter egg. So on clicking the second o of moonblade would lead to
+
+![credits level](https://i.postimg.cc/wB3GP3S4/image.png)
+
+![bonus key](https://i.postimg.cc/6ppj2y56/image.png)
+
+The keys collected (ignoring the gate levels) till now where
+
+```
+Ignition
+WarGames
+Narvi
+Three
+Minusworld
+Oliver Twist
+Ready Player One
+```
+
+`Cutting off the heads claimed`
+
+Taking the first letter of the keys, you'd get the string `IWNTMOR`.
+Taking a few liberties and expanding it as `I want more`. Gives the answer.
+
+![I want more](https://i.postimg.cc/Kz04Yq98/image.png)
+
+Originally the game ended here, but on its second run, since the game completed too quickly, I had to add a few more levels. So I hid a disgruntled message in the game assuming none of the higher ups are ever going to see this message.
+
+### Uninspired levels 8-14
+
+I had to add more levels to the game on short notice, while the game was online, so like every other treasure hunt game, I added levels that can be controlled without editing the code. Adding a new level could be done just from backend. So that new levels could be added easily.
+
+Since the game had started, I didn't have the luxury of time to create carefully crafted new levels. So I had to make do with this instead. In the interest of completion, I'm adding it here.
+
+<details>
+
+<summary>
+    Click here to see these levels
+</summary>
+
+#### Level 8
+
+![8](https://i.postimg.cc/BvMJ582h/image.png)
+
+Removing the symbols which were a red herring gives you `3127A1B73` which on converting to binary gives `001100010010011110100001101101110011`. Which is the paradox correcting time code from the series futurama. It is a level 87 code.
+
+The answer being `Eighty Seven`.
+
+#### Level 9
+
+![9](https://i.postimg.cc/tRr209NL/image.png)
+
+On decrypting the bottom part with a playfair cipher with the key "DEATH". 
+
+![answer 9](https://i.postimg.cc/GhVK2zNK/image.png)
+
+You get `Visor and glove control`. In the book, the game console where the book takes place has visor and glove controls and is called the `Oasis` which is the answer.
+
+#### Level 10
+
+![10](https://i.postimg.cc/NFWXgCMr/image.png)
+
+Taking the first letters of the words, you get `sn foil 1 corn`. With some imaginative extrapolation, it can be made `tin foil unicorn`. Which is a series from the movie blade runner. The tin foil unicorn was part of the jade key in the book.
+
+The answer was `Oscar Pistorius`, A double amputee sprinter, who was also known as blade runner, due to his prosthetic limbs.
+
+#### Level 11
+
+![11](https://i.postimg.cc/SQ8Cdqt6/image.png)
+
+An error message pops up saying that there was an issue and to contact tech support.
+
+At this point I'm reusing ideas. Some fancy googling of tech support and the numbers gives links to my favourite xkcd comic. [#806](https://xkcd.com/806/).
+
+![xdcd 806](https://imgs.xkcd.com/comics/tech_support.png)
+
+The answer of course was `Shibboleet`. The fictional code word to get better tech support.
+
+Status 418, is an april fools joke from 1994, under the hypertext coffee pot control protocol, which returns the error code "I'm a teapot".
+
+#### Level 12
+
+![12](https://i.postimg.cc/c4gjXKGD/image.png)
+
+Feeling that the original level provided here was so bad, on some recent update, instead of making a good riddle, I just plagiarized again from Dan Brown, from his book Da Vici Code, The answer to it is `apple` available on a simple googling.
+
+#### Level 13
+
+![13](https://i.postimg.cc/5yNmTRr5/image.png)
+
+The third _stone_ from the sun, is an instrumental composition from Jimi Hendrix, If the song is played at more than double the original speed, an easter egg is revelaed as a conversation between two aliens who talk about Earth.
+
+During the course of the conversation, they conclude that chickens are the smartest creatures on earth. The answer to the level is `Chicken`
+
+#### Level 14
+
+![14](https://i.postimg.cc/pTVc8CHS/image.png)
+
+Harmless earth, is a reference to Hitchhikers guide to the galaxy, In which earth is referred to as mostly harmless. A character in the Hitchhiker's guide to the galaxy, is repeatedly killed by the main character, Arthur Dent, on every reincarnations and is hell bent on revenge, but fails every time. The character is named `Agrajag`.
+
+</details>
+
+### Level 15 - The final level
+
+![15](https://i.postimg.cc/V6jMfQpQ/image.png)
+
+At this point, I didn't like how the game was turning out, So while it was active, I wanted the end to be a good one. So I put up some levels to give me some time, and started work on this. I ended up completing the thing in two days and putting it up as the final level.
+
+I started by drawing a simple map of the dungeon I'd build, complicating it further and further, till it resembled a long enough game.
+
 
 
 ## Almanac
