@@ -27,7 +27,7 @@ Lacking the technical skills, the levels had to be designed to take input as tex
 
 when the game was completed, I [put it up on reddit](https://www.reddit.com/r/readyplayerone/comments/4zu9hv/easter_egg_hunt_game_based_on_ready_player_one/). The reception was pretty good. But me being impatient ended up giving a lot of clues and hastening the end of the game, instead of letting it run for a longer duration.
 
-The game came around with a second lease on its life when the college fest was fast approaching, and a typical treasure hunt was still not availble. So I figured I'd dust off this project and use it a second time. The treasure hunts typically last for two three weeks. Again, due to my impatience, I ended up giving a ton of clues and someone cleared the final level in three days. This was unacceptable to the big wigs, So I ended up writing some extra uninspired levels, which was a bunch of text, which when solved would give a text to input. Since this was easy to implement, I could crank out new levels without having to update the code.
+The game came around with a second lease on its life when the college fest was fast approaching, and a typical treasure hunt was still not available. So I figured I'd dust off this project and use it a second time. The treasure hunts typically last for two three weeks. Again, due to my impatience, I ended up giving a ton of clues and someone cleared the final level in three days. This was unacceptable to the big wigs, So I ended up writing some extra uninspired levels, which was a bunch of text, which when solved would give a text to input. Since this was easy to implement, I could crank out new levels without having to update the code.
 
 But this felt extremely uninspiring to me, and I couldn't let this stand. So to break it up, while the game was active, and the top player was four or so levels from the new final level, I conceived of a better ending to the game. A text adventure (the improved version of which can be [seen here](https://moonblade.github.io/textAdventure)). In this a player would experience his surrounding as a text description. Could move around by typing commands like 'go north', 'go east' etc. The game created with mostly spaggetti code featured dungeon exploring, monster killing, puzzle solving and item crafting. Cramming all of that into a short game within a couple days took some doing. But I got it up just in time.
 
@@ -40,7 +40,7 @@ This iteration of the game received a ton of praise since the players were expec
 
 ## The levels
 
-### level 0
+### Level 0
 
 The players are greeted with a simple question. To prove their worth. This level was added at the end of the process so that the no of people in the scoreboard would be thinned out from the outset.
 
@@ -50,17 +50,76 @@ In the book, the hero finds the first clue by noticing that in the thick almanac
 
 ![Sample notched letter in almanac](https://i.ibb.co/hVQRFQP/image.png)
 
-The [almanac provided](https://github.com/moonblade/gunt/blob/master/public/Almanac.pdf) has a bunch of such letters, which together spelt the word "ignition" which is the answer to the level.
+The [almanac](https://github.com/moonblade/gunt/blob/master/public/Almanac.pdf) provides has a bunch of such letters, which together spelt the word `ignition` which is the answer to the level.
 
 ![Completed level 0](https://i.ibb.co/RyP4dJg/image.png)
 
-### level 1
+### Level 1 - The Copper Key
 
-In the book, preceding the first key, the hero had to sovle a rhyme to get the location of the first key. I liked this idea and kept playing with it. I ended up tweaking the rhyme endless times finally hitting upon the final version. This ended up being level one. 
+![Copper key](https://i.postimg.cc/h4pq5cBQ/image.png)
 
-The rhyme went
+In the book, preceding the first key, the hero had to sovle a rhyme to get the location of the first key. I liked this idea and kept playing with it. Tweaking the initial rhyme a lot, finally hitting upon the final version.
 
-> 
+`Beneath these words the copper key awaits`
+
+Taking the words literally, an observant player might notice that there is a little bit more space between the first and second lines than the second and third. But its easily missed. On selecting the text however, Its much clearer.
+
+![image.png](https://i.postimg.cc/cH18d05t/image.png)
+
+Another line hidden in tiny white letters. Pasting this into a notepad gives the following.
+
+```
+Beneath these words the copper key awaits
+22 00 61 48 01 12 40 62
+An invincible foe beyond the gates
+A Roman general known for his might
+An eight bit word to help win the fight
+```
+
+`An eight bit word to help win the fight`
+
+So `22 00 61 48 01 12 40 62` would be the key, once decoded, and would possibly be an eight letter word. So how does one go about decoding it? This doesn't seem to be letters, since there are numbers above 26 here.
+
+`A roman general known for his might`
+
+Julius Caeser, arguably the most famous roman general, has a couple of encryption techniques associated with him. The caeser shift cipher and the caeser box cipher.
+
+In the box cipher, the letters are written in a square box left to and then read top to bottom. The key in a box would become
+
+```
+2200
+6148
+0112
+4062
+```
+
+And when read top down `26 04 21 10 04 16 08 22`, These are definitely letters, namely `ZDUJDPHV`. Okay that doesn't seem to make much sense. But wait, caeser had one more cipher attributed to him. The shift cipher, in which the each letter was shifted by some amount to get a new letter.
+
+Shifting the letters thrice to the left gives the copper key.
+
+`WARGAMES`
+
+A 1983 Sci-Fi movie that was referenced in the book. Entering this, solves the level.
+
+But what about `An invincible foe beyond the gates`?
+
+### Level 2 - The Copper Gate
+
+A terminal window is shown where a game of tic tac toe has been started.
+
+![image.png](https://i.postimg.cc/028x4yj7/image.png)
+
+I didn't want all the levels to be boring text entry, so coming up with this level was fun. A playable version of tic tac toe, where the user inputs the numbers 1-9 to pick a cell, and the computer picks a different one. The objective is to win the game. Any input other than f, r or 0-9 gives an invalid input message and the game continues.
+
+Remember the warning from the copper key, `An invincible foe beyond the gates`. The game has a perfect AI, ie the game is unwinnable, you can draw or you can lose. There is no way to win against this. The player is stuck.
+
+![image.png](https://i.postimg.cc/JzvfRrr6/image.png)
+
+The key is supposed to help with the gates, not hinder it. In the climax of the movie WarGames, an AI is set to destroy the world by starting a nuclear attack. The protagonist averts this fate, by making the computer play tic tac toe against itself, by setting the number of players to 0. The computer eventually realizes the concept of futility and no win scenarios, and says "The only winning move is not to play".
+
+In this particular instance, the number of players is set at 1, and cannout be changed. But if the player enters `theonlywinningmoveisnottoplay` the game is won and the gate is cleared.
+
+![image.png](https://i.postimg.cc/T2jQwR97/image.png)
 
 ## Almanac
 
