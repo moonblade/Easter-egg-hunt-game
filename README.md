@@ -406,3 +406,65 @@ Ostensibly a rule book, I crammed the almanac chock-full of easter eggs and the 
 
 [Here is a link to the almanac](https://github.com/moonblade/gunt/blob/master/public/Almanac.pdf)
 
+![Almanac image](https://i.postimg.cc/MKggFHgp/image.png)
+
+On first look, it passes as an inoccuous document detailing the rules of the game. 
+
+#### Level 0 answer
+
+In the book, the first key is found by combining the letters with notches in the almanac. To be true to the book, I edited an existing font, cut out notches in the letters, added that as the font for the letters I required. Spelling out the word ignition.
+
+![i](https://i.postimg.cc/rFWLc51r/image.png) ![g](https://i.postimg.cc/NfNRsrQQ/image.png) ![n](https://i.postimg.cc/zfDmnM9C/image.png) ![i](https://i.postimg.cc/G3WZM9Wh/image.png) ![t](https://i.postimg.cc/027hhPvG/image.png) ![i](https://i.postimg.cc/jdRhdbN4/image.png) ![o](https://i.postimg.cc/QtLQLGh5/image.png) ![n](https://i.postimg.cc/PJyY8CZz/image.png)
+
+#### Morse code
+
+After the end of the text, there are tiny white text, visible when selecting the content.
+
+![whitetext](https://i.postimg.cc/ZKqyMKp2/image.png)
+
+On copying it to a notepad, you get 
+
+`.. .-.. --- ...- . -.. .- -. -... .-. --- .-- -. --..-- ... - . .--. .... . -. ..-. .- .-.. -.- . -. --..-- .- -. -.. - --- .-.. -.- .. . -. .-.-.-`
+
+Which on translating from morse gives `I LOVE DAN BROWN, STEPHEN FALKEN,AND TOLKIEN.` Giving clues to the elements used in each of levels of the game. Dan brown for emerald key, stephen falken being a character in war games, and tolkien being the autor of lord of the rings.
+
+#### Secret cheatsheet one
+
+The first letters of all the pointers spell out the word `cheater part one`. Coupling it with point 11 about tinyurl. Players can goto tinyurl.com/cheaterpartone. Which redirects them to an evernote page, giving more clues for the copper key and get.
+
+![copper clues](https://i.postimg.cc/J0Smxqb1/image.png)
+
+If the players went ahead with the logical leap and tried to visit tinyurl.com/cheaterparttwo. They'd be hit with this screen.
+
+![cheaterparttwo](https://i.postimg.cc/7LP6fK9c/image.png)
+
+#### Secret cheatsheet two
+
+If the metadata of the almanac is opened, they are hit with the clue to the second cheatsheet.
+
+![cheatawesome](https://i.postimg.cc/TYGXdpCN/image.png)
+
+Going to tinyurl.com/cheatextends gives them clues for the jade key and get.
+
+![cheatawesome](https://i.postimg.cc/FH8WK6hF/image.png)
+
+#### Secret cheatsheet three
+
+Remember how I said a pdf has an end character and a zip file a start character? So what happens to the space in between. It must be free real estate right?
+
+If player was crazy enough to open the almanac in a text editor, they'd see the third clue.
+
+![third cheatsheet](https://i.postimg.cc/Kc05zWNX/image.png)
+
+On going to tinyurl.com/cheatawesome. The player is given clues for the crystal key and gate.
+
+![third cheat sheet](https://i.postimg.cc/j5pnwzL7/image.png)
+
+#### Crystal Gate
+
+The original final level of the game, an atari adventure game with an altered easter egg room was placed as a zip file appended to the end of the pdf. On unzipping the pdf with the password from that level, you would be able to play atari adventure, The winning of which would give you the final answer. This has to be the proudest I've been of any of the achivements pulled off for this project.
+
+
+## Conclusion
+
+I'm definitely pleased with this project, and hopefully writing this up inspires current me to create more stuff for future me to be proud of.
