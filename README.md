@@ -13,9 +13,9 @@ Back in college, a friend, V, introduced me to the book Ready Player One by Earn
 
 The true genius of the book was that, there was an easter egg hidden in it (I found this out much later), which led to a series of increasingly challenging games, setup by the author, the winner of which would receive an original Delorean. By the time I got to it, only the [first level](http://anoraksalmanac.com/gate1/stacks/) was still up. I played it till I eventually found the easter egg in that game, directing players to the second gate, which was no longer active. Here's a [hand drawn map](https://imgur.com/a/STRSH#9hsHyBh) I used when playing the game.
 
-The book hooked me immediately, I was inspired by it to try and create something along the same vein. So I started brainstorming.  In the book, the hero had to find three keys, copper, jade and crystal, each of which opened a door. A challenge awaiting the ones who opened the door. So I decided the game would have three parts, each of which would be further divided into two, a key and a door. The key level would helping to solve the door level.
+The book hooked me immediately, I was inspired by it to try and create something along the same vein. So I started brainstorming.  In the book, the hero had to find three keys, copper, jade and crystal, each of which opened a gate. A challenge awaiting the ones who opened the gate. So I decided the game would have three parts, each of which would be further divided into two, a key and a gate. The key level would helping to solve the gate level.
 
-Before I'd even gotten as far as designing the levels, I got another friend, B, to photoshop some awesome looking doors for the game. Something that I never used in the end. Then again they were made by modifying the gate images Earnie Cline had commissioned of the easter egg hunt he'd made, so meh.
+Before I'd even gotten as far as designing the levels, I got another friend, B, to photoshop some awesome looking gates for the game. Something that I never used in the end. Then again they were made by modifying the gate images Earnie Cline had commissioned of the easter egg hunt he'd made, so meh.
 
 I had a few ideas floating around in my head on how to design the levels, initially I wanted the first level to be a sort of find the object game, where a picture of a room would be presented and user could click any objects on the image and if they were interactible, it would be picked up. But I quickly gave up on it due to lack of technical skills needed to implement it. I also wanted to add an almanac, a sort of guide, here originally functioning as the rule list, and eventually gaining more and more importance.
 
@@ -31,12 +31,13 @@ The game came around with a second lease on its life when the college fest was f
 
 But this felt extremely uninspiring to me, and I couldn't let this stand. So to break it up, while the game was active, and the top player was four or so levels from the new final level, I conceived of a better ending to the game. A text adventure (the improved version of which can be [seen here](https://moonblade.github.io/textAdventure)). In this a player would experience his surrounding as a text description. Could move around by typing commands like 'go north', 'go east' etc. The game created with mostly spaggetti code featured dungeon exploring, monster killing, puzzle solving and item crafting. Cramming all of that into a short game within a couple days took some doing. But I got it up just in time.
 
-This iteration of the game received a ton of praise since the players were expecting a typical treasure hunt type game, getting something different was refreshing.
+This iteration of the game received a lot of praise since the players were expecting a typical treasure hunt type game, getting something different was refreshing.
 
 ---
 
 *SPOILER ALERT*: If you plan to play the game, reading further will spoil elements from the game.
 
+---
 
 ## The levels
 
@@ -120,6 +121,43 @@ The key is supposed to help with the gates, not hinder it. In the climax of the 
 In this particular instance, the number of players is set at 1, and cannout be changed. But if the player enters `theonlywinningmoveisnottoplay` the game is won and the gate is cleared.
 
 ![image.png](https://i.postimg.cc/T2jQwR97/image.png)
+
+An easter egg here, the original computer used by the protagonist in the movie, is an IMSAI 8080 machine, which appears as the device name in this terminal. The username MB stands for moonblade.
+
+### Level 3 - The Jade Key
+
+![image.png](https://i.postimg.cc/RFShLQkn/image.png)
+
+Looking back, I feel this was the weakest link in the game. I couldn't find anything to put as the jade key, that satisfied the constraints of the answer starting with a particular letter and it being helpful for the jade gate. So this is what I ended up with.
+
+Its a straight up treasure hunt style google answer hunting from the text provided.
+
+In the Lord of the Rings series, there is a creature known as the "watcher in the water". The heros encounter this monster when they are making their way to Moria. The west gate of Moria also known as the "Doors of Durin" stand in the way of the heros while they are attacked by the creature from behind. The door has inscription in elven that says "Speak friend and enter", but not giving a clue on what to speak. Realizing it literally meant to speak the word "friend" in elven, They speak "mellon" granting them entry and saving them from the monster.
+
+In the lore of the Lord of the Rings, The Doors of Durin were created by a dwarf named `Narvi`. The watcher in the water could see from its position that the door was closed.
+
+Entering `Narvi` unlocked the level.
+
+### Level 4 - The Jade Gate
+
+![image.png](https://i.postimg.cc/C564gKGm/image.png)
+
+The doors of during stand in your way, and mellon isn't the answer.
+
+Googling for a reference image to the doors of durin, the bottom inscription is noticeably different.
+
+![image.png](https://i.postimg.cc/9XSTCs38/image.png)
+
+In the elven script of "Tengwar", The inscription says 8121. Tengwar is written left to right, but Tengwar letters, curiously, are written right to left. So the numbers actually say 1218.
+
+Googling for 1218 and the doors of durin leads you to an [xkcd comic](https://m.xkcd.com/1218/).
+
+![doors of durin](https://imgs.xkcd.com/comics/doors_of_durin.png)
+
+The solution to the level was `Mellogoth`
+
+Ever since I read the comic, I knew that this would definitely be a level in the game I was making. But I had no clue how to get people there. Learning about the tengwar script, and some noob level photoshopping later, I had an image that I was proud of that isn't immediately noticeable to have been photoshopped.
+
 
 ## Almanac
 
