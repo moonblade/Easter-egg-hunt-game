@@ -347,9 +347,54 @@ Harmless earth, is a reference to Hitchhikers guide to the galaxy, In which eart
 
 At this point, I didn't like how the game was turning out, So while it was active, I wanted the end to be a good one. So I put up some levels to give me some time, and started work on this. I ended up completing the thing in two days and putting it up as the final level.
 
-I started by drawing a simple map of the dungeon I'd build, complicating it further and further, till it resembled a long enough game.
+
+I was interested in creating a text adventure, one where the player would interact with the world through text commands and the descriptions of where he was and what transpired would be provided via text as well.
+
+![text adventure](https://i.postimg.cc/zGTVRZ8x/image.png)
 
 
+I started by drawing a simple map of the dungeon I would build, complicating it further and further, till it resembled a long enough game. I ended up with 10 rooms, in two levels. A grid of 9 rooms, and the final boss room as the cellar underneath the bottom right room. Then the game mechanics, which involved finding keys, opening doors and chests, crafting items and killing enemies. If you didn't have the right weapon to kill the enemy with, they would attack and kill you. In hindsight, there's way too many keys and chests, which is not really condusive to an enjoyable game. 
+
+What I ended up creating was a game engine, that took the world I created in json structures and built the world around the player with that. The interactions would also follow whatever was present in the json structure of the world. But since I was pressed for time, every time I needed to create a special condition, say, making an item required the player to be in a specific room, it was hardcoded in in the logic. So eventually the code became an even mix of hardcoded spagetti and game engine logic. On killing the final boss, a vampire with items crafted during the game and retriveing the trophy and putting it in its correct place. The game was won and the final level was passed. 
+
+The game provided enough difficulty for the player to keep occupied for a while, and frustrating dead ends that needs the game to be restarted for a lot of hair pulling.
+
+<details>
+<summary>
+Full walkthrough for the final level
+</summary>
+
+- In west room, you have platinum key, take the key. 
+- Move east to the center roomm and take the copper key lying there.
+- Move east again to arrive in east room. Open the copper chest to get the silver key. Ignore the scorpion trying to strike you.
+- Move west back to central room, move north to the north room, and open the silver chest to get the gold key. The silver key will fall out of the keyhole when the chest is opened. Retrieve it as well. There should be an empty bottle lying around. Pick that up as well.
+- Move south and then west to get to west room. Use the bottle to pick up some water in the bottle.
+- Go east and then south to get to the south room. Open the gold box to get a wooden key. There should also be an ivory key here, pick that up as well.
+- Go north twice to reach the north room, Open the east door with the wooden key, to enter the treasure room.
+- Open the platinum door to get the sword. Ignore the decaying wooden box.
+- Go west, south and east to arrive back in east room with the scorpion in it. Kill the scorpion with the sword.
+- The scorpion on defeat should drop the granite key.
+- Go west, then south, to the south room and open the granit door to the west.
+- Move west to arrive in the burning room with the big fire in it. Do not put out the fire. Take the wooden club lying there.
+- Go east, north twice and east again to the treasure room. Break open the decaying wooden box using the club. It should shatter into decaying wood pieces and give you a stick as well.
+- Take the wood pieces, and use the sword to sharpen it and make a wooden stake with it. (make stake).
+- There should be more wood pieces lying around. Take another piece.
+- Move west, south twice, and west to get back to the burning room. Save a bit of the fire and make a torch by dipping the stick in fire. (take fire). Throw the silver key into the fire, so that it melts into liquid silver. Coat your sword in the liquid silver so that it becomes a silver sword. (Make silver sword).
+- Pour the water from your bottle onto the fire. The fire should go out and you should see a red hot glowing box there.
+- Go east, north and west to arrive in west room. Get some more water in the bottle.
+- Go east, south and west, back to the burning room, and pour water onto the glowing box. It should turn into an ivory box. Open the ivory box to retrieve the stone key.
+- Go east, north, east again to east room. Open the south exit covered by the stone door.
+- Go south to the cavern. Kill the spider there by setting fire to its hairs. It should drop an iron key.
+- Go north, west, north, to north room. Open the west door with the iron key.
+- Go west to the cell. Kill the cobra with the sword. The snake should look like it had a recent meal. Open up the snake to reveal the emeral key. Leaving behind its snake skin. Take the snake skin and make rope with it. Pick up the garlic smelling moss in the room as well. Make a ladder with the rope and the wood pieces gathered earlier.
+- Go east, south and west to the west room, Take some more water.
+- Go east twice to arrive in east room, with its aura of holiness. Imbue the holiness into the water and make holy water.
+- Go south to the cavern. Open the trapdoor down with the emerald key. Attach the ladder to a piece of rock so that after beating the boss, you have a way to come back up. (put ladder).
+- Go down the the final room. It should be pitch black in here. Put the fire down to get some light. There should be a terrifying vampire there. Throw the holy water in his face. Throw the garlicky moss towards his direction. Stick the silver sword through his abdomen, and finally drive the wooden stake through his heart to kill him. (kill vampire four times). He should drop a trophy.
+- Go back up, north, and west to arrive back in center room.
+- Place the trophy on the stand in the central room to beat the game.
+
+</details>
 
 ## Almanac
 
