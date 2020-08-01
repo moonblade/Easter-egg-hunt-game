@@ -110,7 +110,7 @@ A terminal window is shown where a game of tic tac toe has been started.
 
 ![image.png](https://i.postimg.cc/028x4yj7/image.png)
 
-I didn't want all the levels to be boring text entry, so coming up with this level was fun. A playable version of tic tac toe, where the user inputs the numbers 1-9 to pick a cell, and the computer picks a different one. The objective is to win the game. Any input other than f, r or 0-9 gives an invalid input message and the game continues.
+I didn't want the gate levels to be boring text entry, so coming up with this level was fun. A playable version of tic tac toe, where the user inputs the numbers 1-9 to pick a cell, and the computer picks a different one. The objective is to win the game. Any input other than f, r or 0-9 gives an invalid input message and the game continues.
 
 Remember the warning from the copper key, `An invincible foe beyond the gates`. The game has a perfect AI, ie the game is unwinnable, you can draw or you can lose. There is no way to win against this. The player is stuck.
 
@@ -158,10 +158,63 @@ The solution to the level was `Mellogoth`
 
 Ever since I read the comic, I knew that this would definitely be a level in the game I was making. But I had no clue how to get people there. Learning about the tengwar script, and some noob level photoshopping later, I had an image that I was proud of that isn't immediately noticeable to have been photoshopped.
 
+### Level 5 - The Crystal Key
+
+![image.png](https://i.postimg.cc/hGgZMfpd/image.png)
+
+![zoomed view](https://i.postimg.cc/VNpRpvFg/image.png)
+
+In the book, when the characters reach the crystal gate, a simple keyhole appears to them, but they are unable to use their keys to open it. Following an earlier clue to its conclusion, they recite, "Three is a magic number" and the keyhole splits into three. Requiring three keys instead of one to open the gate. I was really interested in doing something similar. 
+
+Being uninspired to create another puzzle that gave the answer three, I blatantly stole from Dan Brown, the code he uses in Digital Fortress. The letters that go around the screen from top left in a clock wise manner spell out.
+
+`PFEE SESN RETM MFHA IRWE OOIG MEEN NRMA ENET SHAS DCNS IIAA IEER BRNK FBLE LODI`
+
+The code on running through a ceaser box cipher returns
+
+`PRIME DIFFERENCE BETWEEN ELEMENTS RESPONSIBLE FOR HIROSHIMA AND NAGASAKI`
+
+The answer to which is `three`.
+
+Entering three as the key, wait for it....., the keyhole splits into three parts.
+
+![three keyholes](https://i.postimg.cc/J0mbCkHN/image.png)
+
+This rhyme is one I'm particularly proud of, being able to cram three different answers in four lines to someone who pretty much sucks at coming up with rhymes was a huge deal. Combining it with the textbox splitting into three to emulate the book, couldn't be happier. This definitely deservs to be the last key.
+
+`Game, book and movie blends`
+
+The first line gives a clue for each for each of the keys, the first related to a game, the second to a book and the third to a movie.
+
+`A glitchy egg for our plumber twins`
+
+Mario and luigi, are in fact twins. Googling plumber brothers immediately gives you Mario, but plumber twins, its not as obvious. 
+
+Super Mario Bros was one of my favourite games on the NES when I was a kid. Recently realising there was a glitch level in it, I played through it and eventually reached it. The level is called `minusworld` which was the first key.
+
+At this point, I realised that finding out three keys without knowing whether any of them were correct would be a nightmare for the player, so I needed to implement something that would make playing a bit more fun so that if they had part of the answer, they would still know about it.
+
+What I ended up going with was a tick mark next to whichever key was correct. I wasn't too subtle a UI designer at this point in time.
+
+![partly correct answer](https://i.postimg.cc/gkbYdKJF/image.png)
+
+`The twist by richard ends`
+
+This was straight out of left field. With no connection to any of the other levels, keys or the premise. 
+
+A play on words, if the player realizes that richard the name can be substituted by its shorter form, dick. the line reads `The twist by dick ends`. Dick ends, Dickens. The second key being `Oliver Twist` the novel by Charles Dickens.
+
+`The tribute to where it all begins`
+
+Since the game was inspired by the book Ready Player One, I wanted that as at least one of the answers. Since, a movie based on the book was coming out as well. So It seemed like the perfect answer. `Ready player One` was the third key.
+
+### Level 6 - The Crystal Gate
+
+
 
 ## Almanac
 
-In the book, the easter egg hunters are given a manual by the designer of the game, and the clue to the first key is hidden inside the Almanac. So to create a similar aesthetic, I added an Almanac for the game as well. 
+In the book, the easter egg hunters are given a sort of manual by the designer of the game called the almanac, and the clue to the first key is hidden inside the Almanac. So to create a similar aesthetic, I added an Almanac for the game as well. 
 
 Ostensibly a rule book, I crammed the almanac chock-full of easter eggs and the answer to the 0<sup>th</sup> level.
 
