@@ -148,7 +148,7 @@ Googling for a reference image to the doors of durin, the bottom inscription is 
 
 ![image.png](https://i.postimg.cc/9XSTCs38/image.png)
 
-In the elven script of "Tengwar", The inscription says 8121. Tengwar is written left to right, but Tengwar letters, curiously, are written right to left. So the numbers actually say 1218.
+In the elven script of "Tengwar", The inscription says 8121. Tengwar is written left to right, but Tengwar numbers, curiously, are written right to left. So the numbers actually say 1218.
 
 Googling for 1218 and the doors of durin leads you to an [xkcd comic](https://m.xkcd.com/1218/).
 
