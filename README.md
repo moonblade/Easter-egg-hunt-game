@@ -1,6 +1,6 @@
 # Easter egg hunt - Inspired by Ready Player One
 
-Update: The app is no longer live. The mlab instance it was connected to for db went down and is no longer accessible. So took down the heroku app. I didn't have a db backup so the existing scoreboard information got wiped. Lesson learned. Take backup of your db and put that with your project. Not just the models for the backend. I figured I'd go ahead and deploy it again without the db, but apparently google has cors error on updating autorized domains. So figured was a good time to take it down.
+**Update**: The app is no longer live. The mlab instance it was connected to for db went down and is no longer accessible. So took down the heroku app. I didn't have a db backup so the existing scoreboard information got wiped. Lesson learned. Take backup of your db and put that with your project. Not just the models for the backend. I figured I'd go ahead and deploy it again without the db, but apparently google has cors error on updating autorized domains. So figured was a good time to take it down.
 
 A [live version](https://dry-reaches-67526.herokuapp.com/) of the game is uploaded to heroku. Sign in and create an avatar to start playing.
 
