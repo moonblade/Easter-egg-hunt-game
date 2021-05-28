@@ -218,7 +218,7 @@ Typing snitch into the text field does nothing though.
 
 In an unrelated internet browsing session on steganography, I came across two interesting pieces of information. A pdf file has a end marker to tell the pdf software where the file ends. Whereas a zip file has a start marker to tell where the zip file starts. Hmmm, So what would happen if you appended a zip file at the end of a pdf file, would it work as both a pdf and zip? I tried it out and was overjoyed when the command `unzip sample.pdf` spat out the content of the zip file. I figured I'd put the answer to the final level in the almanac and on unzipping they'd get the answer.
 
-Adventure, The Atari 2600 game, is regarded as the first video game to have an easter egg in it. In difficulty levels 2 and 3, the player could find a miniscule grey dot, that would allow him to pass through a barrier in the game to see the easter egg room, with the creators make in it.
+Adventure, The Atari 2600 game, is regarded as the first video game to have an easter egg in it. In difficulty levels 2 and 3, the player could find a miniscule grey dot, that would allow him to pass through a barrier in the game to see the easter egg room, with the creators name in it.
 
 ![atari easter egg](https://i.postimg.cc/xCHK7Sgb/image.png)
 
