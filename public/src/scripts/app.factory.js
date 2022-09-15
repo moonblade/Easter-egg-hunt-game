@@ -49,17 +49,19 @@ angular.module("gunt")
             }
             if (returncode == 7) {
                 $localStorage.guntUser = {
-                ...$localStorage.guntUser,
+                id: player.id,
+                name: player.name,
                 level: player.level + 3
               }
             }
             return Promise.resolve({ data: { code: returncode } })
           } else {
             if (answers[player.level] == answer) {
-              $localStorage.guntUser = {
-                ...$localStorage.guntUser,
-                level: player.level + 1 
-              }
+              $localStorage.guntUser ={
+                id: player.id,
+                name: player.name,
+                level: player.level + 1
+              } 
               return Promise.resolve({data: { code: 0 }})
             } else {
               return Promise.resolve({ data: { code: -1 }})
