@@ -16,7 +16,7 @@ var paths = {
 }
 
 gulp.task('index', function() {
-    gulp.src(paths.src + '/index.html')
+    return gulp.src(paths.src + '/index.html')
         .pipe(wiredep())
         .pipe(inject(gulp.src(paths.src + '/**/*.js')
             .pipe(angularFilesort()), {
@@ -30,14 +30,13 @@ gulp.task('index', function() {
         .pipe(gulp.dest(paths.src));
 });
 
-gulp.task('dist', ['index', 'copy', 'uglify'], function() {})
 gulp.task('copy', function() {
-    gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html'])
+    return gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html'])
         .pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('uglify', function() {
-    gulp.src(paths.src + '/index.html')
+    return gulp.src(paths.src + '/index.html')
         .pipe(useref())
         .pipe(gulpif('*.js', uglify()))
         .pipe(gulpif('*.css', cleanCss({
@@ -49,4 +48,5 @@ gulp.task('uglify', function() {
         .pipe(gulp.dest(paths.dist));
 });
 
+gulp.task('dist', gulp.series('index', 'copy', 'uglify'))
 gulp.task('addImport', shell.task(['echo $(cat src/style/main.css | head -n 1) | cat - dist/scripts/main.css > dist/scripts/temp; mv dist/scripts/temp dist/scripts/main.css']));
