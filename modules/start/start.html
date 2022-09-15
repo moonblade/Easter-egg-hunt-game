@@ -1,9 +1,9 @@
 <md-toolbar layout="row">
     <!-- <md-button ng-click="gotoDrishti()"><img class="logoImage" src="../../images/DRlogo.png"></md-button> -->
     <md-button ng-click="gotoGame()">Game</md-button>
-    <md-button ng-click="gotoScoreBoard()">Score Board</md-button>
+    <!-- <md-button ng-click="gotoScoreBoard()">Score Board</md-button> -->
     <md-button ng-click="gotoAlmanac()">Almanac</md-button>
-    <md-button ng-click="gotoClues()">Clues</md-button>
+    <md-button ng-click="gotoClues()">Walkthrough</md-button>
     <span flex></span>
     <md-menu ng-if="!guntUser">
         <md-button class="" ng-click="openMenu($mdOpenMenu)">{{loginAction}}</md-button>
@@ -21,13 +21,8 @@
         </md-menu-content>
     </md-menu>
     <md-menu ng-if="guntUser">
-        <md-button class="" ng-click="openMenu($mdOpenMenu)">{{guntUser.name}}</md-button>
+        <md-button class="" ng-click="reset()">{{guntUser.name}}</md-button>
         <md-menu-content>
-            <md-menu-item>
-                <md-button ng-click="login()">
-                    {{loginAction}}
-                </md-button>
-            </md-menu-item>
         </md-menu-content>
     </md-menu>
 </md-toolbar>
