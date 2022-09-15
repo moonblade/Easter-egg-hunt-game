@@ -5,7 +5,7 @@ angular.module("gunt")
         if (!$scope.guntUser) {
           $localStorage.guntUser = {
             id: 1,
-            name: "",
+            name: "reset",
             level: 0
           };
         $scope.guntUser = $localStorage.guntUser;
@@ -102,7 +102,12 @@ angular.module("gunt")
                 .cancel('Cancel');
             return $mdDialog.show(confirm);
         };
-        $scope.loginAction = $localStorage.guntUser ? "Logout" : "Login";
+        $scope.loginAction = "Reset";
+        $scope.reset = () => {
+          delete $localStorage.guntUser
+          delete $localStorage.showDummy
+          $state.reload()
+        }
 
         var auth = $firebaseAuth();
         $scope.login = function(provider) {

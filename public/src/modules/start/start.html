@@ -21,13 +21,8 @@
         </md-menu-content>
     </md-menu>
     <md-menu ng-if="guntUser">
-        <md-button class="" ng-click="openMenu($mdOpenMenu)">{{guntUser.name}}</md-button>
+        <md-button class="" ng-click="reset()">{{guntUser.name}}</md-button>
         <md-menu-content>
-            <md-menu-item>
-                <md-button ng-click="login()">
-                    {{loginAction}}
-                </md-button>
-            </md-menu-item>
         </md-menu-content>
     </md-menu>
 </md-toolbar>

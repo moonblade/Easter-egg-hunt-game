@@ -400,7 +400,7 @@ angular.module("gunt")
         }
     }]).controller("allRoomController", ["$scope", "mainFactory", "$localStorage", "$rootScope", "$state", function($scope, mainFactory, $localStorage, $rootScope, $state) {
         $scope.level = "";
-        $rootScope.title = "Obscura " + $scope.level;
+        $rootScope.title = "Gunt " + $scope.level;
         $scope.lines = [];
         $scope.image = null;
         $scope.return = {};
@@ -409,7 +409,7 @@ angular.module("gunt")
                 .then(function(data) {
                     $scope.isEndMarker = data.data.isEndMarker;
                     $scope.level = data.data.level;
-                    $rootScope.title = "Obscura " + $scope.level;
+                    $rootScope.title = "Gunt " + $scope.level;
                     if ($scope.level == 14) {
                         $scope.lines = [];
                         $scope.showMessage("Err0r", data.data.text);
