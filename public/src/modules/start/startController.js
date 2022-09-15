@@ -83,7 +83,7 @@ angular.module("gunt")
 
 
         $scope.gotoClues =function(){
-            $window.open('https://www.facebook.com/Obscura-Drishti-Cet-162301407611403/');
+            $window.open('https://github.com/moonblade/Easter-egg-hunt-game#the-levels');
         }
 
         $scope.wallPost = function(){

@@ -45,20 +45,20 @@ angular.module("gunt")
             name: "credits",
             state: "app.game.credits",
             number: 10
-        }, {
-            name: "allRooms",
-            state: "app.game.allRooms",
-            number: 11
+        // }, {
+            // name: "allRooms",
+            // state: "app.game.allRooms",
+            // number: 11
         }];
 
         $scope.gotoLevelPlayer = function(player) {
             mainFactory.login(player)
                 .then(function(data, error) {
                     $scope.userLevel = data.data.level;
-                    if ($scope.userLevel < 11)
+                    if ($scope.userLevel < 10)
                         $state.go($scope.levels[$scope.userLevel].state);
                     else
-                        $state.go("app.game.allRooms");
+                        $state.go("app.game.credits");
                 }).catch(function(error) {
                     $scope.showMessage("Login", "Please login to continue");
                     console.log(error); // 
@@ -366,6 +366,10 @@ angular.module("gunt")
                         $scope.gotoLevel();
                     } else if (data.data.code == 0) {
                         $scope.showMessage("I'm sorry", "Please try again");
+                        $scope.answerCodes[0] = ((data.data.code & 1) != 0);
+                        $scope.answerCodes[1] = ((data.data.code & 2) != 0);
+                        $scope.answerCodes[2] = ((data.data.code & 4) != 0);
+
                     } else {
                         $scope.answerCodes[0] = ((data.data.code & 1) != 0);
                         $scope.answerCodes[1] = ((data.data.code & 2) != 0);
@@ -1300,7 +1304,7 @@ angular.module("gunt")
                 .then(function(data) {
                     // console.log(data.data);
                     if (data.data.code == 0) {
-                        $scope.showMessage("Of course you do", "but you have completed the Game<- this was supposed to be the message, but apparently I don't have a say in it anymore, so the game continues");
+                        $scope.showMessage("Of course you do", "but you have completed the Game");
                         $scope.gotoLevel();
                         $scope.userLevel = 11;
                         $scope.bonusMode = null;
