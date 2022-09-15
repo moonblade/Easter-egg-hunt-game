@@ -2492,6 +2492,11 @@
     "estraverse" "^4.2.0"
     "lodash" "^4.0.0"
 
+"ng@^0.0.0":
+  "integrity" "sha512-HwR40IBJa1ZU+CIGyuy7vSCN3xFYlSRfw5eIwwKOdOMNNNIl8KhT6PXKmHuFEFYpfrbOMaCYtr4QOJ3gkkubcg=="
+  "resolved" "https://registry.npmjs.org/ng/-/ng-0.0.0.tgz"
+  "version" "0.0.0"
+
 "no-case@^2.2.0":
   "integrity" "sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ=="
   "resolved" "https://registry.npmjs.org/no-case/-/no-case-2.3.2.tgz"

@@ -2,6 +2,14 @@ angular.module("gunt")
     .controller("startController", ["$scope", "mainFactory", "$localStorage", "$mdDialog", "GooglePlus", "$firebaseAuth", "$rootScope", "$state", "$window", function($scope, mainFactory, $localStorage, $mdDialog, GooglePlus, $firebaseAuth, $rootScope, $state, $window) {
         $rootScope.title="Game";
         $scope.guntUser = $localStorage.guntUser;
+        if (!$scope.guntUser) {
+          $localStorage.guntUser = {
+            id: 1,
+            name: "",
+            level: 0
+          };
+        $scope.guntUser = $localStorage.guntUser;
+        }
         $scope.showMessage = function(title, message) {
             $mdDialog.show(
                 $mdDialog.alert()
@@ -13,7 +21,7 @@ angular.module("gunt")
         }
 
         $scope.gotoDrishti = function() {
-            $window.open('http://drishticet.org');
+            $window.open('');
         }
 
         $scope.gotoLevelPlayer = function(player) {

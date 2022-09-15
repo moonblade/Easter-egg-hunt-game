@@ -1,9 +1,10 @@
 angular.module("gunt")
-    .factory("mainFactory", ["$http", "$location", function($http, $location) {
+  .factory("mainFactory", ["$http", "$location", "$localStorage", function($http, $location, $localStorage) {
         var factory = {};
         serverUrl = $location.$$protocol + "://" + $location.$$host + ":" + $location.$$port;
 
         factory.login = function(player) {
+          return Promise.resolve({data: $localStorage.guntUser});
             return $http({
                 method: "GET",
                 url: serverUrl + "/player",

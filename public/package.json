@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "gulp dist",
+    "start": "ng serve",
     "init": "npm i && bower install -F"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "gulp-shell": "^0.8.0",
     "gulp-uglify": "^3.0.2",
     "gulp-useref": "^5.0.0",
+    "ng": "^0.0.0",
     "wiredep": "^4.0.0"
   }
 }

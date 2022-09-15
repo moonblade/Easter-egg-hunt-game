@@ -31,7 +31,7 @@ gulp.task('index', function() {
 });
 
 gulp.task('copy', function() {
-    return gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html'])
+    return gulp.src([paths.src + '/**/*.html', '!' + paths.src + '/index.html', paths.src + '/Almanac.pdf'])
         .pipe(gulp.dest(paths.dist));
 });
 
