@@ -13,4 +13,12 @@ jobs:
         with:
           node-version: '14'
       - run: |
-          make -C public build
+          make -c public build
+      - name: push
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          repo: self
+          branch: gh-pages 
+          folder: public/build 
+          github_token: ${{ secrets.github_token }} 
+          message: "build: ({sha}) {msg}" 
