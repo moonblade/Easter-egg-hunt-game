@@ -17,7 +17,7 @@
     "http": "^0.0.0",
     "jade": "~1.11.0",
     "md5": "^2.1.0",
-    "mongoose": "^4.5.9",
+    "mongoose": "^4.13.21",
     "mongoose-validator": "^1.2.5",
     "morgan": "~1.7.0",
     "node-env": "^0.1.6",
